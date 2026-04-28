@@ -1,0 +1,94 @@
+@import "colors.css";
+
+* {
+  font-family: "JetBrainsMono Nerd Font";
+  font-size: 12px;
+  border: none;
+  color: @foreground;
+}
+
+window#waybar {
+  background: transparent;
+  margin: 2px 4px;
+}
+
+/* ===== BASE TRANSPARENCY ===== */
+#workspaces,
+#clock,
+#group-gradient-box,
+#network,
+#pulseaudio,
+#cpu,
+#memory,
+#battery,
+#tray {
+  background: transparent;
+  border: none;
+}
+
+/* ===== WORKSPACES ===== */
+#workspaces {
+  margin-right: 5px;
+  padding: 2px 0;
+}
+
+#workspaces button {
+  padding: 2px 5px;
+  margin: 2px;
+  border-radius: 8px;
+  background: transparent;
+  color: alpha(@foreground, 0.6);
+  transition: color 0.2s ease;
+}
+
+#workspaces button:hover {
+  color: @foreground;
+}
+
+#workspaces button.active {
+  color: @color1;
+}
+
+/* ===== CLOCK ===== */
+#clock {
+  margin: 0 6px;
+  padding: 2px 3px;
+  background: transparent;
+  font-weight: bold;
+  color: alpha(@foreground, 0.8);
+}
+
+/* ===== RIGHT MODULES CONTAINER ===== */
+#group-gradient-box {
+  margin-right: 6px;
+  padding: 4px 0;
+  background: transparent;
+}
+
+#network,
+#pulseaudio,
+#cpu,
+#memory,
+#battery {
+  padding: 2px 5px;
+  margin: 2px 3px;
+  border-radius: 8px;
+  background: transparent;
+  color: alpha(@foreground, 0.7);
+  transition: color 0.2s ease;
+}
+
+#network:hover,
+#pulseaudio:hover,
+#cpu:hover,
+#memory:hover,
+#battery:hover {
+  color: @foreground;
+}
+
+/* ===== TRAY ===== */
+#tray {
+  margin-left: 6px;
+  padding: 4px 4px;
+  background: transparent;
+}
