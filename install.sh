@@ -11,7 +11,7 @@ if [[ "${XDG_CURRENT_DESKTOP,,}" != *"hyprland"* && -z "${HYPRLAND_INSTANCE_SIGN
 fi
 
 # 2. Check required binaries
-DEPS=("git" "dunst" "kitty" "waybar" "fuzzel" "wallust")
+DEPS=("git" "dunst" "kitty" "waybar" "fuzzel" "wallust", "awww")
 MISSING=()
 for cmd in "${DEPS[@]}"; do
     command -v "$cmd" >/dev/null 2>&1 || MISSING+=("$cmd")
