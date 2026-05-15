@@ -5,9 +5,9 @@ local CONFIG_DIR = HOME .. "/.config/hypr"
 local WALLPAPER_DIR = HOME .. "/wallpapers"
 
 -- Load modules
-local setupKeybinds = require("keybinds")
-local setupAnimations = require("animations")
-local setupMonitors = require("monitors")
+local setupKeybinds = require("hypr.modules.keybinds")
+local setupAnimations = require("hypr.modules.animations")
+local setupMonitors = require("hypr.modules.monitors")
 
 -- Safe wallust colors load
 local ok, wallust = pcall(require, "colors")
@@ -22,12 +22,12 @@ local mainMod = "SUPER"
 
 ---- AUTOSTART ----
 hl.on("hyprland.start", function()
-    hl.exec_cmd("dbus-update-activation-environment --systemd --all")
+	hl.exec_cmd("dbus-update-activation-environment --systemd --all")
 
-    hl.exec_cmd("gsettings set org.gnome.desktop.interface color-scheme prefer-dark")
-    hl.exec_cmd("gsettings set org.gnome.desktop.interface gtk-theme Adwaita-dark")
+	hl.exec_cmd("gsettings set org.gnome.desktop.interface color-scheme prefer-dark")
+	hl.exec_cmd("gsettings set org.gnome.desktop.interface gtk-theme Adwaita-dark")
 
-    hl.exec_cmd("wallust run " .. WALLPAPER_DIR .. "/wallpaper.jpg")
+	hl.exec_cmd("wallust run " .. WALLPAPER_DIR .. "/wallpaper.jpg")
 end)
 
 hl.config({
