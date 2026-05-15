@@ -1,0 +1,7 @@
+wallust
+waybar
+hyprpaper
+kitty
+fuzzel
+dunst
+hyprland
