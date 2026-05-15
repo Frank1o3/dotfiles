@@ -22,19 +22,22 @@ local mainMod = "SUPER"
 
 ---- AUTOSTART ----
 hl.on("hyprland.start", function()
-	-- Dark mode
-	hl.exec_cmd('gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"')
-	hl.exec_cmd('gsettings set org.gnome.desktop.interface gtk-theme "Adwaita-dark"')
+    hl.exec_cmd("dbus-update-activation-environment --systemd --all")
 
-	-- Qt theming
-	hl.exec_cmd("export QT_QPA_PLATFORMTHEME=qt6ct")
+    hl.exec_cmd("gsettings set org.gnome.desktop.interface color-scheme prefer-dark")
+    hl.exec_cmd("gsettings set org.gnome.desktop.interface gtk-theme Adwaita-dark")
 
-	-- ✅ FIX: Added missing slash "/" before wallpaper.jpg
-	hl.exec_cmd("wallust run " .. WALLPAPER_DIR .. "/wallpaper.jpg")
-
-	-- Env sync
-	hl.exec_cmd("dbus-update-activation-environment --all")
+    hl.exec_cmd("wallust run " .. WALLPAPER_DIR .. "/wallpaper.jpg")
 end)
+
+hl.config({
+	env = {
+		"QT_QPA_PLATFORMTHEME,qt6ct",
+		"XDG_CURRENT_DESKTOP,Hyprland",
+		"XDG_SESSION_TYPE,wayland",
+		"GTK_THEME,Adwaita-dark",
+	},
+})
 
 ---- LOOK AND FEEL ----
 hl.config({
