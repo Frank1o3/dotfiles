@@ -36,7 +36,7 @@ DEPS=(
     "fuzzel:fuzzel"
     "wallust:wallust"
     "hyprctl:hyprland"
-    "awww:awww"  # ← UPDATE THIS if binary name differs!
+    "hyprctl:hyprpaper"
 )
 
 if [[ "$SKIP_DEPS" != "1" ]]; then
