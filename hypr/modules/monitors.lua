@@ -3,7 +3,7 @@
 return function()
 	hl.monitor({
 		output = "",
-		mode = "preferred",
+		mode = "highres",
 		position = "auto",
 		scale = 1.0,
 		cm = "srgb",
