@@ -72,7 +72,6 @@
     "on-scroll-down": "/home/franklin/.config/hypr/scripts/brightness.sh down",
     "tooltip": false
   },
-  "custom/nightmode": {},
   "battery": {
     "interval": 10,
     "states": {
