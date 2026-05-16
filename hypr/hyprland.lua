@@ -24,18 +24,26 @@ local fileManager = "xdg-open $HOME"
 hl.on("hyprland.start", function()
 	hl.exec_cmd("dbus-update-activation-environment --systemd --all")
 
+	-- GTK / Libadwaita dark mode
 	hl.exec_cmd("gsettings set org.gnome.desktop.interface color-scheme prefer-dark")
 	hl.exec_cmd("gsettings set org.gnome.desktop.interface gtk-theme Adwaita-dark")
+	hl.exec_cmd("gsettings set org.gnome.desktop.interface icon-theme Papirus-Dark")
 
+	-- Cursor consistency
+	hl.exec_cmd("gsettings set org.gnome.desktop.interface cursor-theme Bibata-Modern-Classic")
+
+	-- Generate wallust colors
 	hl.exec_cmd("wallust run " .. WALLPAPER_DIR .. "/wallpaper.jpg")
 end)
 
 hl.config({
 	env = {
+		"GTK_THEME,Adwaita-dark",
 		"QT_QPA_PLATFORMTHEME,qt6ct",
 		"XDG_CURRENT_DESKTOP,Hyprland",
 		"XDG_SESSION_TYPE,wayland",
-		"GTK_THEME,Adwaita-dark",
+		"XCURSOR_THEME,Bibata-Modern-Classic",
+		"XCURSOR_SIZE,24",
 	},
 })
 
