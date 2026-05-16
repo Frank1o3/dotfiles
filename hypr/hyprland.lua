@@ -5,9 +5,9 @@ local CONFIG_DIR = HOME .. "/.config/hypr"
 local WALLPAPER_DIR = HOME .. "/wallpapers"
 
 -- Load modules
-local setupKeybinds = require("hypr.modules.keybinds")
-local setupAnimations = require("hypr.modules.animations")
-local setupMonitors = require("hypr.modules.monitors")
+local setupKeybinds = require("modules.keybinds")
+local setupAnimations = require("modules.animations")
+local setupMonitors = require("modules.monitors")
 
 -- Safe wallust colors load
 local ok, wallust = pcall(require, "colors")
