@@ -30,18 +30,29 @@ notify-send "🎨 Applying" "$SELECTED"
 wallust run "$WALLPAPER_DIR/wallpaper.jpg"
 
 # 🖼️ Set wallpaper with hyprpaper
-# Ensure hyprpaper is running
 if ! pgrep -x hyprpaper > /dev/null; then
     notify-send "⚠️ Starting hyprpaper" "Daemon not running, launching..."
     hyprpaper &
-    sleep 1.5
+    sleep 1
 fi
 
+systemctl --user restart hyprpaper
+sleep 0.5
 
-# Load
-hyprctl hyprpaper wallpaper ",$WALLPAPER_DIR/wallpaper.jpg,cover" 2>/dev/null || {
-    notify-send "❌ Error" "Failed to load wallpaper"
-    exit 1
-}
+# Clear old state & apply new wallpaper
+# Use $SELECTED_PATH directly to avoid symlink cache issues
+hyprctl hyprpaper unload "$WALLPAPER_DIR/wallpaper.jpg" 2>/dev/null
+hyprctl hyprpaper preload "$SELECTED_PATH"
+hyprctl hyprpaper wallpaper ",$SELECTED_PATH"
+
+# Verify it applied
+if ! hyprctl hyprpaper listactive | grep -q "$SELECTED_PATH"; then
+    notify-send "❌ Fallback" "Reloading hyprpaper..."
+    pkill hyprpaper
+    hyprpaper &
+    sleep 1
+    hyprctl hyprpaper preload "$SELECTED_PATH"
+    hyprctl hyprpaper wallpaper ",$SELECTED_PATH"
+fi
 
 notify-send "✓ Complete" "Theme & wallpaper updated"
