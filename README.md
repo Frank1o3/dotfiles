@@ -57,3 +57,113 @@ Main packages used by the setup:
 - Wallpapers are stored in `~/wallpapers`
 - Themes are generated dynamically using `wallust`
 - `hyprpaper` is managed as a user service
+
+# Keybinds
+
+## Applications
+
+| Keybind | Action |
+|---|---|
+| `SUPER + Q` | Open terminal |
+| `SUPER + RETURN` | Open terminal |
+| `SUPER + E` | Open home directory using the system default file manager |
+| `SUPER + D` | Open app launcher |
+| `SUPER + SPACE` | Open app launcher |
+| `SUPER + I` | Open IDE |
+| `SUPER + B` | Open default browser |
+
+---
+
+## Desktop & Session
+
+| Keybind | Action |
+|---|---|
+| `SUPER + W` | Open wallpaper/theme selector |
+| `SUPER + SHIFT + E` | Open power menu |
+| `SUPER + SHIFT + R` | Reload Hyprland configuration |
+| `SUPER + SHIFT + L` | Lock session |
+
+---
+
+## Window Management
+
+| Keybind | Action |
+|---|---|
+| `SUPER + SHIFT + Q` | Close focused window |
+| `SUPER + F` | Toggle fullscreen |
+| `SUPER + SHIFT + F` | Toggle floating mode |
+
+---
+
+## Window Navigation
+
+### Arrow Keys
+
+| Keybind | Action |
+|---|---|
+| `SUPER + ←` | Focus left window |
+| `SUPER + →` | Focus right window |
+| `SUPER + ↑` | Focus upper window |
+| `SUPER + ↓` | Focus lower window |
+
+### Vim-Style Navigation
+
+| Keybind | Action |
+|---|---|
+| `SUPER + H` | Focus left window |
+| `SUPER + J` | Focus lower window |
+| `SUPER + K` | Focus upper window |
+| `SUPER + L` | Focus right window |
+
+---
+
+## Workspaces
+
+| Keybind | Action |
+|---|---|
+| `SUPER + 1-0` | Switch workspace |
+| `SUPER + SHIFT + 1-0` | Move focused window to workspace |
+
+---
+
+## Special Workspace
+
+| Keybind | Action |
+|---|---|
+| `SUPER + S` | Toggle special workspace |
+| `SUPER + SHIFT + S` | Move window to special workspace |
+
+---
+
+## Mouse Controls
+
+| Keybind | Action |
+|---|---|
+| `SUPER + Left Mouse` | Drag window |
+| `SUPER + Right Mouse` | Resize window |
+| `SUPER + Mouse Wheel Up` | Previous workspace |
+| `SUPER + Mouse Wheel Down` | Next workspace |
+
+---
+
+## Media Controls
+
+| Keybind | Action |
+|---|---|
+| `XF86AudioRaiseVolume` | Increase volume |
+| `XF86AudioLowerVolume` | Decrease volume |
+| `XF86AudioMute` | Toggle audio mute |
+| `XF86AudioMicMute` | Toggle microphone mute |
+| `XF86AudioNext` | Next track |
+| `XF86AudioPrev` | Previous track |
+| `XF86AudioPlay` | Play/Pause media |
+| `XF86AudioPause` | Play/Pause media |
+
+---
+
+## Brightness Controls
+
+| Keybind | Action |
+|---|---|
+| `XF86MonBrightnessUp` | Increase brightness |
+| `XF86MonBrightnessDown` | Decrease brightness |
