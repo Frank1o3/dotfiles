@@ -1,63 +1,99 @@
 {
   "layer": "top",
   "position": "top",
-  "height": 28,
-  "modules-left": ["hyprland/workspaces"],
-  "modules-center": ["clock"],
-  "modules-right": ["group/gradient-box", "tray"],
-  "group/gradient-box": {
-    "orientation": "horizontal",
-    "modules": ["network", "pulseaudio", "cpu", "memory", "battery"],
-    "css-classes": ["gradient-modules-container"],
-    "padding": 0,
-    "margin": 0
-  },
+  "height": 34,
+  "spacing": 6,
+  "modules-left": [
+    "hyprland/workspaces"
+  ],
+  "modules-center": [
+    "clock"
+  ],
+  "modules-right": [
+    "cpu",
+    "temperature",
+    "memory",
+    "network",
+    "pulseaudio",
+    "backlight",
+    "battery",
+    "tray"
+  ],
   "hyprland/workspaces": {
-    "format": "{icon}",
-    "format-icons": {
-      "1": "",
-      "2": "",
-      "3": "",
-      "4": "",
-      "5": "",
-      "active": "",
-      "default": ""
-    },
-    "on-click": "activate"
+    "format": "{name}",
+    "on-scroll-up": "hyprctl dispatch workspace e+1",
+    "on-scroll-down": "hyprctl dispatch workspace e-1",
+    "persistent-workspaces": {
+      "*": 10
+    }
   },
   "clock": {
-    "format": " {:%H:%M}",
-    "format-alt": " {:%Y-%m-%d}",
-    "tooltip": false
+    "interval": 1,
+    "format": "  {:%I:%M %p}",
+    "tooltip-format": "{:%A, %B %d, %Y\n%I:%M:%S %p}"
   },
   "cpu": {
-    "format": " {usage}%",
-    "tooltip": true
+    "interval": 2,
+    "format": "󰍛  {usage}%",
+    "tooltip": false
+  },
+  "temperature": {
+    "critical-threshold": 85,
+    "format": "  {temperatureC}°C",
+    "tooltip": false
   },
   "memory": {
-    "format": " {}%",
-    "format-alt": " {used:0.1f}GiB/{total:0.1f}GiB",
-    "tooltip": true
+    "interval": 2,
+    "format": "󰘚  {}%",
+    "tooltip": false
   },
   "network": {
-    "format-wifi": " {signalStrength}%",
-    "format-ethernet": "󰈀",
-    "format-disconnected": "⚠",
-    "tooltip": true
+    "interval": 1,
+    "format-wifi": "󰖩  ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
+    "format-ethernet": "󰈀  ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
+    "format-disconnected": "󰖪  Offline",
+    "tooltip-format": "{ifname} via {gwaddr}"
   },
   "pulseaudio": {
-    "format": "{volume}% {icon}",
-    "format-muted": "",
-    "format-icons": ["", "", ""],
-    "tooltip": true
+    "scroll-step": 5,
+    "format": "{icon}  {volume}%",
+    "format-muted": "󰝟  Muted",
+    "format-icons": {
+      "default": [
+        "󰕿",
+        "󰖀",
+        "󰕾"
+      ]
+    },
+    "tooltip": false
+  },
+  "backlight": {
+    "device": "intel_backlight",
+    "format": "󰃠  {percent}%",
+    "tooltip": false
   },
   "battery": {
-    "bat": "BAT0",
-    "format": "{capacity}% {icon}",
-    "format-charging": " {capacity}%",
-    "format-discharging": "{icon}",
-    "format-icons": ["", "", "", "", ""],
-    "tooltip": true
+    "interval": 10,
+    "states": {
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "{icon}  {capacity}%",
+    "format-charging": "󰂄  {capacity}%",
+    "format-plugged": "󰂄  {capacity}%",
+    "format-icons": [
+      "󰁺",
+      "󰁻",
+      "󰁼",
+      "󰁽",
+      "󰁾",
+      "󰁿",
+      "󰂀",
+      "󰂁",
+      "󰂂",
+      "󰁹"
+    ],
+    "tooltip": false
   },
   "tray": {
     "spacing": 8
