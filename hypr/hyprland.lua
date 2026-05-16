@@ -5,9 +5,9 @@ local CONFIG_DIR = HOME .. "/.config/hypr"
 local WALLPAPER_DIR = HOME .. "/wallpapers"
 
 -- Load modules
-local setupKeybinds = require("modules.keybinds")
-local setupAnimations = require("modules.animations")
-local setupMonitors = require("modules.monitors")
+local setupKeybinds = require("hypr.modules.keybinds")
+local setupAnimations = require("hypr.modules.animations")
+local setupMonitors = require("hypr.modules.monitors")
 
 -- Safe wallust colors load
 local ok, wallust = pcall(require, "colors")
@@ -19,6 +19,7 @@ local menu = "fuzzel"
 local ide = "code"
 local browser = "xdg-open https://"
 local fileManager = "xdg-open $HOME"
+local mainMod = "SUPER"
 
 ---- AUTOSTART ----
 hl.on("hyprland.start", function()
@@ -26,7 +27,9 @@ hl.on("hyprland.start", function()
 
 	-- GTK / Libadwaita dark mode
 	hl.exec_cmd("gsettings set org.gnome.desktop.interface color-scheme prefer-dark")
+
 	hl.exec_cmd("gsettings set org.gnome.desktop.interface gtk-theme Adwaita-dark")
+
 	hl.exec_cmd("gsettings set org.gnome.desktop.interface icon-theme Papirus-Dark")
 
 	-- Cursor consistency
@@ -38,12 +41,10 @@ end)
 
 hl.config({
 	env = {
-		"GTK_THEME,Adwaita-dark",
 		"QT_QPA_PLATFORMTHEME,qt6ct",
 		"XDG_CURRENT_DESKTOP,Hyprland",
 		"XDG_SESSION_TYPE,wayland",
-		"XCURSOR_THEME,Bibata-Modern-Classic",
-		"XCURSOR_SIZE,24",
+		"GTK_THEME,Adwaita-dark",
 	},
 })
 
