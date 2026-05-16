@@ -15,10 +15,10 @@ local w_col = ok and wallust.general and wallust.general.col or {}
 
 ---- MY PROGRAMS ----
 local terminal = "kitty"
-local fileManager = "thunar"
 local menu = "fuzzel"
 local ide = "code"
-local mainMod = "SUPER"
+local browser = "xdg-open https://"
+local fileManager = "xdg-open $HOME"
 
 ---- AUTOSTART ----
 hl.on("hyprland.start", function()
@@ -84,7 +84,7 @@ hl.config({
 })
 
 ---- KEYBINDINGS ----
-setupKeybinds(mainMod, terminal, fileManager, menu, ide, CONFIG_DIR)
+setupKeybinds(mainMod, terminal, fileManager, menu, ide, browser, CONFIG_DIR)
 
 ---- ANIMATIONS/CURVES ----
 setupAnimations()
