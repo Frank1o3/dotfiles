@@ -41,7 +41,6 @@ sleep 0.5
 
 # Clear old state & apply new wallpaper
 # Use $SELECTED_PATH directly to avoid symlink cache issues
-hyprctl hyprpaper unload "$WALLPAPER_DIR/wallpaper.jpg" 2>/dev/null
 hyprctl hyprpaper preload "$SELECTED_PATH"
 hyprctl hyprpaper wallpaper ",$SELECTED_PATH"
 

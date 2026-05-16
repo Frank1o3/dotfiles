@@ -1,7 +1,7 @@
 {
   "layer": "top",
   "position": "top",
-  "height": 34,
+  "height": 45,
   "spacing": 6,
   "modules-left": [
     "hyprland/workspaces"
@@ -15,7 +15,7 @@
     "memory",
     "network",
     "pulseaudio",
-    "backlight",
+    "custom/brightness",
     "battery",
     "tray"
   ],
@@ -26,7 +26,7 @@
   },
   "clock": {
     "interval": 1,
-    "format": "  {:%I:%M %p}",
+    "format": "   {:%I:%M %p}",
     "tooltip-format": "{:%A, %B %d, %Y\n%I:%M:%S %p}"
   },
   "cpu": {
@@ -64,9 +64,12 @@
     },
     "tooltip": false
   },
-  "backlight": {
-    "device": "intel_backlight",
-    "format": "󰃠  {percent}%",
+  "custom/brightness": {
+    "exec": "/home/franklin/.config/hypr/scripts/brightness.sh get",
+    "format": "󰃠  {}%",
+    "interval": 2,
+    "on-scroll-up": "/home/franklin/.config/hypr/scripts/brightness.sh up",
+    "on-scroll-down": "/home/franklin/.config/hypr/scripts/brightness.sh down",
     "tooltip": false
   },
   "battery": {
