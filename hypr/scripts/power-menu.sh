@@ -19,7 +19,25 @@ CHOICE=$(echo "$OPTIONS" | fuzzel --dmenu --prompt='Power Menu')
 case "$CHOICE" in
   "Sign Out")
     notify-send "Signing out" "Ending Hyprland session"
-    hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch exit
+    if command -v n >/dev/null 2>&1; then
+      hyprshutdown >/dev/null 2>&1 || true
+    elif command -v hyprctl >/dev/null 2>&1; then
+      if ! hyprctl dispatch exit >/dev/null 2>&1; then
+        notify-send "Sign out fallback" "hyprctl exit failed, terminating session"
+        if [ -n "${XDG_SESSION_ID:-}" ]; then
+          loginctl terminate-session "$XDG_SESSION_ID"
+        else
+          loginctl terminate-user "$USER"
+        fi
+      fi
+    else
+      notify-send "Sign out fallback" "Ending session via loginctl"
+      if [ -n "${XDG_SESSION_ID:-}" ]; then
+        loginctl terminate-session "$XDG_SESSION_ID"
+      else
+        loginctl terminate-user "$USER"
+      fi
+    fi
     ;;
   "Sleep")
     notify-send "Sleeping" "System suspending"

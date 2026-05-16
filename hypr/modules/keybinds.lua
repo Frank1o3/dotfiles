@@ -28,12 +28,7 @@ return function(mainMod, terminal, fileManager, menu, ide, browser, scripts_dir)
 
 	hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ mode = 0 }))
 
-	hl.bind(
-		mainMod .. " + SHIFT + F",
-		hl.dsp.window.float({
-			action = "toggle",
-		})
-	)
+	hl.bind(mainMod .. " + SHIFT + F", hl.dsp.window.float({ action = "toggle" }))
 
 	--------------------------------------------------
 	-- Desktop / Session

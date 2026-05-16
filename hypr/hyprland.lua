@@ -8,6 +8,7 @@ local WALLPAPER_DIR = HOME .. "/wallpapers"
 local setupKeybinds = require("modules.keybinds")
 local setupAnimations = require("modules.animations")
 local setupMonitors = require("modules.monitors")
+local setupWindowRules = require("modules.window_rules")
 
 -- Safe wallust colors load
 local ok, wallust = pcall(require, "colors")
@@ -42,9 +43,15 @@ end)
 hl.config({
 	env = {
 		"QT_QPA_PLATFORMTHEME,qt6ct",
+		"QT_STYLE_OVERRIDE,gtk2",
 		"XDG_CURRENT_DESKTOP,Hyprland",
 		"XDG_SESSION_TYPE,wayland",
-		"GTK_THEME,Adwaita-dark",
+
+		-- GTK
+		"GTK_THEME,Adwaita:dark",
+		"GDK_THEME,Adwaita:dark",
+		"GTK_ICON_THEME,Papirus-Dark",
+		"GTK_APPLICATION_PREFER_DARK_THEME,1",
 	},
 })
 
@@ -97,6 +104,9 @@ setupKeybinds(mainMod, terminal, fileManager, menu, ide, browser, CONFIG_DIR)
 
 ---- ANIMATIONS/CURVES ----
 setupAnimations()
+
+---- WINDOW RULES ----
+setupWindowRules()
 
 ---- LAYOUTS CONFIG ----
 hl.config({
