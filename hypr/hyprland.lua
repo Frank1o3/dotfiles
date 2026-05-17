@@ -9,6 +9,7 @@ local setupKeybinds = require("modules.keybinds")
 local setupAnimations = require("modules.animations")
 local setupMonitors = require("modules.monitors")
 local setupWindowRules = require("modules.window_rules")
+local setupEnvVariables = require("modules.env")
 
 -- Safe wallust colors load
 local ok, wallust = pcall(require, "colors")
@@ -37,7 +38,7 @@ hl.on("hyprland.start", function()
 	-- Export relevant theme environment variables to the user systemd environment
 	-- so autostarted apps and systemd user services inherit them.
 	hl.exec_cmd(
-	"systemctl --user set-environment GTK_THEME='Adwaita:dark' GDK_THEME='Adwaita:dark' GTK_ICON_THEME='Papirus-Dark' GTK_APPLICATION_PREFER_DARK_THEME='1' QT_QPA_PLATFORMTHEME='qt6ct' QT_STYLE_OVERRIDE='gtk2' XDG_CURRENT_DESKTOP='Hyprland' XDG_SESSION_TYPE='wayland'")
+		"systemctl --user set-environment GTK_THEME='Adwaita:dark' GDK_THEME='Adwaita:dark' GTK_ICON_THEME='Papirus-Dark' GTK_APPLICATION_PREFER_DARK_THEME='1' QT_QPA_PLATFORMTHEME='qt6ct' QT_STYLE_OVERRIDE='gtk2' XDG_CURRENT_DESKTOP='Hyprland' XDG_SESSION_TYPE='wayland'")
 
 	-- Update dbus/systemd activation environment so launched apps see the new vars
 	hl.exec_cmd("dbus-update-activation-environment --systemd --all")
@@ -46,26 +47,13 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("wallust run " .. WALLPAPER_DIR .. "/wallpaper.jpg")
 end)
 
-hl.config({
-	env = {
-		"QT_QPA_PLATFORMTHEME=qt6ct",
-		"QT_STYLE_OVERRIDE=gtk3",
-		"XDG_CURRENT_DESKTOP=Hyprland",
-		"XDG_SESSION_TYPE=wayland",
-
-		-- GTK
-		"GTK_THEME=Adwaita:dark",
-		"GDK_THEME=Adwaita:dark",
-		"GTK_ICON_THEME=Papirus-Dark",
-		"GTK_APPLICATION_PREFER_DARK_THEME=1",
-	},
-})
+setupEnvVariables()
 
 ---- LOOK AND FEEL ----
 hl.config({
 	general = {
 		gaps_in = 5,
-		gaps_out = 20,
+		gaps_out = 10,
 		border_size = 2,
 		col = {
 			active_border = w_col.active_border or { colors = { "rgba(33ccffee)", "rgba(00ff99ee)" }, angle = 45 },
@@ -82,6 +70,12 @@ hl.config({
 	},
 	animations = { enabled = true },
 	cursor = { no_hardware_cursors = 2 },
+	dwindle = {
+		preserve_split = true
+	},
+	xwayland = {
+		force_zero_scaling = true
+	}
 })
 
 --- MONITORS ---
@@ -98,10 +92,14 @@ hl.config({
 ---- INPUT ----
 hl.config({
 	input = {
-		kb_layout = "us",
+		kb_layout    = "us",
+		kb_variant   = "",
+		kb_model     = "",
+		kb_options   = "",
+		kb_rules     = "",
 		follow_mouse = 1,
-		sensitivity = 0,
-		touchpad = { natural_scroll = false },
+		sensitivity  = 0,
+		touchpad     = { natural_scroll = false },
 	},
 })
 

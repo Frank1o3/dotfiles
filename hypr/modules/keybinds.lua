@@ -1,5 +1,20 @@
 -- ~/.config/hypr/keybinds.lua
 
+local function log(msg)
+	local file = io.open("/home/franklin/Documents/dotfiles/hypr/hypr.log", "a")
+	if file == nil then return end
+	file:write(msg .. "\n")
+	file:flush()
+	file:close()
+end
+
+local function clear()
+	local file = io.open("/home/franklin/Documents/dotfiles/hypr/hypr.log", "w")
+	if file == nil then return end
+	file:flush()
+	file:close()
+end
+
 return function(mainMod, terminal, fileManager, menu, ide, browser, scripts_dir)
 	local script_pick = scripts_dir .. "/scripts/pick-wallpaper.sh"
 	local script_power = scripts_dir .. "/scripts/power-menu.sh"
@@ -47,19 +62,19 @@ return function(mainMod, terminal, fileManager, menu, ide, browser, scripts_dir)
 	--------------------------------------------------
 
 	local directions = {
-		h = "left",
-		j = "down",
-		k = "up",
-		l = "right",
 		left = "left",
 		right = "right",
 		up = "up",
 		down = "down",
 	}
 
+
 	for key, dir in pairs(directions) do
 		hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ direction = dir }))
 	end
+
+	hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
+	hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))
 
 	--------------------------------------------------
 	-- Workspace Switching
@@ -149,4 +164,22 @@ return function(mainMod, terminal, fileManager, menu, ide, browser, scripts_dir)
 	hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 
 	hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
+
+	hl.bind(mainMod .. " + K", function()
+		local active_workspace = hl.get_active_workspace()
+		if active_workspace == nil then return end
+		clear()
+		local active_windows = active_workspace:get_windows()
+		for i, curr_win in ipairs(active_windows) do
+			local next_i = ((i - 1) % #active_windows)
+			if next_i <= 0 then
+				next_i = #active_windows
+			end
+			if curr_win ~= nil then
+				log(curr_win.title .. " curr " .. i)
+				log(next_i)
+
+			end
+		end
+	end)
 end
