@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=TokyoNightWallust
+Comment=GTK theme with dynamic wallpaper-derived colors
+
+[X-GNOME-Metatheme]
+GtkTheme=TokyoNightWallust
+MetacityTheme=TokyoNightWallust
+IconTheme=Papirus-Dark
+CursorTheme=Catppuccin-Mocha-Dark
