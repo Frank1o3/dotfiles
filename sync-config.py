@@ -122,31 +122,6 @@ def sync_wallpapers():
     run_cmd(["rsync", "-a", "--delete", "--exclude=.git", f"{src}/", f"{WALLPAPER_HOME}/"])
     success("Updated wallpapers")
 
-def restart_service(name: str):
-    if not shutil.which(name):
-        return
-    try:
-        res = subprocess.run(["pgrep", "-x", name], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        if res.returncode == 0:
-            log(f"Restarting {name}...")
-            subprocess.run(["pkill", "-x", name], check=False)
-            # Detach from terminal (equivalent to `nohup cmd &`)
-            subprocess.Popen(
-                [name],
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-                start_new_session=True
-            )
-    except Exception as e:
-        warn(f"Failed to restart {name}: {e}")
-
-def reload_services():
-    if shutil.which("hyprctl"):
-        log("Reloading Hyprland...")
-        run_cmd(["hyprctl", "reload"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-
-    restart_service("waybar")
-    restart_service("dunst")
 
 # =========================================================
 # Main Execution
@@ -166,8 +141,9 @@ def main():
     if WALLPAPER_HOME.is_dir():
         replace_home_placeholder(WALLPAPER_HOME)
 
-    reload_services()
     success("Config sync complete")
+
+    log("You may need to restart or sign out and back in to see changes.")
 
 if __name__ == "__main__":
     try:
