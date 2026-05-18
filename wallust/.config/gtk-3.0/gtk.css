@@ -1,0 +1,49 @@
+/* Import generated colors */
+@import url("colors.css");
+
+/* Main window */
+window,
+.background {
+    background-color: @theme_bg_color;
+    color: @theme_fg_color;
+}
+
+/* Headerbars */
+headerbar,
+.titlebar {
+    background-color: @headerbar_bg_color;
+    color: @headerbar_fg_color;
+    border-color: @borders;
+}
+
+/* Sidebar */
+treeview.view,
+sidebar,
+placessidebar {
+    background-color: @theme_base_color;
+    color: @theme_text_color;
+}
+
+/* Buttons */
+button {
+    background-color: @theme_base_color;
+    color: @theme_text_color;
+    border-color: @borders;
+}
+
+button:hover {
+    background-color: @theme_selected_bg_color;
+    color: @theme_selected_fg_color;
+}
+
+/* Entries */
+entry {
+    background-color: @theme_base_color;
+    color: @theme_text_color;
+}
+
+/* Selected items */
+:selected {
+    background-color: @theme_selected_bg_color;
+    color: @theme_selected_fg_color;
+}

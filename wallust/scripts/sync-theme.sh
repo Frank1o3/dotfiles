@@ -1,16 +1,33 @@
-#!/bin/bash
-# Copy TokyoNightWallust theme to system themes directory
-# This allows GTK applications to use the theme with wallpaper-derived colors
+#!/usr/bin/env bash
+
+set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-THEME_SRC="$DOTFILES_DIR/wallust/themes/TokyoNightWallust"
-THEME_DEST="$HOME/.themes/"
 
-# Create destination directory if it doesn't exist
-echo "Syncing TokyoNightWallust theme to $THEME_DEST..."
-mkdir -p "$HOME/.local/share/themes"
+sync_gtk() {
+    local version="$1"
 
-# Copy/sync theme directory
-cp -r "$THEME_SRC" "$THEME_DEST"
+    local SRC="$DOTFILES_DIR/wallust/.config/gtk-$version.0"
+    local DEST="$HOME/.config/gtk-$version.0"
 
-echo "✓ TokyoNightWallust theme synced to $THEME_DEST"
+    echo "Syncing GTK$version overrides..."
+
+    mkdir -p "$DEST"
+
+    # Clean old files
+    rm -f "$DEST/gtk.css"
+
+    # Copy fresh files
+    cp "$SRC/gtk.css" "$DEST/"
+
+    echo "✓ GTK$version synced"
+}
+
+sync_gtk 3
+sync_gtk 4
+
+# Clear GTK caches
+rm -rf "$HOME/.cache/gtk-"* 2>/dev/null || true
+
+echo "✓ GTK cache cleared"
+echo "Done."

@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=X-GNOME-Metatheme
-Name=TokyoNightWallust
-Comment=Wallust generated GTK theme
-
-[X-GNOME-Metatheme]
-GtkTheme=TokyoNightWallust
-IconTheme=Papirus-Dark
-CursorTheme=catppuccin-mocha-dark-cursors

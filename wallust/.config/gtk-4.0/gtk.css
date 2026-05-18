@@ -1,0 +1,45 @@
+/* Import generated colors */
+@import url("colors.css");
+
+/* Main app window */
+window {
+    background-color: @window_bg_color;
+    color: @window_fg_color;
+}
+
+/* Headerbar */
+headerbar {
+    background-color: @headerbar_bg_color;
+    color: @headerbar_fg_color;
+}
+
+/* Sidebar */
+navigation-sidebar,
+listview,
+row {
+    background-color: @sidebar_bg_color;
+    color: @sidebar_fg_color;
+}
+
+/* Buttons */
+button {
+    background-color: @card_bg_color;
+    color: @card_fg_color;
+}
+
+button:hover {
+    background-color: @accent_bg_color;
+    color: @accent_fg_color;
+}
+
+/* Entries */
+entry {
+    background-color: @card_bg_color;
+    color: @card_fg_color;
+}
+
+/* Selected */
+:selected {
+    background-color: @accent_bg_color;
+    color: @accent_fg_color;
+}
