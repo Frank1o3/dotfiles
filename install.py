@@ -36,6 +36,7 @@ DEPS = {
     "wallust": "wallust",
     "hyprctl": "hyprland",
     "hyprpaper": "hyprpaper",
+    "hyprshutdown": "hyprshutdown",
 }
 SERVICES = ["hyprpaper.service"]
 
