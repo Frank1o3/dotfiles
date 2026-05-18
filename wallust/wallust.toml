@@ -55,10 +55,10 @@ kitty  = { template = 'kitty.conf', target = '~/.config/kitty/colors.conf' }
 dunst  = { template = 'dunstrc', target = '~/.config/dunst/dunstrc' }
 hypr   = { template = 'hyprland-colors.lua', target = '~/.config/hypr/colors.lua' }
 fuzzel = { template = 'fuzzel.ini', target = '~/.config/fuzzel/colors.ini'}
-gtk3   = { template = 'gtk3.css', target = 'themes/TokyoNightWallust/gtk-3.0/colors.css' }
-gtk4   = { template = 'gtk4.css', target = 'themes/TokyoNightWallust/gtk-4.0/colors.css' }
+gtk3   = { template = 'gtk3.css', target = '~/.themes/TokyoNightWallust/gtk-3.0/colors.css' }
+gtk4   = { template = 'gtk4.css', target = '~/.themes/TokyoNightWallust/gtk-4.0/colors.css' }
 
 [hooks]
 # Run commands when wallust is invoked. Useful to avoid scripting.
 #wallpaper = """swww img "$(find ~/Media/Pictures/Wallpapers -iregex '.*.\\(jpg\\|jpeg\\|png\\|gif\\)' -type f | shuf -n 1)" """
-post = "pkill waybar; waybar & killall dunst; dunst & bash '~/.config/wallust/scripts/sync-theme.sh'"
+post = "pkill waybar; waybar & killall dunst; dunst & bash -c '~/.config/wallust/scripts/sync-theme.sh'"

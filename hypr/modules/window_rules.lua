@@ -44,6 +44,17 @@ return function()
     })
 
     hl.window_rule({
+        name = "Sober",
+        match = { initial_class = "org.vinegarhq.Sober" },
+        fullscreen = false,
+        persistent_size = true,
+        size = { 1280, 720 }, -- 720p or 1280x720
+        float = true,
+        center = true,
+        enabled = true
+    })
+
+    hl.window_rule({
         name = "Picture in Picture",
         match = {
             title = "Picture in Picture",
