@@ -1,4 +1,3 @@
-
 -- Safe wallust colors load
 local ok, wallust = pcall(require, "colors")
 local w_col = ok and wallust.general and wallust.general.col or {}
@@ -18,8 +17,17 @@ hl.config({
 	},
 	decoration = {
 		rounding = 10,
-		shadow = { enabled = true, range = 4, color = 0xee1a1a1a },
-		blur = { enabled = true, size = 3, passes = 1 },
+		shadow = {
+			enabled = true,
+			range = 28,
+			render_power = 4,
+			color = 0xaa000000,
+		},
+		blur = {
+			enabled = true,
+			size = 12,
+			passes = 3,
+		}
 	},
 	animations = { enabled = true },
 	cursor = { no_hardware_cursors = 2 },

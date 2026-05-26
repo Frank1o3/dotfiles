@@ -1,0 +1,56 @@
+@import "colors.css";
+
+* {
+    font-family: "Geist", "SF Pro Display";
+    font-size: 14px;
+}
+
+/* Notification */
+
+.notification {
+    background: @surface;
+
+    border-radius: 28px;
+
+    border: 1px solid @border;
+
+    margin: 12px;
+    padding: 0;
+}
+
+.notification-content {
+    padding: 18px;
+}
+
+.summary {
+    color: @fg;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.body {
+    color: alpha(@fg, 0.82);
+}
+
+.image {
+    border-radius: 18px;
+}
+
+/* Hover */
+
+.notification:hover {
+    background: @surface-alt;
+}
+
+/* Control Center */
+
+.control-center {
+    background: alpha(@bg, 0.72);
+
+    border-radius: 32px;
+
+    border: 1px solid alpha(white, 0.05);
+
+    margin: 18px;
+    padding: 12px;
+}

@@ -19,7 +19,7 @@ REPO_DIR = Path(__file__).resolve().parent
 CONFIG_HOME = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config"))
 WALLPAPER_HOME = Path.home() / "wallpapers"
 
-CONFIGS = ["hypr", "waybar", "kitty", "dunst", "fuzzel", "wallust"]
+CONFIGS = ["hypr", "waybar", "kitty", "fuzzel", "wallust", "swaync"]
 TEXT_EXTENSIONS = {
     ".conf", ".cfg", ".ini", ".lua", ".sh", ".bash", ".toml",
     ".json", ".yaml", ".yml", ".css", ".scss", ".py", ".txt",

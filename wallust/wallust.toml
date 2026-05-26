@@ -52,9 +52,9 @@ check_contrast = true
 
 waybar = { template = 'waybar.css', target = '~/.config/waybar/colors.css' }
 kitty  = { template = 'kitty.conf', target = '~/.config/kitty/colors.conf' }
-dunst  = { template = 'dunstrc', target = '~/.config/dunst/dunstrc' }
 hypr   = { template = 'hyprland-colors.lua', target = '~/.config/hypr/colors.lua' }
-fuzzel = { template = 'fuzzel.ini', target = '~/.config/fuzzel/colors.ini'}
+fuzzel = { template = 'fuzzel.ini', target = '~/.config/fuzzel/colors.ini' }
+swaync = { template = 'swaync.css', target = '~/.config/swaync/style.css' }
 
 [hooks]
 # Run commands when wallust is invoked. Useful to avoid scripting.
