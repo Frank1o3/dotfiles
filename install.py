@@ -21,7 +21,7 @@ VERBOSE = os.environ.get("VERBOSE", "0") == "1"
 SKIP_DEPS = os.environ.get("SKIP_DEPS", "0") == "1"
 DRY_RUN = os.environ.get("DRY_RUN", "0") == "1"
 
-CONFIG_DIRS = ["dunst", "fuzzel", "hypr", "kitty", "wallust", "waybar"]
+CONFIG_DIRS = ["swaync", "fuzzel", "hypr", "kitty", "wallust", "waybar"]
 TEXT_EXTENSIONS = {
     ".conf", ".cfg", ".ini", ".lua", ".sh", ".bash", ".toml",
     ".json", ".yaml", ".yml", ".css", ".scss", ".py", ".txt",
@@ -29,7 +29,7 @@ TEXT_EXTENSIONS = {
 }
 DEPS = {
     "git": "git",
-    "dunst": "dunst",
+    "swaync": "swaync",
     "kitty": "kitty",
     "waybar": "waybar",
     "fuzzel": "fuzzel",
