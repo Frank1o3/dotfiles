@@ -1,26 +1,31 @@
 -- ~/.config/hypr/modules/env.lua
 
-return function()
-    -- QT
-    hl.env("QT_STYLE_OVERRIDE", "gtk3")
-    hl.env("QT_QPA_PLATFORM", "wayland;xcb")
+-- Cursor
+hl.env("XCURSOR_SIZE", "20")
+hl.env("HYPRCURSOR_SIZE", "20")
+hl.env("XCURSOR_THEME", "catppuccin-mocha-dark-cursors")
+hl.env("HYPRCURSOR_THEME", "catppuccin-mocha-dark-cursors")
 
-    -- GTK
-    hl.env("GTK_THEME", "Adwaita-dark")
-    hl.env("GTK_ICON_THEME", "Papirus-Dark")
-    hl.env("GTK_CURSOR_THEME", "catppuccin-mocha-dark-cursors")
-    hl.env("GTK_APPLICATION_PREFER_DARK_THEME", "1")
+-- Toolkit Backend
+hl.env("GTK_BACKEND", "wayland,x11,*")
+hl.env("QT_QPA_PLATFORM", "wayland;xcb")
+hl.env("SDL_VIDEODRIVER", "wayland")
+hl.env("CLUTTER_BACKEND", "wayland")
 
-    -- Scaling
-    hl.env("GDK_SCALE", "1")
+-- XDG
+hl.env("XDG_CURRENT_DESKTOP", "Hyprland")
+hl.env("XDG_SESSION_TYPE", "wayland")
+hl.env("XDG_SESSION_DESKTOP", "Hyprland")
 
-    -- Cursor
-    hl.env("XCURSOR_SIZE", "20")
-    hl.env("HYPRCURSOR_SIZE", "20")
-    hl.env("XCURSOR_THEME", "catppuccin-mocha-dark-cursors")
-    hl.env("HYPRCURSOR_THEME", "catppuccin-mocha-dark-cursors")
+-- QT
+hl.env("QT_AUTO_SCREEN_SCALE_FACTOR", "1.25")
+hl.env("QT_QPA_PLATFORM", "wayland;xcb")
+hl.env("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1")
+hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
 
-    -- Session
-    hl.env("XDG_CURRENT_DESKTOP", "Hyprland")
-    hl.env("XDG_SESSION_TYPE", "wayland")
-end
+-- GTK
+hl.env("GTK_THEME", "Adwaita-dark")
+hl.env("GTK_ICON_THEME", "Papirus-Dark")
+hl.env("GTK_CURSOR_THEME", "catppuccin-mocha-dark-cursors")
+hl.env("GTK_APPLICATION_PREFER_DARK_THEME", "1")
+hl.env("GDK_SCALE", "1")

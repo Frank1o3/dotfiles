@@ -75,7 +75,7 @@ def sync_config(name: str):
             pass  # Files differ
 
     log(f"Syncing: {name}")
-    run_cmd(["rsync", "-a", "--delete", "--exclude=.git", f"{src}/", f"{dest}/"])
+    run_cmd(["rsync", "-a", "--exclude=.git", f"{src}/", f"{dest}/"])
     success(f"Updated: {name}")
 
 def replace_home_placeholder(target_dir: Path):
@@ -119,7 +119,7 @@ def sync_wallpapers():
         except subprocess.CalledProcessError:
             pass
 
-    run_cmd(["rsync", "-a", "--delete", "--exclude=.git", f"{src}/", f"{WALLPAPER_HOME}/"])
+    run_cmd(["rsync", "-a", "--exclude=.git", f"{src}/", f"{WALLPAPER_HOME}/"])
     success("Updated wallpapers")
 
 
