@@ -47,7 +47,7 @@ Main packages used by the setup:
 - wallust
 - waybar
 - kitty
-- dunst
+- swaync
 - fuzzel
 
 ---
