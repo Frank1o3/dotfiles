@@ -1,4 +1,3 @@
 version=1.0.0
 release_date=2026-05-29
-release_message=update user config script
-usefull if you want to sync you config to the latest config and be able to keep some config files as they currently are
+release_message=update user config script usefull if you want to sync you config to the latest config and be able to keep some config files as they currently are
