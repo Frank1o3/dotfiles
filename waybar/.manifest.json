@@ -1,7 +1,8 @@
 {
-  "version": 6,
-  "message": "fix brightness display issue",
+  "version": 7,
+  "message": "replaced the custom brighness module with the built in one",
   "files": [
-    "waybar/config.jsonc"
+    "waybar/config.jsonc",
+    "waybar/style.css"
   ]
 }

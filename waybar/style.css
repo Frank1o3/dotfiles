@@ -23,7 +23,7 @@ window#waybar {
 #memory,
 #network,
 #pulseaudio,
-#custom-brightness,
+#backlight,
 #battery,
 #tray {
   background: alpha(@background, 0.78);
@@ -49,7 +49,7 @@ window#waybar {
 #memory:hover,
 #network:hover,
 #pulseaudio:hover,
-#custom-brightness:hover,
+#backlight:hover,
 #battery:hover,
 #tray:hover {
   background: alpha(@color1, 0.22);

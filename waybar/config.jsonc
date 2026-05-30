@@ -15,7 +15,7 @@
     "memory",
     "network",
     "pulseaudio",
-    "custom/brightness",
+    "backlight",
     "battery",
     "tray"
   ],
@@ -65,10 +65,14 @@
     },
     "tooltip": false
   },
-  "custom/brightness": {
-    "exec": "brightnessctl -m | cut -d, -f4 | sed 's/%//'",
-    "format": "󰃠  {}%",
-    "interval": 1,
+  "backlight": {
+    "device": "intel_backlight", // Check 'ls /sys/class/backlight/' if this doesn't work
+    "format": "{icon}  {percent}%",
+    "format-icons": [
+      "󰃞",
+      "󰃟",
+      "󰃠"
+    ],
     "on-scroll-up": "brightnessctl set 5%+",
     "on-scroll-down": "brightnessctl set 5%-",
     "tooltip": false
