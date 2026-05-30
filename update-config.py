@@ -2,7 +2,6 @@
 
 import json
 import urllib.request
-import tempfile
 from pathlib import Path
 
 REPO_RAW = "https://raw.githubusercontent.com/Frank1o3/dotfiles/main"
@@ -10,17 +9,17 @@ CONFIG_DIR = Path.home() / ".config"
 CONFIGS = ["hypr", "waybar", "kitty", "fuzzel", "wallust", "swaync"]
 
 
-def fetch_json(url):
+def fetch_json(url: str):
     with urllib.request.urlopen(url, timeout=10) as r:
         return json.loads(r.read().decode())
 
 
-def fetch_text(url):
+def fetch_text(url: str):
     with urllib.request.urlopen(url, timeout=10) as r:
         return r.read().decode()
 
 
-def yesno(prompt):
+def yesno(prompt: str) -> str:
     while True:
         ans = input(prompt + " [y/n/a/q]: ").strip().lower()
         if ans in ("y", "n", "a", "q"):
@@ -38,10 +37,12 @@ def main():
         if local_version_file.exists():
             try:
                 local_version = json.loads(local_version_file.read_text())["version"]
+                print(f"   Local version: v{local_version}")
             except Exception:
                 pass
 
         try:
+            print(f"{REPO_RAW}/{cfg}/.manifest.json")
             manifest = fetch_json(f"{REPO_RAW}/{cfg}/.manifest.json")
         except Exception as e:
             print(f"⚠️  Could not fetch manifest for {cfg}: {e}")
@@ -56,7 +57,7 @@ def main():
         print(f"   Local:  v{local_version} → Remote: v{remote_version}")
         if msg := manifest.get("message"):
             print(f"   📝 {msg}")
-        print(f"\n   Files to update:")
+        print("\n   Files to update:")
         for f in manifest["files"]:
             print(f"    - {f}")
 
