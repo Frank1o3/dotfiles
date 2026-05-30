@@ -1,2 +1,0 @@
--- Permissions module for Hyprland
--- This module checks if the user has the necessary permissions to run certain commands or access certain files

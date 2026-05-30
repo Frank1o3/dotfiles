@@ -1,6 +1,6 @@
 {
-  "version": 8,
-  "message": "removed the brightness script since its not needed anymore",
+  "version": 9,
+  "message": "Did some minor changes to the configs",
   "files": [
     "waybar/config.jsonc",
     "waybar/style.css"

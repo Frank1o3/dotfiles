@@ -1,7 +1,19 @@
 {
-  "version": 12,
-  "message": "removed the brightness script since its not needed anymore",
+  "version": 13,
+  "message": "Did some minor changes to the configs",
   "files": [
-    "hypr/scripts/brightness.sh"
+    "hypr/hyprland.lua",
+    "hypr/hyprpaper.conf",
+    "hypr/scripts/pick-wallpaper.sh",
+    "hypr/scripts/power-menu.sh",
+    "hypr/modules/keybinds.lua",
+    "hypr/modules/monitors.lua",
+    "hypr/modules/window_rules.lua",
+    "hypr/modules/autostart.lua",
+    "hypr/modules/decorations.lua",
+    "hypr/modules/layout.lua",
+    "hypr/modules/misc.lua",
+    "hypr/modules/input.lua",
+    "hypr/modules/env.lua"
   ]
 }

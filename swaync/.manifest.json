@@ -1,5 +1,8 @@
 {
-  "version": 1,
-  "message": "initial",
-  "files": []
+  "version": 2,
+  "message": "Did some minor changes to the configs",
+  "files": [
+    "swaync/config.json",
+    "swaync/style.css"
+  ]
 }

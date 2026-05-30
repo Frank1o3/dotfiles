@@ -1,7 +1,18 @@
 {
-  "version": 2,
-  "message": "fix issues with reloading the waybar and notification manager",
+  "version": 3,
+  "message": "Did some minor changes to the configs",
   "files": [
-    "wallust/wallust.toml"
+    "wallust/wallust.toml",
+    "wallust/templates/colors.css",
+    "wallust/templates/fuzzel.ini",
+    "wallust/templates/hyprland-colors.lua",
+    "wallust/templates/kitty.conf",
+    "wallust/templates/waybar.css",
+    "wallust/templates/gtk3.css",
+    "wallust/templates/gtk4.css",
+    "wallust/templates/swaync.css",
+    "wallust/scripts/sync-theme.sh",
+    "wallust/.config/gtk-4.0/gtk.css",
+    "wallust/.config/gtk-3.0/gtk.css"
   ]
 }

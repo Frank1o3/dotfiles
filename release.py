@@ -8,9 +8,10 @@ CONFIGS = ["hypr", "waybar", "kitty", "fuzzel", "wallust", "swaync"]
 
 
 def get_git_changes():
-    # Checks for any changes (staged or unstaged)
+    # Detects changed files (staged, unstaged, and untracked)
     status = subprocess.check_output(["git", "status", "--porcelain"]).decode()
-    return [line[3:] for line in status.splitlines()]
+    # Extract paths, ignoring the status prefix (e.g., ' M ', '?? ')
+    return [line[3:].strip() for line in status.splitlines()]
 
 
 def main():
@@ -25,13 +26,16 @@ def main():
         print("No changes detected in git.")
         return
 
+    any_updates = False
+
     for cfg in CONFIGS:
         cfg_path = Path(cfg)
         if not cfg_path.exists():
             continue
 
-        # Check if this specific folder has changes
+        # Logic Fix: Check if this folder OR any sub-files have changed
         has_changes = any(path.startswith(cfg + "/") for path in changes)
+
         if not has_changes:
             print(f"[-] {cfg}: No changes, skipping.")
             continue
@@ -45,26 +49,38 @@ def main():
             except:
                 pass
 
-        # 2. Map ALL current files (to support deletions)
-        # We ignore .version and .manifest.json themselves
+        # 2. Capture the "State of Truth"
+        # We index EVERY file currently in the folder.
+        # This ensures the update script knows these files are valid.
         all_files = [
             str(p)
             for p in cfg_path.rglob("*")
             if p.is_file() and p.name not in [".version", ".manifest.json"]
         ]
 
+        # Safety Check: Never push an empty file list if the folder isn't actually empty
+        if not all_files and any(cfg_path.iterdir()):
+            print(
+                f"⚠️  {cfg}: manifest list is empty but folder is not! Skipping for safety."
+            )
+            continue
+
         # 3. Write Manifest
         manifest = {"version": version, "message": message, "files": all_files}
 
         (cfg_path / ".manifest.json").write_text(json.dumps(manifest, indent=2))
-        ver_file.write_text(json.dumps({"version": version}))
-        print(f"[+] {cfg}: Bumped to v{version}")
+        ver_file.write_text(json.dumps({"version": version}, indent=2))
+        print(f"[+] {cfg}: Bumped to v{version} ({len(all_files)} files tracked)")
+        any_updates = True
 
-    # Git ops
-    subprocess.run(["git", "add", "."])
-    subprocess.run(["git", "commit", "-m", f"release: {message}"])
-    subprocess.run(["git", "push"])
-    print("\n✅ Pushed to GitHub.")
+    if any_updates:
+        # Git ops
+        subprocess.run(["git", "add", "."])
+        subprocess.run(["git", "commit", "-m", f"release: {message}"])
+        subprocess.run(["git", "push"])
+        print("\n✅ Pushed to GitHub.")
+    else:
+        print("\nℹ️ No manifests were updated.")
 
 
 if __name__ == "__main__":
