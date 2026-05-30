@@ -1,9 +1,7 @@
 {
-  "version": 11,
-  "message": "added more window rules and a permissions.lua file if you need it its there",
+  "version": 12,
+  "message": "removed the brightness script since its not needed anymore",
   "files": [
-    "hypr/hyprland.lua",
-    "hypr/modules/permissions.lua",
-    "hypr/modules/window_rules.lua"
+    "hypr/scripts/brightness.sh"
   ]
 }
