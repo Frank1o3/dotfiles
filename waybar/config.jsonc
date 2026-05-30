@@ -66,11 +66,11 @@
     "tooltip": false
   },
   "custom/brightness": {
-    "exec": "{HOME}/.config/hypr/scripts/brightness.sh get",
+    "exec": "brightnessctl get",
     "format": "󰃠  {}%",
     "interval": 2,
-    "on-scroll-up": "{HOME}/.config/hypr/scripts/brightness.sh up",
-    "on-scroll-down": "{HOME}/.config/hypr/scripts/brightness.sh down",
+    "on-scroll-up": "brightnessctl -e4 -n2 set 5%+",
+    "on-scroll-down": "brightnessctl -e4 -n2 set 5%-",
     "tooltip": false
   },
   "battery": {
