@@ -16,7 +16,7 @@ $PREVIEW_WIN $PREVIEW_ARGS "${WALLPAPERS[0]}" &
 PREVIEW_PID=$!
 
 # 2. Select
-SELECTED=$(printf '%s\n' "${WALLPAPERS[@]}" | fuzzel --dmenu --prompt='🖼️ Select Wallpaper: ' \
+SELECTED=$(printf '%s\n' "${WALLPAPERS[@]}" | fuzzel --dmenu --prompt='Select Wallpaper: ' \
     --width=60 --lines=12)
 kill $PREVIEW_PID 2>/dev/null || true
 [ -z "$SELECTED" ] && exit 0
@@ -31,7 +31,7 @@ wallust run "$WALLPAPER_DIR/wallpaper.jpg"
 
 # 🖼️ Set wallpaper with hyprpaper
 if ! pgrep -x hyprpaper > /dev/null; then
-    notify-send "⚠️ Starting hyprpaper" "Daemon not running, launching..."
+    notify-send "Starting hyprpaper" "Daemon not running, launching..."
     hyprpaper &
     sleep 1
 fi
@@ -46,7 +46,7 @@ hyprctl hyprpaper wallpaper ",$SELECTED_PATH"
 
 # Verify it applied
 if ! hyprctl hyprpaper listactive | grep -q "$SELECTED_PATH"; then
-    notify-send "❌ Fallback" "Reloading hyprpaper..."
+    notify-send "Fallback" "Reloading hyprpaper..."
     pkill hyprpaper
     hyprpaper &
     sleep 1
@@ -56,6 +56,5 @@ fi
 
 pkill -x waybar; waybar & disown
 pkill -x swaync; swaync & disown
-
 
 notify-send "✓ Complete" "Theme & wallpaper updated"

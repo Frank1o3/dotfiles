@@ -1,5 +1,9 @@
 {
-  "version": 1,
-  "message": "initial",
-  "files": []
+  "version": 2,
+  "message": "Updating configs so apps load with dark theme",
+  "files": [
+    "hypr/modules/autostart.lua",
+    "hypr/modules/env.lua",
+    "hypr/scripts/pick-wallpaper.sh"
+  ]
 }
