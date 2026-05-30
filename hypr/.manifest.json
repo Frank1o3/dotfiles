@@ -1,6 +1,6 @@
 {
-  "version": 13,
-  "message": "Did some minor changes to the configs",
+  "version": 14,
+  "message": "By mistake set the GTK_THEME witch messed up some stuff",
   "files": [
     "hypr/hyprland.lua",
     "hypr/hyprpaper.conf",

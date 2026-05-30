@@ -23,7 +23,6 @@ hl.env("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1")
 hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
 
 -- GTK
-hl.env("GTK_THEME", "adw-gtk3-dark")
 hl.env("GTK_ICON_THEME", "Papirus-Dark")
 hl.env("GTK_CURSOR_THEME", "catppuccin-mocha-dark-cursors")
 hl.env("GTK_APPLICATION_PREFER_DARK_THEME", "1")
