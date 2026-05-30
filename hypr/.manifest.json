@@ -1,6 +1,6 @@
 {
-  "version": 6,
-  "message": "Added a small change",
+  "version": 7,
+  "message": "Removed the Small change",
   "files": [
     "hypr/scripts/pick-wallpaper.sh"
   ]
