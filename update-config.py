@@ -95,7 +95,7 @@ def main():
 
         for f in manifest["files"]:
             if not all_mode:
-                choice = yesno(f"\n   Update {cfg}/{f}?")
+                choice = yesno(f"\n   Update {f}?")
                 if choice == "q":
                     print("\n👋 Quitting.")
                     return
@@ -105,8 +105,8 @@ def main():
                 if choice == "n":
                     continue
 
-            url = f"{REPO_RAW}/{cfg}/{f}"
-            target = CONFIG_DIR / cfg / f
+            url = f"{REPO_RAW}/{f}"
+            target = CONFIG_DIR / f
 
             print(f"\n   ↓ Fetching: {url}")
 
