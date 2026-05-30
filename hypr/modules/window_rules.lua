@@ -55,3 +55,13 @@ hl.window_rule({
 	float = true,
 	center = true,
 })
+
+hl.window_rule({
+	name = "Sober",
+	match = { initial_class = "^Minecraft.*" },
+	fullscreen = false,
+	persistent_size = true,
+	size = { 1080, 720 }, -- 720p or 1080x720
+	float = true,
+	center = true,
+})
