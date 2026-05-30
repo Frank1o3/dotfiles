@@ -9,6 +9,21 @@ import sys
 REPO_RAW = "https://raw.githubusercontent.com/Frank1o3/dotfiles/main"
 CONFIG_DIR = Path.home() / ".config"
 CONFIGS = ["hypr", "waybar", "kitty", "fuzzel", "wallust", "swaync"]
+TEXT_EXTENSIONS = {
+    ".conf",
+    ".cfg",
+    ".ini",
+    ".lua",
+    ".sh",
+    ".toml",
+    ".json",
+    ".yaml",
+    ".yml",
+    ".css",
+    ".py",
+    ".txt",
+    ".md",
+}
 
 
 def fetch_json(url: str):
@@ -26,6 +41,10 @@ def yesno(prompt: str) -> str:
         ans = input(prompt + " [y/n/a/q]: ").strip().lower()
         if ans in ("y", "n", "a", "q"):
             return ans
+
+
+def replace_home_placeholder(content: str) -> str:
+    return content.replace("{HOME}", str(Path.home()))
 
 
 def main():
@@ -94,6 +113,8 @@ def main():
             # Step 1: Download
             try:
                 content = fetch_text(url)
+                if target.suffix.lower() in TEXT_EXTENSIONS:
+                    content = replace_home_placeholder(content)
                 print(f"   ✓ Downloaded ({len(content)} bytes)")
             except urllib.error.HTTPError as e:
                 print(f"   ✗ Download failed: HTTP {e.code}")

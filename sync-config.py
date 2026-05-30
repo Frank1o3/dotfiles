@@ -4,9 +4,9 @@ Dotfiles Sync Script
 Syncs local repo configs -> ~/.config
 Replaces {HOME} placeholders with actual $HOME path
 """
+
 import os
 import sys
-import shutil
 import subprocess
 from pathlib import Path
 
@@ -21,17 +21,44 @@ WALLPAPER_HOME = Path.home() / "wallpapers"
 
 CONFIGS = ["hypr", "waybar", "kitty", "fuzzel", "wallust", "swaync"]
 TEXT_EXTENSIONS = {
-    ".conf", ".cfg", ".ini", ".lua", ".sh", ".bash", ".toml",
-    ".json", ".yaml", ".yml", ".css", ".scss", ".py", ".txt",
-    ".md", ".js", ".ts", ".html", ".xml", ".rc", ".theme"
+    ".conf",
+    ".cfg",
+    ".ini",
+    ".lua",
+    ".sh",
+    ".bash",
+    ".toml",
+    ".json",
+    ".yaml",
+    ".yml",
+    ".css",
+    ".scss",
+    ".py",
+    ".txt",
+    ".md",
+    ".js",
+    ".ts",
+    ".html",
+    ".xml",
+    ".rc",
+    ".theme",
 }
+
 
 # =========================================================
 # Logging Helpers
 # =========================================================
-def log(msg): print(f"ℹ️  {msg}")
-def warn(msg): print(f"⚠️  {msg}", file=sys.stderr)
-def success(msg): print(f"✅ {msg}")
+def log(msg):
+    print(f"ℹ️  {msg}")
+
+
+def warn(msg):
+    print(f"⚠️  {msg}", file=sys.stderr)
+
+
+def success(msg):
+    print(f"✅ {msg}")
+
 
 def run_cmd(cmd, **kwargs):
     """Execute command, respecting DRY_RUN and VERBOSE."""
@@ -46,6 +73,7 @@ def run_cmd(cmd, **kwargs):
     except FileNotFoundError:
         warn(f"Command not found: {cmd[0]}")
         return 1
+
 
 # =========================================================
 # Core Functions
@@ -67,9 +95,10 @@ def sync_config(name: str):
                 ["diff", "-qr", str(src), str(dest)],
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
-                check=True
+                check=True,
             )
-            if VERBOSE: log(f"No changes: {name}")
+            if VERBOSE:
+                log(f"No changes: {name}")
             return
         except subprocess.CalledProcessError:
             pass  # Files differ
@@ -78,9 +107,11 @@ def sync_config(name: str):
     run_cmd(["rsync", "-a", "--exclude=.git", f"{src}/", f"{dest}/"])
     success(f"Updated: {name}")
 
+
 def replace_home_placeholder(target_dir: Path):
     home_str = str(Path.home())
-    if VERBOSE: log(f"Scanning for {{HOME}} in: {target_dir}")
+    if VERBOSE:
+        log(f"Scanning for {{HOME}} in: {target_dir}")
 
     for file in target_dir.rglob("*"):
         if not file.is_file() or file.is_symlink():
@@ -93,10 +124,14 @@ def replace_home_placeholder(target_dir: Path):
                 if DRY_RUN:
                     log(f"[dry-run] Would replace {{HOME}} in: {file}")
                 else:
-                    file.write_text(content.replace("{HOME}", home_str), encoding="utf-8")
-                    if VERBOSE: log(f"✓ Replaced {{HOME}} in: {file}")
+                    file.write_text(
+                        content.replace("{HOME}", home_str), encoding="utf-8"
+                    )
+                    if VERBOSE:
+                        log(f"✓ Replaced {{HOME}} in: {file}")
         except Exception as e:
             warn(f"Failed to process {file}: {e}")
+
 
 def sync_wallpapers():
     src = REPO_DIR / "wallpapers"
@@ -112,9 +147,10 @@ def sync_wallpapers():
                 ["diff", "-qr", str(src), str(WALLPAPER_HOME)],
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
-                check=True
+                check=True,
             )
-            if VERBOSE: log("No changes: wallpapers")
+            if VERBOSE:
+                log("No changes: wallpapers")
             return
         except subprocess.CalledProcessError:
             pass
@@ -144,6 +180,7 @@ def main():
     success("Config sync complete")
 
     log("You may need to restart or sign out and back in to see changes.")
+
 
 if __name__ == "__main__":
     try:
