@@ -1,7 +1,8 @@
 {
-  "version": 3,
-  "message": "Wallpaper picker script fix so it can reload waybar and swaync",
+  "version": 4,
+  "message": "fix issues with reloading the waybar and notification manager",
   "files": [
+    "hypr/modules/autostart.lua",
     "hypr/scripts/pick-wallpaper.sh"
   ]
 }

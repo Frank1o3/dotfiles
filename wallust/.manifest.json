@@ -1,5 +1,7 @@
 {
-  "version": 1,
-  "message": "initial",
-  "files": []
+  "version": 2,
+  "message": "fix issues with reloading the waybar and notification manager",
+  "files": [
+    "wallust/wallust.toml"
+  ]
 }

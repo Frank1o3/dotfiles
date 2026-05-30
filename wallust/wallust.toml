@@ -59,3 +59,4 @@ swaync = { template = 'swaync.css', target = '~/.config/swaync/style.css' }
 [hooks]
 # Run commands when wallust is invoked. Useful to avoid scripting.
 #wallpaper = """swww img "$(find ~/Media/Pictures/Wallpapers -iregex '.*.\\(jpg\\|jpeg\\|png\\|gif\\)' -type f | shuf -n 1)" """
+post = "systemctl --user restart waybar swaync"

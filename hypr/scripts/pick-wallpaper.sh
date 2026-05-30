@@ -54,12 +54,4 @@ if ! hyprctl hyprpaper listactive | grep -q "$SELECTED_PATH"; then
     hyprctl hyprpaper wallpaper ",$SELECTED_PATH"
 fi
 
-pkill -x waybar || true
-sleep 0.2
-waybar &
-
-pkill -x swaync || true
-sleep 0.2
-swaync &
-
 notify-send "✓ Complete" "Theme & wallpaper updated"

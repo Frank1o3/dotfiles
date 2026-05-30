@@ -42,6 +42,8 @@ TEXT_EXTENSIONS = {
     ".xml",
     ".rc",
     ".theme",
+    ".json",
+    ".jsonc",
 }
 
 
