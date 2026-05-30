@@ -6,13 +6,13 @@ ACTION="${1:-get}"
 
 case "$ACTION" in
     get)
-        ddcutil --brief getvcp 10 2>/dev/null \
-          | awk '{print $4}'
+        brightnessctl get 10 2>/dev/null \
+            | awk '{print $4}'
         ;;
     up)
-        ddcutil --sleep-multiplier=.1 setvcp 10 + 5 >/dev/null
+        brightnessctl -e4 -n2 set 5%+ >/dev/null
         ;;
     down)
-        ddcutil --sleep-multiplier=.1 setvcp 10 - 5 >/dev/null
+        brightnessctl -e4 -n2 set 5%- >/dev/null
         ;;
 esac

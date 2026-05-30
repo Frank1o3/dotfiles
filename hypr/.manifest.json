@@ -1,7 +1,8 @@
 {
-  "version": 9,
-  "message": "Minor changes to the autostart",
+  "version": 10,
+  "message": "Small change to use more supported tools",
   "files": [
-    "hypr/hyprland.lua"
+    "hypr/modules/keybinds.lua",
+    "hypr/scripts/brightness.sh"
   ]
 }
