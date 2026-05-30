@@ -1,9 +1,7 @@
 {
-  "version": 2,
-  "message": "Updating configs so apps load with dark theme",
+  "version": 3,
+  "message": "Wallpaper picker script fix so it can reload waybar and swaync",
   "files": [
-    "hypr/modules/autostart.lua",
-    "hypr/modules/env.lua",
     "hypr/scripts/pick-wallpaper.sh"
   ]
 }
