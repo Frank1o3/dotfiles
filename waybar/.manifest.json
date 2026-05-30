@@ -1,5 +1,7 @@
 {
-  "version": 1,
-  "message": "initial",
-  "files": []
+  "version": 2,
+  "message": "Updated the swaybar so it uses the built-in username repalcement system",
+  "files": [
+    "waybar/config.jsonc"
+  ]
 }

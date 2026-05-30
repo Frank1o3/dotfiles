@@ -65,11 +65,11 @@
     "tooltip": false
   },
   "custom/brightness": {
-    "exec": "/home/franklin/.config/hypr/scripts/brightness.sh get",
+    "exec": "/home/{HOME}/.config/hypr/scripts/brightness.sh get",
     "format": "󰃠  {}%",
     "interval": 2,
-    "on-scroll-up": "/home/franklin/.config/hypr/scripts/brightness.sh up",
-    "on-scroll-down": "/home/franklin/.config/hypr/scripts/brightness.sh down",
+    "on-scroll-up": "/home/{HOME}/.config/hypr/scripts/brightness.sh up",
+    "on-scroll-down": "/home/{HOME}/.config/hypr/scripts/brightness.sh down",
     "tooltip": false
   },
   "battery": {
