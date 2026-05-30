@@ -1,6 +1,6 @@
 {
-  "version": 2,
-  "message": "Updated the swaybar so it uses the built-in username repalcement system",
+  "version": 3,
+  "message": "Fixed path's issue in the waybar config",
   "files": [
     "waybar/config.jsonc"
   ]
