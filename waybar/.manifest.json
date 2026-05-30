@@ -1,6 +1,6 @@
 {
-  "version": 3,
-  "message": "Fixed path's issue in the waybar config",
+  "version": 4,
+  "message": "Added networking tray and the network status acts as a shortcut to edit you system networks",
   "files": [
     "waybar/config.jsonc"
   ]

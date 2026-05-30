@@ -36,7 +36,9 @@ DEPS = {
     "wallust": "wallust",
     "hyprctl": "hyprland",
     "hyprpaper": "hyprpaper",
-    "hyprshutdown": "hyprshutdown",
+    "nmcli": "networkmanager",
+    "nm-connection-editor": "nm-connection-editor",
+    "nm-applet": "network-manager-applet",
 }
 SERVICES = ["hyprpaper.service"]
 

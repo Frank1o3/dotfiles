@@ -1,8 +1,7 @@
 {
-  "version": 4,
-  "message": "fix issues with reloading the waybar and notification manager",
+  "version": 5,
+  "message": "Added networking tray and the network status acts as a shortcut to edit you system networks",
   "files": [
-    "hypr/modules/autostart.lua",
-    "hypr/scripts/pick-wallpaper.sh"
+    "hypr/modules/autostart.lua"
   ]
 }
