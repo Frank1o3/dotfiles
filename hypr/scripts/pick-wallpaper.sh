@@ -54,4 +54,9 @@ if ! hyprctl hyprpaper listactive | grep -q "$SELECTED_PATH"; then
     hyprctl hyprpaper wallpaper ",$SELECTED_PATH"
 fi
 
+# if /usr/share/sddm/themes/win11_sddm_theme exists it should ad at Backgrounds a current.jpg which is the same wallpaper we just set, so we can copy it there to update the sddm background as well
+if [ -d "/usr/share/sddm/themes/win11_sddm_theme" ]; then
+    sudo cp "$SELECTED_PATH" "/usr/share/sddm/themes/win11_sddm_theme/Backgrounds/current.jpg"
+fi
+
 notify-send "✓ Complete" "Theme & wallpaper updated"

@@ -1,7 +1,7 @@
 {
-  "version": 5,
-  "message": "Added networking tray and the network status acts as a shortcut to edit you system networks",
+  "version": 6,
+  "message": "Added a small change",
   "files": [
-    "hypr/modules/autostart.lua"
+    "hypr/scripts/pick-wallpaper.sh"
   ]
 }
