@@ -21,7 +21,7 @@ VERBOSE = os.environ.get("VERBOSE", "0") == "1"
 SKIP_DEPS = os.environ.get("SKIP_DEPS", "0") == "1"
 DRY_RUN = os.environ.get("DRY_RUN", "0") == "1"
 
-CONFIG_DIRS = ["swaync", "fuzzel", "hypr", "kitty", "wallust", "waybar"]
+CONFIG_DIRS = ["swaync", "fuzzel", "hypr", "kitty", "wallust", "waybar", "fish"]
 TEXT_EXTENSIONS = {
     ".conf", ".cfg", ".ini", ".lua", ".sh", ".bash", ".toml",
     ".json", ".yaml", ".yml", ".css", ".scss", ".py", ".txt",
@@ -39,6 +39,7 @@ DEPS = {
     "nmcli": "networkmanager",
     "nm-connection-editor": "nm-connection-editor",
     "nm-applet": "network-manager-applet",
+    "fish": "fish",
 }
 SERVICES = ["hyprpaper.service"]
 

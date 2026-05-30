@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "message": "Added a custom fish greeting",
+  "files": [
+    "fish/config.fish"
+  ]
+}

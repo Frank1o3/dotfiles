@@ -4,7 +4,7 @@ import subprocess
 from pathlib import Path
 import sys
 
-CONFIGS = ["hypr", "waybar", "kitty", "fuzzel", "wallust", "swaync"]
+CONFIGS = ["hypr", "waybar", "kitty", "fuzzel", "wallust", "swaync", "fish"]
 
 
 def get_git_changes():

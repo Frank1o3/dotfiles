@@ -5,7 +5,7 @@ from pathlib import Path
 
 REPO_RAW = "https://raw.githubusercontent.com/Frank1o3/dotfiles/main"
 CONFIG_DIR = Path.home() / ".config"
-CONFIGS = ["hypr", "waybar", "kitty", "fuzzel", "wallust", "swaync"]
+CONFIGS = ["hypr", "waybar", "kitty", "fuzzel", "wallust", "swaync", "fish"]
 
 
 def fetch(url):
