@@ -1,6 +1,6 @@
 {
-  "version": 7,
-  "message": "replaced the custom brighness module with the built in one",
+  "version": 8,
+  "message": "removed the brightness script since its not needed anymore",
   "files": [
     "waybar/config.jsonc",
     "waybar/style.css"

@@ -1,159 +1,81 @@
 #!/usr/bin/env python3
-
 import json
 import urllib.request
-import urllib.error
 from pathlib import Path
-import sys
+import os
 
 REPO_RAW = "https://raw.githubusercontent.com/Frank1o3/dotfiles/main"
 CONFIG_DIR = Path.home() / ".config"
 CONFIGS = ["hypr", "waybar", "kitty", "fuzzel", "wallust", "swaync"]
-TEXT_EXTENSIONS = {
-    ".conf",
-    ".cfg",
-    ".ini",
-    ".lua",
-    ".sh",
-    ".toml",
-    ".json",
-    ".yaml",
-    ".yml",
-    ".css",
-    ".py",
-    ".txt",
-    ".md",
-}
 
 
-def fetch_json(url: str):
+def fetch(url):
     with urllib.request.urlopen(url, timeout=10) as r:
-        return json.loads(r.read().decode())
-
-
-def fetch_text(url: str):
-    with urllib.request.urlopen(url, timeout=10) as r:
-        return r.read().decode()
-
-
-def yesno(prompt: str) -> str:
-    while True:
-        ans = input(prompt + " [y/n/a/q]: ").strip().lower()
-        if ans in ("y", "n", "a", "q"):
-            return ans
-
-
-def replace_home_placeholder(content: str) -> str:
-    return content.replace("{HOME}", str(Path.home()))
+        return r.read()
 
 
 def main():
-    # Check for interactive terminal
-    if not sys.stdin.isatty():
-        print("❌ Error: This script requires an interactive terminal.")
-        print("💡 In fish, run:")
-        print("   python3 (curl -fsSL .../update-config.py | psub)")
-        print("   # or download first:")
-        print("   curl -fsSL .../update-config.py -o update.py && python3 update.py")
-        return
-
-    print("🔍 Checking updates...\n")
-    all_mode = False
+    print("🚀 Starting Update Check...\n")
 
     for cfg in CONFIGS:
-        local_version_file = CONFIG_DIR / cfg / ".version"
-        local_version = 0
+        local_dir = CONFIG_DIR / cfg
+        local_version_file = local_dir / ".version"
 
+        # Get local version
+        local_ver = 0
         if local_version_file.exists():
             try:
-                local_version = json.loads(local_version_file.read_text())["version"]
-            except Exception:
+                local_ver = json.loads(local_version_file.read_text())["version"]
+            except:
                 pass
 
-        manifest_url = f"{REPO_RAW}/{cfg}/.manifest.json"
+        # Get remote manifest
         try:
-            manifest = fetch_json(manifest_url)
-        except urllib.error.HTTPError as e:
-            print(f"⚠️  {cfg}: Manifest not found ({e.code}) at {manifest_url}")
-            continue
-        except Exception as e:
-            print(f"⚠️  {cfg}: Could not fetch manifest: {e}")
+            manifest = json.loads(fetch(f"{REPO_RAW}/{cfg}/.manifest.json").decode())
+        except:
+            print(f"⚠️  {cfg}: Could not fetch manifest.")
             continue
 
-        remote_version = manifest["version"]
-        if remote_version <= local_version:
-            print(f"✓ {cfg} is up to date (v{local_version})")
+        remote_ver = manifest["version"]
+
+        if remote_ver <= local_ver:
+            print(f"✅ {cfg} is up to date (v{local_ver})")
             continue
 
-        print(f"\n📦 {cfg} update available")
-        print(f"   Local:  v{local_version} → Remote: v{remote_version}")
-        if msg := manifest.get("message"):
-            print(f"   📝 {msg}")
-        print("\n   Files to update:")
-        for f in manifest["files"]:
-            print(f"    - {f}")
+        print(f"📦 Updating {cfg}: v{local_ver} -> v{remote_ver}")
+        remote_files = manifest["files"]  # List of relative paths like "hypr/init.lua"
 
-        for f in manifest["files"]:
-            if not all_mode:
-                choice = yesno(f"\n   Update {f}?")
-                if choice == "q":
-                    print("\n👋 Quitting.")
-                    return
-                if choice == "a":
-                    all_mode = True
-                    print("   → Applying to all remaining files")
-                if choice == "n":
-                    continue
+        # 1. DELETE files that no longer exist in the repo
+        # Walk local directory
+        for item in local_dir.rglob("*"):
+            if item.is_file() and item.name not in [".version"]:
+                # Convert local path to relative repo path format
+                rel_path = str(item.relative_to(CONFIG_DIR))
+                if rel_path not in remote_files:
+                    print(f"   🗑️  Removing deprecated: {rel_path}")
+                    item.unlink()
 
-            url = f"{REPO_RAW}/{f}"
+        # 2. DOWNLOAD/UPDATE files
+        for f in remote_files:
             target = CONFIG_DIR / f
-
-            print(f"\n   ↓ Fetching: {url}")
-
-            # Step 1: Download
+            print(f"   ↓ Downloading: {f}")
             try:
-                content = fetch_text(url)
-                if target.suffix.lower() in TEXT_EXTENSIONS:
-                    content = replace_home_placeholder(content)
-                print(f"   ✓ Downloaded ({len(content)} bytes)")
-            except urllib.error.HTTPError as e:
-                print(f"   ✗ Download failed: HTTP {e.code}")
-                print("      The file may not exist at that path in the repo.")
-                print(
-                    "      Check your manifest 'files' paths are relative (e.g., 'modules/foo.lua', not 'hypr/modules/foo.lua')"
-                )
-                continue
-            except urllib.error.URLError as e:
-                print(f"   ✗ Download failed: Network error — {e.reason}")
-                continue
-            except Exception as e:
-                print(f"   ✗ Download failed: {type(e).__name__}: {e}")
-                continue
-
-            # Step 2: Write to disk
-            try:
+                content = fetch(f"{REPO_RAW}/{f}")
                 target.parent.mkdir(parents=True, exist_ok=True)
-                target.write_text(content)
-                print(f"   ✓ Installed → {target}")
-            except PermissionError:
-                print(f"   ✗ Write failed: Permission denied for {target}")
-                print(f"      Try: chmod -R u+w ~/.config/{cfg}")
-                continue
+
+                # Check if we should replace {HOME}
+                if target.suffix in [".conf", ".lua", ".json", ".sh"]:
+                    text = content.decode().replace("{HOME}", str(Path.home()))
+                    target.write_text(text)
+                else:
+                    target.write_bytes(content)
             except Exception as e:
-                print(f"   ✗ Write failed: {type(e).__name__}: {e}")
-                continue
+                print(f"   ❌ Failed {f}: {e}")
 
-        # Update local version tracker
-        try:
-            local_version_file.parent.mkdir(parents=True, exist_ok=True)
-            local_version_file.write_text(
-                json.dumps({"version": remote_version}, indent=2) + "\n"
-            )
-            print(f"\n✅ {cfg} updated to v{remote_version}")
-        except Exception as e:
-            print(f"\n⚠️  Could not update version file for {cfg}: {e}")
-
-    print("\n🎉 Update complete!")
+        # Update version file
+        local_version_file.parent.mkdir(parents=True, exist_ok=True)
+        local_version_file.write_text(json.dumps({"version": remote_ver}))
+        print(f"✨ {cfg} update complete.\n")
 
 
 if __name__ == "__main__":
