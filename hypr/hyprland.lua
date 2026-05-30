@@ -7,7 +7,6 @@ local WALLPAPER_DIR = HOME .. "/wallpapers"
 
 -- Load modules
 local setupKeybinds = require("modules.keybinds")
-require("modules.autostart")(WALLPAPER_DIR)
 require("modules.env")
 require("modules.misc")
 require("modules.monitors")
@@ -15,3 +14,4 @@ require("modules.decorations")
 require("modules.layout")
 require("modules.window_rules")
 require("modules.input")
+require("modules.autostart")(WALLPAPER_DIR)

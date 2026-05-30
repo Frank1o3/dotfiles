@@ -1,8 +1,7 @@
 {
-  "version": 8,
-  "message": "Minor changes to the theming",
+  "version": 9,
+  "message": "Minor changes to the autostart",
   "files": [
-    "hypr/modules/autostart.lua",
-    "hypr/modules/env.lua"
+    "hypr/hyprland.lua"
   ]
 }
