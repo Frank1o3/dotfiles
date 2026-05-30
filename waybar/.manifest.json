@@ -1,6 +1,6 @@
 {
-  "version": 5,
-  "message": "fixed the monitor brightness issue",
+  "version": 6,
+  "message": "fix brightness display issue",
   "files": [
     "waybar/config.jsonc"
   ]

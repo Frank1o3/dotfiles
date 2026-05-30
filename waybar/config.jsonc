@@ -66,11 +66,11 @@
     "tooltip": false
   },
   "custom/brightness": {
-    "exec": "brightnessctl get",
+    "exec": "brightnessctl -m | cut -d, -f4 | sed 's/%//'",
     "format": "󰃠  {}%",
-    "interval": 2,
-    "on-scroll-up": "brightnessctl -e4 -n2 set 5%+",
-    "on-scroll-down": "brightnessctl -e4 -n2 set 5%-",
+    "interval": 1,
+    "on-scroll-up": "brightnessctl set 5%+",
+    "on-scroll-down": "brightnessctl set 5%-",
     "tooltip": false
   },
   "battery": {
