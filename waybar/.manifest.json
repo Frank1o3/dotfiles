@@ -1,6 +1,6 @@
 {
-  "version": 9,
-  "message": "Did some minor changes to the configs",
+  "version": 10,
+  "message": "refactored some of the configs and added a helper tool that install the needed packages and the config",
   "files": [
     "waybar/config.jsonc",
     "waybar/style.css"

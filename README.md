@@ -33,7 +33,7 @@ It also includes:
 Run:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Frank1o3/dotfiles/main/install.py | python3
+curl -fsSL https://raw.githubusercontent.com/Frank1o3/dotfiles/main/setup.sh | bash
 ```
 
 ---

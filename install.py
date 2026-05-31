@@ -3,6 +3,7 @@
 Dotfiles Installer
 Clones repo, backs up old configs, deploys new ones, replaces {HOME} placeholders
 """
+
 import os
 import sys
 import shutil
@@ -14,7 +15,9 @@ from pathlib import Path
 # =========================================================
 # Configuration & Environment
 # =========================================================
-REPO_URL = sys.argv[1] if len(sys.argv) > 1 else "https://github.com/Frank1o3/dotfiles.git"
+REPO_URL = (
+    sys.argv[1] if len(sys.argv) > 1 else "https://github.com/Frank1o3/dotfiles.git"
+)
 REPO_BRANCH = sys.argv[2] if len(sys.argv) > 2 else "main"
 
 VERBOSE = os.environ.get("VERBOSE", "0") == "1"
@@ -23,9 +26,27 @@ DRY_RUN = os.environ.get("DRY_RUN", "0") == "1"
 
 CONFIG_DIRS = ["swaync", "fuzzel", "hypr", "kitty", "wallust", "waybar", "fish"]
 TEXT_EXTENSIONS = {
-    ".conf", ".cfg", ".ini", ".lua", ".sh", ".bash", ".toml",
-    ".json", ".yaml", ".yml", ".css", ".scss", ".py", ".txt",
-    ".md", ".js", ".ts", ".html", ".xml", ".rc", ".theme"
+    ".conf",
+    ".cfg",
+    ".ini",
+    ".lua",
+    ".sh",
+    ".bash",
+    ".toml",
+    ".json",
+    ".yaml",
+    ".yml",
+    ".css",
+    ".scss",
+    ".py",
+    ".txt",
+    ".md",
+    ".js",
+    ".ts",
+    ".html",
+    ".xml",
+    ".rc",
+    ".theme",
 }
 DEPS = {
     "git": "git",
@@ -43,12 +64,21 @@ DEPS = {
 }
 SERVICES = ["hyprpaper.service"]
 
+
 # =========================================================
 # Logging Helpers
 # =========================================================
-def log(msg): print(f"ℹ️  {msg}")
-def warn(msg): print(f"⚠️  {msg}", file=sys.stderr)
-def err(msg): print(f"❌ {msg}", file=sys.stderr)
+def log(msg):
+    print(f"ℹ️  {msg}")
+
+
+def warn(msg):
+    print(f"⚠️  {msg}", file=sys.stderr)
+
+
+def err(msg):
+    print(f"❌ {msg}", file=sys.stderr)
+
 
 def run_cmd(cmd, **kwargs):
     """Execute command, respecting DRY_RUN and VERBOSE."""
@@ -70,6 +100,7 @@ def run_cmd(cmd, **kwargs):
         warn(f"Command failed: {cmd_str} — {e}")
         return 1
 
+
 # =========================================================
 # Core Functions
 # =========================================================
@@ -86,12 +117,13 @@ def is_hyprland() -> bool:
                 ["hyprctl", "version"],
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
-                check=True
+                check=True,
             )
             return True
         except subprocess.CalledProcessError:
             pass
     return False
+
 
 def check_dependencies():
     """Check for required binaries; return list of missing packages."""
@@ -102,7 +134,8 @@ def check_dependencies():
     missing = []
     for binary, pkg in DEPS.items():
         if shutil.which(binary):
-            if VERBOSE: log(f"✅ Found: {binary}")
+            if VERBOSE:
+                log(f"✅ Found: {binary}")
         else:
             warn(f"Missing: {binary} (package: {pkg})")
             missing.append(pkg)
@@ -126,6 +159,7 @@ def check_dependencies():
     log("✅ All dependencies satisfied")
     return []
 
+
 def backup_configs(backup_stamp: str):
     """Backup existing config directories."""
     log("📦 Backing up existing configurations...")
@@ -137,12 +171,15 @@ def backup_configs(backup_stamp: str):
                 print(f"[dry-run] mv {src} {dest}")
             else:
                 shutil.move(str(src), str(dest))
-                if VERBOSE: log(f"Backed up: {dir_name}")
+                if VERBOSE:
+                    log(f"Backed up: {dir_name}")
+
 
 def replace_home_placeholder(target_dir: Path):
     """Replace {HOME} placeholder with actual $HOME in text files."""
     home_str = str(Path.home())
-    if VERBOSE: log(f"Scanning for {{HOME}} in: {target_dir}")
+    if VERBOSE:
+        log(f"Scanning for {{HOME}} in: {target_dir}")
 
     for file in target_dir.rglob("*"):
         if not file.is_file() or file.is_symlink():
@@ -155,10 +192,14 @@ def replace_home_placeholder(target_dir: Path):
                 if DRY_RUN:
                     log(f"[dry-run] Would replace {{HOME}} in: {file}")
                 else:
-                    file.write_text(content.replace("{HOME}", home_str), encoding="utf-8")
-                    if VERBOSE: log(f"✓ Replaced {{HOME}} in: {file}")
+                    file.write_text(
+                        content.replace("{HOME}", home_str), encoding="utf-8"
+                    )
+                    if VERBOSE:
+                        log(f"✓ Replaced {{HOME}} in: {file}")
         except Exception as e:
             warn(f"Failed to process {file}: {e}")
+
 
 def deploy_configs(repo_path: Path):
     """Copy config directories from repo to ~/.config."""
@@ -172,7 +213,8 @@ def deploy_configs(repo_path: Path):
                 print(f"[dry-run] cp -a {src}/. {dest}/")
             else:
                 shutil.copytree(str(src), str(dest), dirs_exist_ok=True)
-                if VERBOSE: log(f"Deployed: {dir_name}")
+                if VERBOSE:
+                    log(f"Deployed: {dir_name}")
 
     # Replace {HOME} placeholders after deploy
     log("🔧 Resolving {HOME} placeholders...")
@@ -180,6 +222,7 @@ def deploy_configs(repo_path: Path):
         dest = Path.home() / ".config" / dir_name
         if dest.is_dir():
             replace_home_placeholder(dest)
+
 
 def deploy_wallpapers(repo_path: Path):
     """Copy wallpapers directory."""
@@ -195,6 +238,7 @@ def deploy_wallpapers(repo_path: Path):
             replace_home_placeholder(dest)
         log("🖼️  Wallpapers deployed")
 
+
 def configure_services():
     """Enable/start systemd user services."""
     if not shutil.which("systemctl"):
@@ -206,7 +250,9 @@ def configure_services():
             # Check if service file exists
             result = subprocess.run(
                 ["systemctl", "--user", "list-unit-files"],
-                capture_output=True, text=True, check=False
+                capture_output=True,
+                text=True,
+                check=False,
             )
             if service not in result.stdout:
                 warn(f"Service not found: {service}")
@@ -218,18 +264,23 @@ def configure_services():
             else:
                 run_cmd(["systemctl", "--user", "enable", service])
                 # Check if already active
-                active = subprocess.run(
-                    ["systemctl", "--user", "is-active", "--quiet", service],
-                    check=False
-                ).returncode == 0
+                active = (
+                    subprocess.run(
+                        ["systemctl", "--user", "is-active", "--quiet", service],
+                        check=False,
+                    ).returncode
+                    == 0
+                )
                 if active:
                     run_cmd(["systemctl", "--user", "restart", service])
                 else:
                     run_cmd(["systemctl", "--user", "start", service])
 
-            if VERBOSE: log(f"Enabled: {service}")
+            if VERBOSE:
+                log(f"Enabled: {service}")
         except Exception as e:
             warn(f"Failed to configure {service}: {e}")
+
 
 # =========================================================
 # Main Execution
@@ -241,7 +292,9 @@ def main():
     # Hyprland environment check
     if not is_hyprland() and not SKIP_DEPS:
         err("This setup requires Hyprland.")
-        err(f"Detected: XDG_CURRENT_DESKTOP='{os.environ.get('XDG_CURRENT_DESKTOP', 'unset')}'")
+        err(
+            f"Detected: XDG_CURRENT_DESKTOP='{os.environ.get('XDG_CURRENT_DESKTOP', 'unset')}'"
+        )
         sys.exit(1)
 
     if VERBOSE:
@@ -260,10 +313,19 @@ def main():
     log("🌐 Cloning repository...")
     with tempfile.TemporaryDirectory() as temp_repo:
         repo_path = Path(temp_repo)
-        run_cmd([
-            "git", "clone", "--depth", "1", "--branch", REPO_BRANCH,
-            REPO_URL, str(repo_path)
-        ], check=True)
+        run_cmd(
+            [
+                "git",
+                "clone",
+                "--depth",
+                "1",
+                "--branch",
+                REPO_BRANCH,
+                REPO_URL,
+                str(repo_path),
+            ],
+            check=True,
+        )
 
         # Deploy configs and wallpapers
         deploy_configs(repo_path)
@@ -285,6 +347,7 @@ def main():
     print("  • dunst")
     print("  • fuzzel")
 
+
 if __name__ == "__main__":
     try:
         main()
@@ -298,5 +361,6 @@ if __name__ == "__main__":
         err(f"Unexpected error: {e}")
         if VERBOSE:
             import traceback
+
             traceback.print_exc()
         sys.exit(1)

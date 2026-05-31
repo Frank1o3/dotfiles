@@ -41,7 +41,7 @@ hl.window_rule({
 	match = { initial_class = "steam_app_3199170" },
 	fullscreen = false,
 	persistent_size = true,
-	size = { 1280, 720 }, -- 720p or 1280x720
+	size = { 1180, 620 }, -- 720p or 1280x720
 	float = true,
 	center = true,
 })
@@ -51,7 +51,7 @@ hl.window_rule({
 	match = { initial_class = "org.vinegarhq.Sober" },
 	fullscreen = false,
 	persistent_size = true,
-	size = { 1280, 720 }, -- 720p or 1280x720
+	size = { 1180, 620 }, -- 720p or 1280x720
 	float = true,
 	center = true,
 })
@@ -61,7 +61,7 @@ hl.window_rule({
 	match = { initial_class = "^Minecraft.*" },
 	fullscreen = false,
 	persistent_size = true,
-	size = { 1080, 720 }, -- 720p or 1080x720
+	size = { 1180, 620 }, -- 720p or 1080x720
 	float = true,
 	center = true,
 })

@@ -21,6 +21,8 @@
   ],
   "hyprland/workspaces": {
     "format": "{name}",
+    "monitor": "DP-4", // Forces this bar instance to only track DP-4 workspaces
+    "all-outputs": false,
     "on-scroll-up": "hyprctl dispatch workspace e+1",
     "on-scroll-down": "hyprctl dispatch workspace e-1"
   },
