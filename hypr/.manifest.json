@@ -1,6 +1,6 @@
 {
-  "version": 15,
-  "message": "refactored some of the configs and added a helper tool that install the needed packages and the config",
+  "version": 16,
+  "message": "fixed some window rule's",
   "files": [
     "hypr/hyprland.lua",
     "hypr/hyprpaper.conf",

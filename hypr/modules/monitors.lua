@@ -6,8 +6,7 @@ hl.monitor({
 	mode = "1920x1080@60.00Hz",
 	position = "1920x-30",
 	scale = 1.0,
-	cm = "srgb",
-	disabled = true
+	cm = "srgb"
 })
 
 -- 2. Primary monitor positioned at 0x0

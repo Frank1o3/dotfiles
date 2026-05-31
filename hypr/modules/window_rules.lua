@@ -57,7 +57,7 @@ hl.window_rule({
 })
 
 hl.window_rule({
-	name = "Sober",
+	name = "Minecraft",
 	match = { initial_class = "^Minecraft.*" },
 	fullscreen = false,
 	persistent_size = true,
