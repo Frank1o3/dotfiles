@@ -1,6 +1,6 @@
 {
-  "version": 16,
-  "message": "fixed some window rule's",
+  "version": 17,
+  "message": "Updated the window rules in favor of a unified format",
   "files": [
     "hypr/hyprland.lua",
     "hypr/hyprpaper.conf",

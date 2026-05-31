@@ -15,7 +15,7 @@ def fetch(url):
 
 def yesno(prompt: str) -> bool:
     while True:
-        ans = input(f"{prompt} [y/n]: ").strip().lower()
+        ans = input(f"{prompt} [Y/n]: ").strip().lower() or "y"
         if ans in ("y", "n"):
             return ans == "y"
 
