@@ -1,8 +1,9 @@
 {
-  "version": 10,
-  "message": "refactored some of the configs and added a helper tool that install the needed packages and the config",
+  "version": 11,
+  "message": "updated swaybar config to read correct cpu temp and show gpu clock",
   "files": [
     "waybar/config.jsonc",
-    "waybar/style.css"
+    "waybar/style.css",
+    "waybar/scripts/igpu.sh"
   ]
 }

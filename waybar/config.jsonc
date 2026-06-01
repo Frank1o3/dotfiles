@@ -11,6 +11,7 @@
   ],
   "modules-right": [
     "cpu",
+    "custom/igpu",
     "temperature",
     "memory",
     "network",
@@ -46,10 +47,24 @@
     "format": "󰍛  {usage}%",
     "tooltip": false
   },
+  "custom/igpu": {
+    "exec": "~/.config/waybar/scripts/igpu.sh",
+    "interval": 2,
+    "format": "{}",
+    "tooltip": true
+  },
   "temperature": {
+    "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input", // ← Update with your actual path
     "critical-threshold": 85,
     "format": "  {temperatureC}°C",
-    "tooltip": false
+    "format-icons": [
+      "",
+      "",
+      "",
+      ""
+    ], // Optional: visual temp indicators
+    "tooltip": true,
+    "tooltip-format": "CPU Package: {temperatureC}°C"
   },
   "memory": {
     "interval": 2,

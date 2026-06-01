@@ -19,6 +19,7 @@ window#waybar {
 #workspaces,
 #clock,
 #cpu,
+#custom-igpu,
 #temperature,
 #memory,
 #network,
@@ -45,7 +46,7 @@ window#waybar {
 
 #clock:hover,
 #cpu:hover,
-#temperature:hover,
+#custom-igpu:hover #temperature:hover,
 #memory:hover,
 #network:hover,
 #pulseaudio:hover,
@@ -111,6 +112,10 @@ window#waybar {
  * ====================================================== */
 
 #cpu {
+  color: @color1;
+}
+
+#custom-igpu {
   color: @color1;
 }
 
