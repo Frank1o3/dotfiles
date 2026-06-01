@@ -50,8 +50,8 @@
   "custom/igpu": {
     "exec": "~/.config/waybar/scripts/igpu.sh",
     "interval": 2,
-    "format": "{}",
-    "tooltip": true
+    "format": "󰢮  {}",
+    "tooltip": false
   },
   "temperature": {
     "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input", // ← Update with your actual path

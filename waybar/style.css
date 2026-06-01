@@ -46,7 +46,8 @@ window#waybar {
 
 #clock:hover,
 #cpu:hover,
-#custom-igpu:hover #temperature:hover,
+#custom-igpu:hover,
+#temperature:hover,
 #memory:hover,
 #network:hover,
 #pulseaudio:hover,

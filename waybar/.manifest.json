@@ -1,6 +1,6 @@
 {
-  "version": 11,
-  "message": "updated swaybar config to read correct cpu temp and show gpu clock",
+  "version": 12,
+  "message": "updated waybar so it shows the igp usage in percentage values",
   "files": [
     "waybar/config.jsonc",
     "waybar/style.css",
