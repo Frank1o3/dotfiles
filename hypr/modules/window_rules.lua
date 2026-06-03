@@ -48,7 +48,7 @@ hl.window_rule({
 -- Games
 hl.window_rule({
 	name = "BloodStrike",
-	match = { initial_class = "steam_app_3199170" },
+	match = { initial_class = "^(steam_app_3199170|bloodstrike\\.exe)$" },
 	fullscreen = false,
 	tag = "game",
 })
