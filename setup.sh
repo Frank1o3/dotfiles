@@ -25,7 +25,7 @@ paru -S --needed --noconfirm --skipreview $(
 echo "Running config install script..."
 
 curl -fsSL \
-    "https://raw.githubusercontent.com/Frank1o3/dotfiles/refs/heads/main/install.py" |
+    "https://raw.githubusercontent.com/Frank1o3/dotfiles/refs/heads/main/update-config.py" |
     python3 -
 
 echo "Enable services..."
