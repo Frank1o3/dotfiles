@@ -57,4 +57,16 @@ if [ -d "$HOME/wallpapers/wallpapers" ]; then
     rmdir "$HOME/wallpapers/wallpapers"
 fi
 
+echo "Setting up default apps"
+
+xdg-mime default thunar.desktop inode/directory
+xdg-mime default thunar.desktop application/x-directory
+xdg-mime default code.desktop text/plain
+xdg-mime default code.desktop text/x-shellscript
+xdg-mime default code.desktop text/x-python
+
+git config --global core.editor "code --wait"
+git config --global merge.tool vscode
+git config --global mergetool.vscode.cmd "code --wait $MERGED"
+
 echo "Done."
