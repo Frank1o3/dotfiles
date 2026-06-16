@@ -22,17 +22,17 @@ paru -S --needed --noconfirm --skipreview $(
     grep -v '^$'
 )
 
-echo "Running config install script..."
-
-curl -fsSL \
-    "https://raw.githubusercontent.com/Frank1o3/dotfiles/refs/heads/main/update-config.py" |
-    python3 -
-
 echo "Enable services..."
 systemctl --user enable gnome-keyring-daemon.service || true
 systemctl --user start gnome-keyring-daemon.service || true
 
 systemctl --user enable hyprpolkitagent.service || true
 systemctl --user start hyprpolkitagent.service || true
+
+echo "Running config install script..."
+
+curl -fsSL \
+    "https://raw.githubusercontent.com/Frank1o3/dotfiles/refs/heads/main/update-config.py" |
+    python3 -
 
 echo "Done."
