@@ -43,12 +43,12 @@ If you want you'r configs to stay up to date with the updates i make you can Run
 
 (bash & zsh) Terminal's:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Frank1o3/dotfiles/refs/heads/main/update-config.py | python3
+curl -fsSL https://raw.githubusercontent.com/Frank1o3/dotfiles/rmain/update-config.py | python3
 ```
 
 fish Terminal:
 ```bash
-python3 (curl -fsSL https://raw.githubusercontent.com/Frank1o3/dotfiles/refs/heads/main/update-config.py | psub)
+python3 (curl -fsSL https://raw.githubusercontent.com/Frank1o3/dotfiles/main/update-config.py | psub)
 ```
 
 ---
