@@ -41,4 +41,15 @@ echo "Making utility script executable"
 chmod +x ./.config/hypr/scripts/pick-wallpaper.sh
 chmod +x ./.config/hypr/scripts/power-menu.sh
 
+echo "Getting Wallpapers"
+rm -rf "$HOME/wallpapers"
+mkdir -p "$HOME/wallpapers"
+
+curl -fL \
+  https://github.com/Frank1o3/dotfiles/archive/refs/heads/main.tar.gz \
+| tar -xz \
+  --strip-components=1 \
+  -C "$HOME/wallpapers" \
+  dotfiles-main/wallpapers
+
 echo "Done."
