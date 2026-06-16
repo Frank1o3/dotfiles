@@ -20,3 +20,4 @@ papirus-icon-theme
 adwaita-cursors
 aur/catppuccin-cursors-mocha
 aur/wallust
+aur/visual-studio-code-bin
