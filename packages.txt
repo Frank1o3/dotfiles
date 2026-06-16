@@ -6,9 +6,8 @@ fuzzel
 hyprland
 hyprpaper
 hyprshudown
-networkmanager
 nm-connection-editor
-network-manager-appler
+network-manager-applet
 swaync
 imv
 wallust
