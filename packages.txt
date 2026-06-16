@@ -19,4 +19,4 @@ adw-gtk-theme
 papirus-icon-theme
 adwaita-cursors
 catppuccin-cursors-mocha
-wallust
+aur/wallust
