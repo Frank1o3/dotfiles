@@ -37,4 +37,8 @@ curl -fsSL "$SCRIPT_URL" -o "$tmpfile"
 python3 "$tmpfile"
 rm -f "$tmpfile"
 
+echo "Making utility script executable"
+chmod +x ./.config/hypr/scripts/pick-wallpaper.sh
+chmod +x ./.config/hypr/scripts/power-menu.sh
+
 echo "Done."
