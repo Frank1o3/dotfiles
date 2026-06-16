@@ -6,6 +6,8 @@ fuzzel
 hyprland
 hyprpaper
 hyprshutdown
+hyprpolkitagent
+gnome-keyring
 nm-connection-editor
 network-manager-applet
 swaync
