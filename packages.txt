@@ -10,7 +10,6 @@ nm-connection-editor
 network-manager-applet
 swaync
 imv
-wallust
 ttf-jetbrains-mono-nerd
 ttf-nerd-fonts-symbols
 ttf-nerd-fonts-symbols-common
@@ -18,3 +17,4 @@ adw-gtk-theme
 papirus-icon-theme
 adwaita-cursors
 catppuccin-cursors-mocha
+wallust
