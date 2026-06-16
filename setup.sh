@@ -12,7 +12,7 @@ for cmd in curl paru python3; do
     }
 done
 
-URL="https://raw.githubusercontent.com/Frank1o3/dotfiles/main/packages.txt"
+URL="https://raw.githubusercontent.com/Frank1o3/dotfiles/refs/heads/main/packages.txt"
 
 echo "Installing packages..."
 
@@ -25,7 +25,7 @@ paru -S --needed $(
 echo "Running config install script..."
 
 curl -fsSL \
-    "https://raw.githubusercontent.com/Frank1o3/dotfiles/main/install.py" |
+    "https://raw.githubusercontent.com/Frank1o3/dotfiles/refs/heads/main/install.py" |
     python3 -
 
 echo "Done."
