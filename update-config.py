@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import sys
 import json
 import urllib.request
 from pathlib import Path
@@ -6,6 +7,7 @@ from pathlib import Path
 REPO_RAW = "https://raw.githubusercontent.com/Frank1o3/dotfiles/main"
 CONFIG_DIR = Path.home() / ".config"
 CONFIGS = ["hypr", "waybar", "kitty", "fuzzel", "wallust", "swaync", "fish"]
+TTY = open("/dev/tty", "r")
 
 
 def fetch(url):
@@ -15,9 +17,13 @@ def fetch(url):
 
 def yesno(prompt: str) -> bool:
     while True:
-        ans = input(f"{prompt} [Y/n]: ").strip().lower() or "y"
-        if ans in ("y", "n"):
-            return ans == "y"
+        print(f"{prompt} [Y/n]: ", end="", flush=True)
+        ans = TTY.readline().strip().lower() or "y"
+
+        if ans in ("y", "yes"):
+            return True
+        if ans in ("n", "no"):
+            return False
 
 
 def main():
