@@ -5,7 +5,7 @@ waybar
 fuzzel
 hyprland
 hyprpaper
-hyprshudown
+hyprshutdown
 nm-connection-editor
 network-manager-applet
 swaync
