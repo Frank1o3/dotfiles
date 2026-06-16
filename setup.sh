@@ -12,8 +12,8 @@ for cmd in curl paru python3; do
     }
 done
 
-URL="https://raw.githubusercontent.com/Frank1o3/dotfiles/refs/heads/main/packages.txt"
-SCRIPT_URL="https://raw.githubusercontent.com/Frank1o3/dotfiles/refs/heads/main/update-config.py"
+URL="https://raw.githubusercontent.com/Frank1o3/dotfiles/main/packages.txt"
+SCRIPT_URL="https://raw.githubusercontent.com/Frank1o3/dotfiles/main/update-config.py"
 
 echo "Installing packages..."
 
@@ -30,7 +30,7 @@ systemctl --user start gnome-keyring-daemon.service || true
 systemctl --user enable hyprpolkitagent.service || true
 systemctl --user start hyprpolkitagent.service || true
 
-echo "Running config install script..."
+echo "Running config update/install script..."
 
 tmpfile=$(mktemp)
 curl -fsSL "$SCRIPT_URL" -o "$tmpfile"
