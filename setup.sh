@@ -52,4 +52,9 @@ curl -fL \
   -C "$HOME/wallpapers" \
   dotfiles-main/wallpapers
 
+if [ -d "$HOME/wallpapers/wallpapers" ]; then
+    mv "$HOME/wallpapers/wallpapers/"* "$HOME/wallpapers/"
+    rmdir "$HOME/wallpapers/wallpapers"
+fi
+
 echo "Done."
