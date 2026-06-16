@@ -13,6 +13,7 @@ for cmd in curl paru python3; do
 done
 
 URL="https://raw.githubusercontent.com/Frank1o3/dotfiles/refs/heads/main/packages.txt"
+SCRIPT_URL="https://raw.githubusercontent.com/Frank1o3/dotfiles/refs/heads/main/update-config.py"
 
 echo "Installing packages..."
 
@@ -31,8 +32,9 @@ systemctl --user start hyprpolkitagent.service || true
 
 echo "Running config install script..."
 
-curl -fsSL \
-    "https://raw.githubusercontent.com/Frank1o3/dotfiles/refs/heads/main/update-config.py" |
-    python3 -
+tmpfile=$(mktemp)
+curl -fsSL "$SCRIPT_URL" -o "$tmpfile"
+python3 "$tmpfile"
+rm -f "$tmpfile"
 
 echo "Done."
