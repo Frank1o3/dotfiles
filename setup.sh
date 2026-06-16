@@ -16,7 +16,7 @@ URL="https://raw.githubusercontent.com/Frank1o3/dotfiles/refs/heads/main/package
 
 echo "Installing packages..."
 
-paru -S --needed $(
+paru -S --needed --noconfirm --skipreview $(
     curl -fsSL "$URL" |
     grep -v '^#' |
     grep -v '^$'
