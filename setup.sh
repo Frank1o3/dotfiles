@@ -42,22 +42,6 @@ chmod +x ./.config/hypr/scripts/pick-wallpaper.sh
 chmod +x ./.config/hypr/scripts/power-menu.sh
 chmod +x ./.config/waybar/scripts/igpu.sh
 
-echo "Getting Wallpapers"
-rm -rf "$HOME/wallpapers"
-mkdir -p "$HOME/wallpapers"
-
-curl -fL \
-  https://github.com/Frank1o3/dotfiles/archive/refs/heads/main.tar.gz \
-| tar -xz \
-  --strip-components=1 \
-  -C "$HOME/wallpapers" \
-  dotfiles-main/wallpapers
-
-if [ -d "$HOME/wallpapers/wallpapers" ]; then
-    mv "$HOME/wallpapers/wallpapers/"* "$HOME/wallpapers/"
-    rmdir "$HOME/wallpapers/wallpapers"
-fi
-
 echo "Setting up default apps"
 
 xdg-mime default thunar.desktop inode/directory
