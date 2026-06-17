@@ -26,6 +26,7 @@ window#waybar {
 #pulseaudio,
 #backlight,
 #battery,
+#gamemode,
 #tray {
   background: alpha(@background, 0.78);
 
@@ -53,6 +54,7 @@ window#waybar {
 #pulseaudio:hover,
 #backlight:hover,
 #battery:hover,
+#gamemode:hover,
 #tray:hover {
   background: alpha(@color1, 0.22);
 
@@ -190,6 +192,14 @@ window#waybar {
   background: alpha(@color3, 0.22);
 
   color: @color3;
+}
+
+/* ======================================================
+ * GameMode
+ * ====================================================== */
+
+#gamemode {
+  color: @color9;
 }
 
 /* ======================================================

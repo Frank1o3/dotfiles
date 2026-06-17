@@ -32,7 +32,7 @@ wallust run "$WALLPAPER_DIR/wallpaper.jpg"
 # 🖼️ Set wallpaper with hyprpaper
 if ! pgrep -x hyprpaper > /dev/null; then
     notify-send "Starting hyprpaper" "Daemon not running, launching..."
-    hyprpaper &
+    systemctl --user start hyprpaper
     sleep 1
 fi
 
@@ -48,7 +48,7 @@ hyprctl hyprpaper wallpaper ",$SELECTED_PATH"
 if ! hyprctl hyprpaper listactive | grep -q "$SELECTED_PATH"; then
     notify-send "Fallback" "Reloading hyprpaper..."
     pkill hyprpaper
-    hyprpaper &
+    systemctl --user start hyprpaper
     sleep 1
     hyprctl hyprpaper preload "$SELECTED_PATH"
     hyprctl hyprpaper wallpaper ",$SELECTED_PATH"

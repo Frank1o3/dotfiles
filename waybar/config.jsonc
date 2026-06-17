@@ -10,6 +10,7 @@
     "clock"
   ],
   "modules-right": [
+    "gamemode",
     "cpu",
     "custom/igpu",
     "temperature",
@@ -126,6 +127,18 @@
       "󰁹"
     ],
     "tooltip": false
+  },
+  "gamemode": {
+    "format": "{glyph}",
+    "format-alt": "{glyph} {count}",
+    "glyph": "🎮",
+    "hide-not-running": false,
+    "use-icon": true,
+    "icon-name": false,
+    "icon-spacing": 4,
+    "icon-size": 20,
+    "tooltip": true,
+    "tooltip-format": "Games running: {count}"
   },
   "tray": {
     "spacing": 8

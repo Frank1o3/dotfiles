@@ -11,7 +11,7 @@ return function(WALLPAPER_DIR)
 
 		-- Generate wallust colors
 		hl.exec_cmd("wallust run " .. WALLPAPER_DIR .. "/wallpaper.jpg")
-		hl.exec_cmd("systemctl --user start waybar swaync")
+		hl.exec_cmd("systemctl --user start waybar swaync hyprpaper")
 		hl.exec_cmd("nm-applet --indicator &")
 	end)
 end

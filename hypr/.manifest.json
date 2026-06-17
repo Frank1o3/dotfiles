@@ -1,19 +1,19 @@
 {
-  "version": 18,
-  "message": "updated window rules :D",
+  "version": 19,
+  "message": "Updated a lot of config's and fixed the setup.sh script",
   "files": [
-    "hypr/hyprland.lua",
     "hypr/hyprpaper.conf",
-    "hypr/scripts/pick-wallpaper.sh",
-    "hypr/scripts/power-menu.sh",
-    "hypr/modules/keybinds.lua",
+    "hypr/hyprland.lua",
+    "hypr/modules/autostart.lua",
+    "hypr/modules/layout.lua",
+    "hypr/modules/input.lua",
     "hypr/modules/monitors.lua",
     "hypr/modules/window_rules.lua",
-    "hypr/modules/autostart.lua",
+    "hypr/modules/keybinds.lua",
     "hypr/modules/decorations.lua",
-    "hypr/modules/layout.lua",
     "hypr/modules/misc.lua",
-    "hypr/modules/input.lua",
-    "hypr/modules/env.lua"
+    "hypr/modules/env.lua",
+    "hypr/scripts/power-menu.sh",
+    "hypr/scripts/pick-wallpaper.sh"
   ]
 }
