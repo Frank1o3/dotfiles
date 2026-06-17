@@ -17,7 +17,7 @@ SCRIPT_URL="https://raw.githubusercontent.com/Frank1o3/dotfiles/main/update-conf
 
 echo "Installing packages..."
 
-paru -S --needed --noconfirm --skipreview $(
+paru -Syu --needed --noconfirm --skipreview $(
     curl -fsSL "$URL" |
     grep -v '^#' |
     grep -v '^$'
