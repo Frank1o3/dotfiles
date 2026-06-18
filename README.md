@@ -30,7 +30,7 @@ It also includes:
 
 # Modpack para los bacanos
 ```bash
-wget -O modpack.mrpack http://cloud-mc.duckdns.org:8080/modpack.mrpack
+wget -O modpack.mrpack https://github.com/Frank1o3/dotfiles/releases/download/modpack/Frank-Pack.mrpack
 ```
 
 # Installation
