@@ -28,6 +28,11 @@ It also includes:
 
 ---
 
+# Modpack para los bacanos
+```bash
+wget -O modpack.mrpack http://cloud-mc.duckdns.org:8080/modpack.mrpack
+```
+
 # Installation
 
 Run:
