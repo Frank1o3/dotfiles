@@ -1,22 +1,22 @@
-@define-color bg {{background}};
-@define-color fg {{foreground}};
+{# Dynamic loop generating the core colors (0-7, bg, and fg) #}
+{% for c in colors -%}
+{% if loop.index <= 8 -%}
+@define-color color{{ loop.index0 }} {{ c }};
+{% elif loop.index == 17 -%}
+@define-color bg {{ c }};
+{% elif loop.index == 18 -%}
+@define-color fg {{ c }};
+{% endif -%}
+{% endfor -%}
 
-@define-color color0 {{color0}};
-@define-color color1 {{color1}};
-@define-color color2 {{color2}};
-@define-color color3 {{color3}};
-@define-color color4 {{color4}};
-@define-color color5 {{color5}};
-@define-color color6 {{color6}};
-@define-color color7 {{color7}};
+{# Semantic UI Assignments and GTK3 Alpha Blending #}
+@define-color border alpha(@color7, 0.12);
+@define-color surface alpha(@bg, 0.58);
+@define-color surface-alt alpha({{ background | lighten(0.04) }}, 0.72);
 
-@define-color border alpha({{color7}}, 0.12);
-@define-color surface alpha({{background}}, 0.58);
-@define-color surface-alt alpha({{background | lighten(0.04)}}, 0.72);
+@define-color accent @color4;
+@define-color accent-alt @color5;
 
-@define-color accent {{color4}};
-@define-color accent-alt {{color5}};
-
-@define-color urgent {{color1}};
-@define-color success {{color2}};
-@define-color warning {{color3}};
+@define-color urgent @color1;
+@define-color success @color2;
+@define-color warning @color3;

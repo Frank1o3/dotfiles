@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "message": "Added a custom fish greeting",
+  "version": 2,
+  "message": "Updated configs replaces fuzzel with wofi and did minor changes to how config files get synced etc",
   "files": [
     "fish/config.fish"
   ]

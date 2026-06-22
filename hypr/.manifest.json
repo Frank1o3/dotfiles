@@ -1,6 +1,6 @@
 {
-  "version": 19,
-  "message": "Updated a lot of config's and fixed the setup.sh script",
+  "version": 20,
+  "message": "Updated configs replaces fuzzel with wofi and did minor changes to how config files get synced etc",
   "files": [
     "hypr/hyprpaper.conf",
     "hypr/hyprland.lua",

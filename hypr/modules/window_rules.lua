@@ -5,13 +5,13 @@
 local game_res = 576
 
 -- 🔢 Calculates standard 16:9 width based on the given height
-local function calc_resolution(height)
+local function calc_landscape(height)
 	local width = math.ceil(height * (16 / 9))
 	return { width, height }
 end
 
 -- Pre-calculate resolution table for the global game rule
-local game_size = calc_resolution(game_res)
+local game_size = calc_landscape(game_res)
 
 -- Fix some dragging issues with XWayland
 hl.window_rule({
@@ -43,6 +43,21 @@ hl.window_rule({
 	name = "suppress-maximize-events",
 	match = { class = ".*" },
 	suppress_event = "maximize",
+})
+
+-- General use menus
+hl.window_rule({
+	name = "pick-wallpaper",
+	match = { class = "wallpaper-picker", initial_title = "kitty" },
+	fullscreen = false,
+	tag = "menu",
+})
+
+hl.window_rule({
+	name = "power-menu",
+	match = { class = "power-menu", initial_title = "kitty" },
+	fullscreen = false,
+	tag = "menu-small",
 })
 
 -- Games
@@ -82,4 +97,26 @@ hl.window_rule({
 	workspace = "1",
 	border_size = 0, -- Removes compositor border rendering overhead
 	rounding = 0, -- Disables rounding to save GPU cycles
+})
+
+hl.window_rule({
+	match = { tag = "menu" },
+	float = true,
+	persistent_size = true,
+	size = calc_landscape(720),
+	center = true,
+	no_blur = false,
+	no_dim = false,
+	idle_inhibit = "always",
+})
+
+hl.window_rule({
+	match = { tag = "menu-small" },
+	float = true,
+	persistent_size = true,
+	size = { 220, 300 },
+	center = true,
+	no_blur = false,
+	no_dim = false,
+	idle_inhibit = "always",
 })

@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
-import sys
+
 import json
 import urllib.request
 from pathlib import Path
 
 REPO_RAW = "https://raw.githubusercontent.com/Frank1o3/dotfiles/main"
-CONFIG_DIR = Path.home() / ".config"
-CONFIGS = ["hypr", "waybar", "kitty", "fuzzel", "wallust", "swaync", "fish"]
-TTY = open("/dev/tty", "r")
 
 
 def fetch(url):
@@ -15,107 +12,77 @@ def fetch(url):
         return r.read()
 
 
-def yesno(prompt: str) -> bool:
-    while True:
-        print(f"{prompt} [Y/n]: ", end="", flush=True)
-        ans = TTY.readline().strip().lower() or "y"
-
-        if ans in ("y", "yes"):
-            return True
-        if ans in ("n", "no"):
-            return False
+def yesno(prompt):
+    ans = input(f"{prompt} [Y/n]: ").strip().lower()
+    return ans in ("", "y", "yes")
 
 
 def main():
-    print("🚀 Starting Smart Sync...\n")
+    print("🚀 Smart Update\n")
 
-    for cfg in CONFIGS:
-        local_dir = CONFIG_DIR / cfg
-        local_version_file = local_dir / ".version"
+    repo_manifest = json.loads(fetch(f"{REPO_RAW}/.repo-manifest.json"))
 
-        # 1. Get Versions
+    for cfg, meta in repo_manifest["configs"].items():
+
+        if meta.get("optional"):
+            if not yesno(f"Install optional config {cfg}?"):
+                continue
+
+        install_path = Path(meta["install_path"]).expanduser() if meta["install_path"] else Path.home() / ".config" / cfg
+
+        version_file = install_path / ".version"
+
         local_ver = 0
-        if local_version_file.exists():
+        if version_file.exists():
             try:
-                local_ver = json.loads(local_version_file.read_text())["version"]
+                local_ver = json.loads(version_file.read_text())["version"]
             except:
                 pass
 
         try:
-            manifest = json.loads(fetch(f"{REPO_RAW}/{cfg}/.manifest.json").decode())
+            manifest = json.loads(fetch(f"{REPO_RAW}/{cfg}/.manifest.json"))
         except:
-            print(f"⚠️  {cfg}: Could not fetch manifest. Skipping.")
+            print(f"⚠️ {cfg}: no manifest")
             continue
 
         remote_ver = manifest["version"]
-        remote_files = manifest["files"]
 
-        # If versions match, we can still check for missing files,
-        # but we skip the heavy lifting.
         if remote_ver <= local_ver:
-            print(f"✅ {cfg} is already v{local_ver}. Checking for orphan files...")
-        else:
-            print(f"📦 {cfg} Update Available: v{local_ver} -> v{remote_ver}")
+            print(f"✅ {cfg} up to date")
+            continue
 
-        # --- PHASE 1: ORPHAN CHECK (Local but not in Repo) ---
-        if local_dir.exists():
-            for item in local_dir.rglob("*"):
-                if item.is_file() and item.name not in [".version", ".manifest.json"]:
-                    # Convert to repo-style path: "hypr/init.lua"
-                    rel_path = str(item.relative_to(CONFIG_DIR))
+        print(f"📦 {cfg}: v{local_ver} → v{remote_ver}")
 
-                    if rel_path not in remote_files:
-                        if not yesno(f"   ❓ {rel_path} is local-only. Keep it?"):
-                            print(f"   🗑️  Deleting {rel_path}...")
-                            item.unlink()
-                        else:
-                            print(f"   💾 Keeping local {rel_path}")
+        for f in manifest["files"]:
+            rel = Path(f)
+            target = Path.home() / ".config" / rel.relative_to(cfg)
 
-        # --- PHASE 2: SMART DOWNLOAD (Missing or Outdated) ---
-        # We only ask for updates if the remote version is higher
-        for f in remote_files:
-            target = CONFIG_DIR / f
+            if str(rel.relative_to(cfg)) in meta["protected"] and target.exists():
+                print(f"🔒 Skipping protected: {rel}")
+                continue
 
-            # Case A: File is missing locally
-            if not target.exists():
-                print(f"   📥 Found new file: {f}")
-                download = True
+            if target.exists():
+                if not yesno(f"Update {rel}?"):
+                    continue
 
-            # Case B: Version mismatch (Update available)
-            elif remote_ver > local_ver:
-                if yesno(f"   🔄 Update existing {f}?"):
-                    download = True
-                else:
-                    print(f"   ⏭️  Skipping {f} (keeping your local changes)")
-                    download = False
-            else:
-                download = False
+            try:
+                content = fetch(f"{REPO_RAW}/{f}")
+                target.parent.mkdir(parents=True, exist_ok=True)
 
-            if download:
                 try:
-                    content = fetch(f"{REPO_RAW}/{f}")
-                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_text(content.decode())
+                except:
+                    target.write_bytes(content)
 
-                    if target.suffix in [
-                        ".conf",
-                        ".lua",
-                        ".json",
-                        ".sh",
-                        ".css",
-                        ".ini",
-                    ]:
-                        text = content.decode().replace("{HOME}", str(Path.home()))
-                        target.write_text(text)
-                    else:
-                        target.write_bytes(content)
-                    print(f"   ✅ Installed {f}")
-                except Exception as e:
-                    print(f"   ❌ Failed {f}: {e}")
+                print(f"✔ {rel}")
 
-        # 3. Finalize Version
-        local_version_file.parent.mkdir(parents=True, exist_ok=True)
-        local_version_file.write_text(json.dumps({"version": remote_ver}))
-        print(f"✨ {cfg} sync complete.\n")
+            except Exception as e:
+                print(f"❌ {rel}: {e}")
+
+        install_path.mkdir(parents=True, exist_ok=True)
+        (install_path / ".version").write_text(json.dumps({"version": remote_ver}))
+
+        print(f"✨ {cfg} updated\n")
 
 
 if __name__ == "__main__":

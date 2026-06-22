@@ -1,0 +1,23 @@
+{# wallust/wofi-colors.css #}
+{# Loop out the base raw palette variables first #}
+{% for c in colors -%}
+{% if loop.index <= 16 -%}
+@define-color color{{ loop.index0 }} {{ c }};
+{% elif loop.index == 17 -%}
+@define-color background {{ c }};
+{% elif loop.index == 18 -%}
+@define-color foreground {{ c }};
+{% endif -%}
+{% endfor -%}
+
+{# Map the functional names directly to match your Fuzzel config scheme #}
+@define-color text @foreground;
+@define-color prompt @color0;
+@define-color placeholder @color1;
+@define-color input @color2;
+@define-color match @color3;
+@define-color selection @color4;
+@define-color selection-text @color5;
+@define-color selection-match @color6;
+@define-color counter @color7;
+@define-color border @color8;

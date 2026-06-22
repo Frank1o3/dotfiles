@@ -5,7 +5,7 @@ local CONFIG_DIR = HOME .. "/.config/hypr"
 
 ---- MY PROGRAMS ----
 local terminal = "kitty"
-local menu = "fuzzel"
+local menu = "wofi"
 local ide = "code"
 local browser = "xdg-open https://"
 local fileManager = "xdg-open $HOME"
@@ -44,9 +44,9 @@ hl.bind(mainMod .. " + SHIFT + F", hl.dsp.window.float({ action = "toggle" }))
 -- Desktop / Session
 --------------------------------------------------
 
-hl.bind(mainMod .. " + W", hl.dsp.exec_cmd(script_pick))
+hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("kitty --class wallpaper-picker -e " .. script_pick))
 
-hl.bind(mainMod .. " + SHIFT + E", hl.dsp.exec_cmd(script_power))
+hl.bind(mainMod .. " + SHIFT + E", hl.dsp.exec_cmd("kitty --class power-menu -e " .. script_power))
 
 hl.bind(mainMod .. " + SHIFT + R", hl.dsp.exec_cmd("hyprctl reload"))
 
@@ -135,9 +135,17 @@ hl.bind(
 -- Brightness Controls
 --------------------------------------------------
 
-hl.bind(mainMod .. " + XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+"), { locked = true, repeating = true })
+hl.bind(
+	mainMod .. " + XF86MonBrightnessUp",
+	hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+"),
+	{ locked = true, repeating = true }
+)
 
-hl.bind(mainMod .. " + XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-"), { locked = true, repeating = true })
+hl.bind(
+	mainMod .. " + XF86MonBrightnessDown",
+	hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-"),
+	{ locked = true, repeating = true }
+)
 
 --------------------------------------------------
 -- Media Controls

@@ -1,0 +1,25 @@
+# ~/.config/wofi/config
+
+# Core Configuration
+mode=drun
+show=drun
+stylesheet=style.css
+
+# Visual Structure & Layout
+allow_images=true
+image_size=24
+location=center
+halign=fill
+content_halign=fill
+filter_rate=100
+
+# Window Sizing (Optimized to sit perfectly inside your Hyprland canvas)
+width=40%
+height=35%
+
+# Interaction & Search Tweaks
+insensitive=true
+parse_search=true
+hide_scroll=true
+no_actions=true
+define_key=true

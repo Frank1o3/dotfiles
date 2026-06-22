@@ -1,0 +1,101 @@
+/* ~/.config/wofi/style.css */
+@import url("{HOME}/.config/wofi/colors.css");
+
+/* --- Window --- */
+#window {
+    font-family: "JetBrainsMonoNF-Regular";
+    font-size: 13px;
+
+    background-color: alpha(@background, 0.96);
+    border: 1px solid @border;
+    border-radius: 6px;
+}
+
+/* --- Layout --- */
+#outer-box {
+    padding: 10px;
+}
+
+/* --- Input --- */
+#prompt {
+    color: @prompt;
+    margin-right: 6px;
+    font-weight: bold;
+}
+
+#input {
+    background-color: alpha(@background, 0.85);
+    color: @input;
+
+    border: 1px solid @border;
+    border-radius: 4px;
+
+    padding: 7px;
+    margin-bottom: 8px;
+}
+
+#input image {
+    color: @placeholder;
+}
+
+/* --- Scroll --- */
+#scroll {
+    margin-top: 4px;
+}
+
+/* --- Entries (core of universality) --- */
+#entry {
+    padding: 6px 8px;
+    border-radius: 4px;
+
+    /* adapts to both icons AND images */
+    min-height: 40px;
+
+    /* clean alignment */
+    display: flex;
+    align-items: center;
+
+    /* subtle separation */
+    border: 1px solid transparent;
+}
+
+/* --- Images / Icons --- */
+#img {
+    margin-right: 10px;
+
+    /* works for both small icons and bigger previews */
+    min-width: 32px;
+    min-height: 32px;
+
+    /* moderate scaling so it doesn’t break drun */
+    -gtk-icon-transform: scale(1.6);
+}
+
+/* --- Text --- */
+#text {
+    color: @text;
+    margin-left: 4px;
+
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* Match highlight */
+match {
+    color: @match;
+    font-weight: bold;
+}
+
+/* --- Selection --- */
+#entry:selected {
+    background-color: @selection;
+    border: 1px solid alpha(@border, 0.6);
+}
+
+#text:selected {
+    color: @selection-text;
+}
+
+#text:selected match {
+    color: @selection-match;
+}

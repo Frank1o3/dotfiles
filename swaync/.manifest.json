@@ -1,6 +1,6 @@
 {
-  "version": 2,
-  "message": "Did some minor changes to the configs",
+  "version": 3,
+  "message": "Updated configs replaces fuzzel with wofi and did minor changes to how config files get synced etc",
   "files": [
     "swaync/config.json",
     "swaync/style.css"

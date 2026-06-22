@@ -2,8 +2,9 @@ git
 fish
 kitty
 waybar
-fuzzel
+wofi
 hyprland
+hyprlock
 hyprpaper
 hyprshutdown
 hyprpolkitagent

@@ -1,19 +1,58 @@
 #!/usr/bin/env python3
+
 import json
 import subprocess
 from pathlib import Path
 import sys
+import configparser
 
-CONFIGS = ["hypr", "waybar", "kitty", "fuzzel", "wallust", "swaync", "fish"]
+ROOT = Path(".").resolve()
 
 
+# =========================================================
+# Config Detection
+# =========================================================
+def find_configs():
+    configs = []
+
+    for marker in Path(".").rglob(".config-root"):
+        if marker.parent.parent.resolve() == ROOT:
+            configs.append(marker.parent.name)
+        else:
+            print(f"⚠️ Ignoring misplaced .config-root in {marker}")
+
+    return sorted(set(configs))
+
+
+def load_config_meta(cfg_path: Path):
+    parser = configparser.ConfigParser()
+    parser.read(cfg_path / ".config-root")
+
+    return {
+        "install_path": parser.get("DEFAULT", "install_path", fallback=None),
+        "protected": [
+            x.strip()
+            for x in parser.get("DEFAULT", "protected", fallback="").split(",")
+            if x.strip()
+        ],
+        "optional": parser.getboolean("DEFAULT", "optional", fallback=False),
+    }
+
+
+CONFIGS = find_configs()
+
+
+# =========================================================
+# Git Helpers
+# =========================================================
 def get_git_changes():
-    # Detects changed files (staged, unstaged, and untracked)
     status = subprocess.check_output(["git", "status", "--porcelain"]).decode()
-    # Extract paths, ignoring the status prefix (e.g., ' M ', '?? ')
     return [line[3:].strip() for line in status.splitlines()]
 
 
+# =========================================================
+# Core Logic
+# =========================================================
 def main():
     if len(sys.argv) < 2:
         print("Usage: ./release.py 'commit message'")
@@ -23,24 +62,24 @@ def main():
     changes = get_git_changes()
 
     if not changes:
-        print("No changes detected in git.")
+        print("No changes detected.")
         return
 
+    repo_manifest = {"configs": {}}
     any_updates = False
 
     for cfg in CONFIGS:
         cfg_path = Path(cfg)
-        if not cfg_path.exists():
-            continue
 
-        # Logic Fix: Check if this folder OR any sub-files have changed
         has_changes = any(path.startswith(cfg + "/") for path in changes)
 
         if not has_changes:
-            print(f"[-] {cfg}: No changes, skipping.")
+            print(f"[-] {cfg}: no changes")
             continue
 
-        # 1. Update Version
+        meta = load_config_meta(cfg_path)
+
+        # version
         ver_file = cfg_path / ".version"
         version = 1
         if ver_file.exists():
@@ -49,38 +88,49 @@ def main():
             except:
                 pass
 
-        # 2. Capture the "State of Truth"
-        # We index EVERY file currently in the folder.
-        # This ensures the update script knows these files are valid.
-        all_files = [
-            str(p)
+        # file list (FULL PATHS)
+        files = [
+            str(p.resolve().relative_to(ROOT))
             for p in cfg_path.rglob("*")
-            if p.is_file() and p.name not in [".version", ".manifest.json"]
+            if p.is_file()
+            and p.name not in [".version", ".manifest.json", ".config-root"]
         ]
 
-        # Safety Check: Never push an empty file list if the folder isn't actually empty
-        if not all_files and any(cfg_path.iterdir()):
-            print(
-                f"⚠️  {cfg}: manifest list is empty but folder is not! Skipping for safety."
-            )
+        if not files and any(cfg_path.iterdir()):
+            print(f"⚠️ {cfg}: empty manifest, skipping")
             continue
 
-        # 3. Write Manifest
-        manifest = {"version": version, "message": message, "files": all_files}
+        manifest = {
+            "version": version,
+            "message": message,
+            "files": files,
+        }
 
+        # write per-config
         (cfg_path / ".manifest.json").write_text(json.dumps(manifest, indent=2))
         ver_file.write_text(json.dumps({"version": version}, indent=2))
-        print(f"[+] {cfg}: Bumped to v{version} ({len(all_files)} files tracked)")
+
+        # add to global manifest
+        repo_manifest["configs"][cfg] = {
+            "version": version,
+            "install_path": meta["install_path"],
+            "protected": meta["protected"],
+            "optional": meta["optional"],
+        }
+
+        print(f"[+] {cfg}: v{version} ({len(files)} files)")
         any_updates = True
 
+    # write global manifest
+    Path(".repo-manifest.json").write_text(json.dumps(repo_manifest, indent=2))
+
     if any_updates:
-        # Git ops
         subprocess.run(["git", "add", "."])
         subprocess.run(["git", "commit", "-m", f"release: {message}"])
         subprocess.run(["git", "push"])
-        print("\n✅ Pushed to GitHub.")
+        print("\n✅ Released + pushed")
     else:
-        print("\nℹ️ No manifests were updated.")
+        print("\nℹ️ Nothing updated")
 
 
 if __name__ == "__main__":

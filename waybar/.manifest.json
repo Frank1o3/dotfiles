@@ -1,6 +1,6 @@
 {
-  "version": 13,
-  "message": "Updated a lot of config's and fixed the setup.sh script",
+  "version": 14,
+  "message": "Updated configs replaces fuzzel with wofi and did minor changes to how config files get synced etc",
   "files": [
     "waybar/config.jsonc",
     "waybar/style.css",

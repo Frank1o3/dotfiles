@@ -1,7 +1,8 @@
 {
-  "version": 3,
+  "version": 1,
   "message": "Updated configs replaces fuzzel with wofi and did minor changes to how config files get synced etc",
   "files": [
-    "kitty/kitty.conf"
+    "wofi/style.css",
+    "wofi/config"
   ]
 }
