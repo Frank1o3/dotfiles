@@ -5,14 +5,15 @@ local CONFIG_DIR = HOME .. "/.config/hypr"
 
 ---- MY PROGRAMS ----
 local terminal = "kitty"
-local menu = "wofi"
+local menu = "wofi --show drun"
 local ide = "code"
-local browser = "xdg-open https://"
-local fileManager = "xdg-open $HOME"
+local browser = "xdg-open https://google.com"
+local fileManager = "xdg-open " .. HOME
 local mainMod = "SUPER"
 
 local script_pick = CONFIG_DIR .. "/scripts/pick-wallpaper.sh"
 local script_power = CONFIG_DIR .. "/scripts/power-menu.sh"
+local script_games = CONFIG_DIR .. "/scripts/wofi-games.sh"
 
 --------------------------------------------------
 -- Applications
@@ -22,6 +23,7 @@ hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + RETURN", hl.dsp.exec_cmd(terminal))
 
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
+hl.bind(mainMod .. " + G", hl.dsp.exec_cmd(script_games))
 
 hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(menu))

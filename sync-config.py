@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import os
-import sys
 import subprocess
 from pathlib import Path
 import configparser
@@ -49,7 +48,29 @@ def run(cmd):
     if DRY_RUN:
         print("[dry-run]", " ".join(cmd))
         return
-    subprocess.run(cmd)
+    subprocess.run(cmd, check=True)
+
+
+def replace_home_placeholders(dest: Path):
+    home = str(Path.home())
+
+    for file in dest.rglob("*"):
+        if not file.is_file():
+            continue
+
+        try:
+            content = file.read_text()
+
+            if "{HOME}" in content:
+                new_content = content.replace("{HOME}", home)
+                file.write_text(new_content)
+
+                if VERBOSE:
+                    log(f"Replaced {{HOME}} in {file}")
+
+        except Exception:
+            # Skip binary or unreadable files
+            continue
 
 
 # =========================================================
@@ -73,6 +94,9 @@ def sync(cfg):
         f"{src}/",
         f"{dest}/"
     ])
+
+    # 🔥 NEW STEP: Replace {HOME} placeholders
+    replace_home_placeholders(dest)
 
 
 def main():

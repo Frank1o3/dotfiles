@@ -1,6 +1,6 @@
 {
-  "version": 20,
-  "message": "Updated configs replaces fuzzel with wofi and did minor changes to how config files get synced etc",
+  "version": 21,
+  "message": "Added a new hotkey for listing game apps",
   "files": [
     "hypr/hyprpaper.conf",
     "hypr/hyprland.lua",
@@ -14,6 +14,7 @@
     "hypr/modules/misc.lua",
     "hypr/modules/env.lua",
     "hypr/scripts/power-menu.sh",
+    "hypr/scripts/wofi-games.sh",
     "hypr/scripts/pick-wallpaper.sh"
   ]
 }

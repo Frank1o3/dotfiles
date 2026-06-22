@@ -1,43 +1,7 @@
 {
   "configs": {
-    "fish": {
-      "version": 2,
-      "install_path": null,
-      "protected": [],
-      "optional": false
-    },
     "hypr": {
-      "version": 20,
-      "install_path": null,
-      "protected": [],
-      "optional": false
-    },
-    "kitty": {
-      "version": 3,
-      "install_path": null,
-      "protected": [],
-      "optional": false
-    },
-    "swaync": {
-      "version": 3,
-      "install_path": null,
-      "protected": [],
-      "optional": false
-    },
-    "wallust": {
-      "version": 4,
-      "install_path": null,
-      "protected": [],
-      "optional": false
-    },
-    "waybar": {
-      "version": 14,
-      "install_path": null,
-      "protected": [],
-      "optional": false
-    },
-    "wofi": {
-      "version": 1,
+      "version": 21,
       "install_path": null,
       "protected": [],
       "optional": false

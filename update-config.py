@@ -24,6 +24,19 @@ def yesno(prompt: str) -> bool:
             return False
 
 
+# 🔥 NEW: placeholder replacement
+def replace_placeholders(file: Path):
+    try:
+        content = file.read_text()
+    except:
+        return  # skip binary files
+
+    home = str(Path.home())
+
+    if "{HOME}" in content:
+        file.write_text(content.replace("{HOME}", home))
+
+
 def main():
     print("🚀 Smart Update\n")
 
@@ -77,10 +90,14 @@ def main():
                 content = fetch(f"{REPO_RAW}/{f}")
                 target.parent.mkdir(parents=True, exist_ok=True)
 
+                # write file
                 try:
                     target.write_text(content.decode())
                 except:
                     target.write_bytes(content)
+
+                # 🔥 NEW: replace {HOME} in this file
+                replace_placeholders(target)
 
                 print(f"✔ {rel}")
 
