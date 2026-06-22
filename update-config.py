@@ -5,6 +5,7 @@ import urllib.request
 from pathlib import Path
 
 REPO_RAW = "https://raw.githubusercontent.com/Frank1o3/dotfiles/main"
+TTY = open("/dev/tty", "r")
 
 
 def fetch(url):
@@ -12,9 +13,15 @@ def fetch(url):
         return r.read()
 
 
-def yesno(prompt):
-    ans = input(f"{prompt} [Y/n]: ").strip().lower()
-    return ans in ("", "y", "yes")
+def yesno(prompt: str) -> bool:
+    while True:
+        print(f"{prompt} [Y/n]: ", end="", flush=True)
+        ans = TTY.readline().strip().lower() or "y"
+
+        if ans in ("y", "yes"):
+            return True
+        if ans in ("n", "no"):
+            return False
 
 
 def main():
@@ -55,9 +62,10 @@ def main():
 
         for f in manifest["files"]:
             rel = Path(f)
-            target = Path.home() / ".config" / rel.relative_to(cfg)
+            subpath = rel.relative_to(cfg)
+            target = install_path / subpath
 
-            if str(rel.relative_to(cfg)) in meta["protected"] and target.exists():
+            if str(subpath) in meta["protected"] and target.exists():
                 print(f"🔒 Skipping protected: {rel}")
                 continue
 
