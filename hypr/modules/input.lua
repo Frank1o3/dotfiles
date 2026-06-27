@@ -2,14 +2,21 @@
 ---
 hl.config({
 	input = {
+		-- Keyboard
 		kb_layout = "us",
 		kb_variant = "",
 		kb_model = "",
 		kb_options = "",
 		kb_rules = "",
+		numlock_by_default = true,
+
+		-- Touchdevice
+		touchpad = { natural_scroll = true },
+
+		-- Mouse
 		follow_mouse = 1,
 		sensitivity = 0,
-		touchpad = { natural_scroll = true },
+		accel_profile = "flat",
 	},
 })
 

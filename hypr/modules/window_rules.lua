@@ -34,8 +34,7 @@ hl.window_rule({
 		initial_title = "Picture in Picture",
 	},
 	float = true,
-	persistent_size = true,
-	size = { 426, 240 },
+	persistent_size = false,
 })
 
 hl.window_rule({

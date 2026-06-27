@@ -129,8 +129,7 @@
     "tooltip": false
   },
   "gamemode": {
-    "format": "{glyph}",
-    "format-alt": "{glyph} {count}",
+    "format": "{glyph} {count}",
     "glyph": "🎮",
     "hide-not-running": false,
     "use-icon": true,

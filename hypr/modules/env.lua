@@ -27,3 +27,6 @@ hl.env("GTK_ICON_THEME", "Papirus-Dark")
 hl.env("GTK_CURSOR_THEME", "catppuccin-mocha-dark-cursors")
 hl.env("GTK_APPLICATION_PREFER_DARK_THEME", "1")
 hl.env("GDK_SCALE", "1")
+
+-- Terminal
+hl.env("TERMINAL", "kitty")

@@ -27,7 +27,8 @@ hl.config({
 			enabled = true,
 			size = 12,
 			passes = 3,
-		}
+			new_optimizations = true,
+		},
 	},
 	animations = { enabled = true },
 	cursor = { no_hardware_cursors = 2 },

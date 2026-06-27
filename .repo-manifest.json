@@ -1,7 +1,25 @@
 {
   "configs": {
     "hypr": {
-      "version": 21,
+      "version": 22,
+      "install_path": null,
+      "protected": [],
+      "optional": false
+    },
+    "swaync": {
+      "version": 4,
+      "install_path": null,
+      "protected": [],
+      "optional": false
+    },
+    "wallust": {
+      "version": 5,
+      "install_path": null,
+      "protected": [],
+      "optional": false
+    },
+    "waybar": {
+      "version": 15,
       "install_path": null,
       "protected": [],
       "optional": false

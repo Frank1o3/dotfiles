@@ -19,6 +19,7 @@ def find_configs():
     configs = []
 
     for marker in ROOT.rglob(".config-root"):
+        # Only allow one level deep (./cfg/.config-root)
         if marker.parent.parent.resolve() == ROOT.resolve():
             configs.append(marker.parent.name)
 
@@ -48,6 +49,10 @@ def run(cmd):
     if DRY_RUN:
         print("[dry-run]", " ".join(cmd))
         return
+
+    if VERBOSE:
+        log("Running: " + " ".join(cmd))
+
     subprocess.run(cmd, check=True)
 
 
@@ -61,16 +66,21 @@ def replace_home_placeholders(dest: Path):
         try:
             content = file.read_text()
 
-            if "{HOME}" in content:
-                new_content = content.replace("{HOME}", home)
+            if "{HOME}" not in content:
+                continue
+
+            new_content = content.replace("{HOME}", home)
+
+            # Only write if changed
+            if new_content != content:
                 file.write_text(new_content)
 
                 if VERBOSE:
                     log(f"Replaced {{HOME}} in {file}")
 
-        except Exception:
-            # Skip binary or unreadable files
-            continue
+        except Exception as e:
+            if VERBOSE:
+                log(f"Skipped {file}: {e}")
 
 
 # =========================================================
@@ -86,22 +96,46 @@ def sync(cfg):
 
     log(f"{cfg} → {dest}")
 
-    run([
+    cmd = [
         "rsync",
         "-a",
+        "--delete",
+        "--checksum",
         "--exclude=.git",
         "--exclude=.config-root",
-        f"{src}/",
-        f"{dest}/"
-    ])
+        "--exclude=colors.css",
+        "--exclude=colors.lua",
+        "--exclude=colors.conf",
+        "--exclude=*.cache",
+    ]
 
-    # 🔥 NEW STEP: Replace {HOME} placeholders
+    if VERBOSE:
+        cmd.append("--itemize-changes")
+
+    cmd += [f"{src}/", f"{dest}/"]
+
+    run(cmd)
+
+    # Replace placeholders AFTER sync
     replace_home_placeholders(dest)
 
 
+# =========================================================
+# Main
+# =========================================================
 def main():
+    if not CONFIGS:
+        log("No configs found.")
+        return
+
+    if VERBOSE:
+        log(f"Detected configs: {CONFIGS}")
+
     for cfg in CONFIGS:
-        sync(cfg)
+        try:
+            sync(cfg)
+        except subprocess.CalledProcessError as e:
+            print(f"❌ Failed syncing {cfg}: {e}")
 
 
 if __name__ == "__main__":

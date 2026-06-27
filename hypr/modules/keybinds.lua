@@ -14,6 +14,7 @@ local mainMod = "SUPER"
 local script_pick = CONFIG_DIR .. "/scripts/pick-wallpaper.sh"
 local script_power = CONFIG_DIR .. "/scripts/power-menu.sh"
 local script_games = CONFIG_DIR .. "/scripts/wofi-games.sh"
+local script_audio = CONFIG_DIR .. "/scripts/toggle-audio.sh"
 
 --------------------------------------------------
 -- Applications
@@ -53,6 +54,8 @@ hl.bind(mainMod .. " + SHIFT + E", hl.dsp.exec_cmd("kitty --class power-menu -e 
 hl.bind(mainMod .. " + SHIFT + R", hl.dsp.exec_cmd("hyprctl reload"))
 
 hl.bind(mainMod .. " + SHIFT + L", hl.dsp.exec_cmd("loginctl lock-session"))
+
+hl.bind(mainMod .. " + n", hl.dsp.exec_cmd("swaync-client -t"))
 
 --------------------------------------------------
 -- Focus Movement (vim + arrows)
@@ -149,6 +152,8 @@ hl.bind(
 	{ locked = true, repeating = true }
 )
 
+hl.bind("SCROLL_LOCK", hl.dsp.exec_cmd(script_audio), { locked = true })
+
 --------------------------------------------------
 -- Media Controls
 --------------------------------------------------
@@ -160,3 +165,13 @@ hl.bind(mainMod .. " + XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { 
 hl.bind(mainMod .. " + XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 
 hl.bind(mainMod .. " + XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
+
+-- Media controls using navigation keys + SUPER
+
+hl.bind(mainMod .. " + HOME", hl.dsp.exec_cmd("playerctl previous"), { locked = true })
+
+hl.bind(mainMod .. " + END", hl.dsp.exec_cmd("playerctl next"), { locked = true })
+
+hl.bind(mainMod .. " + PRIOR", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
+
+hl.bind(mainMod .. " + NEXT", hl.dsp.exec_cmd("playerctl stop"), { locked = true })

@@ -1,6 +1,6 @@
 {
-  "version": 14,
-  "message": "Updated configs replaces fuzzel with wofi and did minor changes to how config files get synced etc",
+  "version": 15,
+  "message": "did some theming for swaync and updated some hotkeys and other misc stuff on the config files",
   "files": [
     "waybar/config.jsonc",
     "waybar/style.css",

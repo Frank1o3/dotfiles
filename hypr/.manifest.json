@@ -1,6 +1,6 @@
 {
-  "version": 21,
-  "message": "Added a new hotkey for listing game apps",
+  "version": 22,
+  "message": "did some theming for swaync and updated some hotkeys and other misc stuff on the config files",
   "files": [
     "hypr/hyprpaper.conf",
     "hypr/hyprland.lua",
@@ -13,6 +13,7 @@
     "hypr/modules/decorations.lua",
     "hypr/modules/misc.lua",
     "hypr/modules/env.lua",
+    "hypr/scripts/toggle-audio.sh",
     "hypr/scripts/power-menu.sh",
     "hypr/scripts/wofi-games.sh",
     "hypr/scripts/pick-wallpaper.sh"
