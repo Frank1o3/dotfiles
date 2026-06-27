@@ -1,6 +1,6 @@
 {
-  "version": 22,
-  "message": "did some theming for swaync and updated some hotkeys and other misc stuff on the config files",
+  "version": 23,
+  "message": "Fixed Picture in Picture size",
   "files": [
     "hypr/hyprpaper.conf",
     "hypr/hyprland.lua",

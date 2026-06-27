@@ -34,7 +34,8 @@ hl.window_rule({
 		initial_title = "Picture in Picture",
 	},
 	float = true,
-	persistent_size = false,
+	persistent_size = true,
+	size = calc_landscape(270),
 })
 
 hl.window_rule({
