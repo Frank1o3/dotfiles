@@ -28,6 +28,7 @@ hl.config({
 			size = 12,
 			passes = 3,
 			new_optimizations = true,
+			ignore_opacity = false
 		},
 	},
 	animations = { enabled = true },

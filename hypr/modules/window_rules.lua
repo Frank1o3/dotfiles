@@ -76,6 +76,13 @@ hl.window_rule({
 })
 
 hl.window_rule({
+	name = "Kaomoji Picker",
+	match = { initial_class = "Tk" },
+	fullscreen = false,
+	center = true,
+})
+
+hl.window_rule({
 	name = "Minecraft",
 	match = { initial_class = "^Minecraft.*" },
 	fullscreen = false,

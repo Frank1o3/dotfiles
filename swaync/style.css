@@ -1,13 +1,17 @@
 @import "colors.css";
 
-/* === GLOBAL & SCROLLBAR === */
+/* ============================= */
+/* GLOBAL                        */
+/* ============================= */
 * {
     font-family: JetBrainsMono Nerd Font;
     font-size: 13px;
-    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.2s ease;
 }
 
-/* Custom sleek scrollbar */
+/* ============================= */
+/* SCROLLBAR                     */
+/* ============================= */
 scrollbar {
     min-width: 8px;
     background: transparent;
@@ -15,46 +19,47 @@ scrollbar {
 
 scrollbar trough {
     background: transparent;
-    border: none;
 }
 
 scrollbar slider {
     background: alpha(@accent, 0.6);
     border-radius: 99px;
     min-height: 30px;
-    border: none;
 }
 
 scrollbar slider:hover {
-    background: @color1;
+    background: alpha(@accent, 0.9);
 }
 
-/* === CONTROL CENTER (Main Window) === */
+/* ============================= */
+/* CONTROL CENTER                */
+/* ============================= */
 .control-center {
-    /* Fake glassmorphism using gradients and alphas */
-    background: linear-gradient(135deg, alpha(@bg, 0.85), alpha(@surface-alt, 0.75));
-    border: 1px solid alpha(@color7, 0.15);
-    border-radius: 24px;
+    background: linear-gradient(135deg, alpha(@bg, 0.88), alpha(@surface-alt, 0.75));
+    border: 1px solid alpha(@color7, 0.12);
+    border-radius: 26px;
+    padding: 28px;
+
     box-shadow:
-        0 25px 50px rgba(0, 0, 0, 0.6),
-        inset 0 1px 0 alpha(@fg, 0.05);
-    padding: 24px;
+        0 30px 60px rgba(0, 0, 0, 0.65),
+        inset 0 1px 0 alpha(@fg, 0.04);
 }
 
-/* Header Title */
 .control-center .title {
     font-size: 22px;
     font-weight: 800;
     color: @fg;
-    margin-bottom: 20px;
-    letter-spacing: 0.5px;
+    margin-bottom: 22px;
+    letter-spacing: 0.6px;
 }
 
-/* === BUTTONS (Clear All, etc.) === */
+/* ============================= */
+/* BUTTONS                       */
+/* ============================= */
 button {
-    background: alpha(@surface, 0.6);
+    background: alpha(@surface, 0.65);
     color: @fg;
-    border: 1px solid alpha(@border, 0.3);
+    border: 1px solid alpha(@border, 0.25);
     border-radius: 14px;
     padding: 8px 18px;
     font-weight: 600;
@@ -62,27 +67,39 @@ button {
 }
 
 button:hover {
-    background: alpha(@accent, 0.4);
+    background: alpha(@accent, 0.35);
     border-color: @accent;
-    box-shadow: 0 0 15px alpha(@accent, 0.3);
-    color: @fg;
+    box-shadow: 0 0 12px alpha(@accent, 0.25);
+    transform: translateY(-1px);
 }
 
-/* === DND SWITCH === */
-.widget-dnd {
-    background: alpha(@surface, 0.4);
-    border-radius: 16px;
-    padding: 12px 16px;
-    margin-bottom: 12px;
-    border: 1px solid alpha(@border, 0.1);
+/* ============================= */
+/* WIDGET BASE                   */
+/* ============================= */
+.widget-dnd,
+.widget-volume,
+.widget-backlight {
+    background: linear-gradient(135deg,
+            alpha(@surface, 0.55),
+            alpha(@surface-alt, 0.4));
+    border-radius: 18px;
+    padding: 14px 18px;
+    margin-bottom: 14px;
+    border: 1px solid alpha(@border, 0.12);
 }
 
-.widget-dnd label {
+/* Labels */
+.widget-dnd label,
+.widget-volume label,
+.widget-backlight label {
     color: @fg;
     font-weight: 600;
     font-size: 14px;
 }
 
+/* ============================= */
+/* SWITCH                        */
+/* ============================= */
 .switch {
     background: alpha(@bg, 0.8);
     border-radius: 999px;
@@ -101,72 +118,55 @@ button:hover {
     border-radius: 999px;
     min-width: 20px;
     min-height: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
 }
 
-/* === SLIDERS (Volume & Backlight) === */
-.widget-volume,
-.widget-backlight {
-    background: alpha(@surface, 0.4);
-    border-radius: 16px;
-    padding: 12px 16px;
-    margin-bottom: 12px;
-    border: 1px solid alpha(@border, 0.1);
-}
-
-.widget-volume label,
-.widget-backlight label {
-    color: @fg;
-    font-weight: 600;
-    font-size: 14px;
-    margin-right: 12px;
-}
-
-/* Slider Track */
+/* ============================= */
+/* SLIDERS                       */
+/* ============================= */
 scale trough {
     min-height: 12px;
     border-radius: 99px;
-    background: alpha(@bg, 0.8);
+    background: alpha(@bg, 0.75);
     border: 1px solid alpha(@border, 0.2);
 }
 
-/* Slider Fill */
 scale highlight {
     min-height: 12px;
     border-radius: 99px;
-    background: linear-gradient(90deg, @accent, @color1);
-    border: none;
+    background: linear-gradient(90deg, @accent, @accent-alt);
 }
 
-/* Slider Thumb */
 scale slider {
     min-width: 22px;
     min-height: 22px;
     margin: -5px;
     background: @fg;
     border-radius: 50%;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
     border: 2px solid alpha(@bg, 0.5);
 }
 
 scale slider:hover {
-    background: @color1;
-    box-shadow: 0 0 12px alpha(@color1, 0.6);
+    background: @accent-alt;
+    box-shadow: 0 0 10px alpha(@accent-alt, 0.5);
 }
 
-/* === MPRIS (Media Player) === */
+/* ============================= */
+/* MPRIS                         */
+/* ============================= */
 .mpris {
-    background: linear-gradient(145deg, alpha(@surface-alt, 0.8), alpha(@surface, 0.5));
+    background: linear-gradient(145deg,
+            alpha(@surface-alt, 0.75),
+            alpha(@surface, 0.45));
     border-radius: 20px;
     padding: 16px;
     margin-bottom: 16px;
-    border: 1px solid alpha(@border, 0.2);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border: 1px solid alpha(@border, 0.15);
+
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
 }
 
 .mpris .album-art {
     border-radius: 14px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
     margin-right: 16px;
 }
 
@@ -179,10 +179,9 @@ scale slider:hover {
 .mpris .artist,
 .mpris .album {
     font-size: 13px;
-    color: @color7;
+    color: alpha(@color7, 0.9);
 }
 
-/* Media Buttons */
 .mpris .buttons {
     margin-top: 12px;
 }
@@ -193,7 +192,6 @@ scale slider:hover {
     border-radius: 50%;
     min-width: 36px;
     min-height: 36px;
-    padding: 0;
     margin: 0 4px;
     border: 1px solid alpha(@border, 0.2);
 }
@@ -201,60 +199,79 @@ scale slider:hover {
 .mpris .btn:hover {
     background: @accent;
     color: @bg;
-    border-color: @accent;
 }
 
-/* Make Play/Pause pop */
 .mpris .btn.play-pause {
     background: @accent;
     color: @bg;
     min-width: 44px;
     min-height: 44px;
-    font-weight: bold;
     border: none;
 }
 
 .mpris .btn.play-pause:hover {
-    background: @color1;
-    box-shadow: 0 0 15px alpha(@color1, 0.5);
+    background: @accent-alt;
+    box-shadow: 0 0 12px alpha(@accent-alt, 0.5);
 }
 
-/* === NOTIFICATIONS === */
+/* ============================= */
+/* NOTIFICATIONS                 */
+/* ============================= */
 .notification {
-    background: linear-gradient(135deg, alpha(@surface-alt, 0.85), alpha(@surface, 0.7));
-    border: 1px solid alpha(@border, 0.2);
-    border-radius: 18px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-    padding: 14px;
-    margin: 8px 0;
+    background: linear-gradient(135deg,
+            alpha(@surface-alt, 0.9),
+            alpha(@surface, 0.75));
+    border: 1px solid alpha(@border, 0.15);
+    border-radius: 20px;
+    padding: 16px;
+    margin: 10px 0;
+
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
 }
 
+/* 🔥 FIX GTK DARK HOVER OVERLAY */
+.notification:hover box,
+.notification:hover row {
+    background: transparent;
+}
+
+/* Clean hover effect (no darkening) */
 .notification:hover {
-    border-color: alpha(@accent, 0.6);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 15px alpha(@accent, 0.1);
+    border-color: alpha(@accent, 0.7);
+    box-shadow:
+        0 16px 36px rgba(0, 0, 0, 0.55),
+        0 0 18px alpha(@accent, 0.15);
+    transform: translateY(-2px);
 }
 
+/* Text */
 .notification .title {
     color: @color1;
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 6px;
+    font-size: 15px;
+    font-weight: 800;
 }
 
 .notification .body {
-    color: @color7;
-    font-size: 13px;
-    line-height: 1.4;
+    color: alpha(@color7, 0.9);
+    line-height: 1.5;
 }
 
+/* Hover text refinement */
+.notification:hover .title {
+    color: @color3;
+}
+
+.notification:hover .body {
+    color: @color4;
+}
+
+/* Close button */
 .notification .close-button {
     background: alpha(@color1, 0.2);
     color: @color1;
     border-radius: 50%;
-    min-width: 24px;
-    min-height: 24px;
-    padding: 0;
-    border: none;
+    min-width: 26px;
+    min-height: 26px;
 }
 
 .notification .close-button:hover {

@@ -15,6 +15,7 @@ local script_pick = CONFIG_DIR .. "/scripts/pick-wallpaper.sh"
 local script_power = CONFIG_DIR .. "/scripts/power-menu.sh"
 local script_games = CONFIG_DIR .. "/scripts/wofi-games.sh"
 local script_audio = CONFIG_DIR .. "/scripts/toggle-audio.sh"
+local script_emoticon = CONFIG_DIR .. "/scripts/emoticon.py"
 
 --------------------------------------------------
 -- Applications
@@ -25,7 +26,7 @@ hl.bind(mainMod .. " + RETURN", hl.dsp.exec_cmd(terminal))
 
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + G", hl.dsp.exec_cmd(script_games))
-
+hl.bind(mainMod .. " + M", hl.dsp.exec_cmd(script_emoticon))
 hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(menu))
 
@@ -175,3 +176,10 @@ hl.bind(mainMod .. " + END", hl.dsp.exec_cmd("playerctl next"), { locked = true 
 hl.bind(mainMod .. " + PRIOR", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 
 hl.bind(mainMod .. " + NEXT", hl.dsp.exec_cmd("playerctl stop"), { locked = true })
+
+
+--------------------------------------------------
+-- Screen Shot
+--------------------------------------------------
+hl.bind("Print", hl.dsp.exec_cmd("grimblast --notify copy area"))
+hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd("grimblast --notify copy active"))
