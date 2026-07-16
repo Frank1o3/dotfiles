@@ -28,11 +28,6 @@ It also includes:
 
 ---
 
-# Modpack para los bacanos
-```bash
-wget -O modpack.mrpack https://github.com/Frank1o3/dotfiles/releases/download/modpack/Frank-Pack.mrpack
-```
-
 # Installation
 
 Run:
