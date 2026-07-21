@@ -69,6 +69,20 @@ hl.window_rule({
 })
 
 hl.window_rule({
+	name = "Combat Master",
+	match = { initial_class = "^(CombatMaster\\.CombatMaster.x86_64)$" },
+	fullscreen = false,
+	tag = "game",
+})
+
+hl.window_rule({
+	name = "3D Demo",
+	match = { initial_title = "^3D Demo.*" },
+	fullscreen = false,
+	tag = "game",
+})
+
+hl.window_rule({
 	name = "Sober",
 	match = { initial_class = "org.vinegarhq.Sober" },
 	fullscreen = false,

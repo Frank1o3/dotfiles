@@ -1,13 +1,7 @@
 {
   "configs": {
     "hypr": {
-      "version": 24,
-      "install_path": null,
-      "protected": [],
-      "optional": false
-    },
-    "swaync": {
-      "version": 5,
+      "version": 25,
       "install_path": null,
       "protected": [],
       "optional": false

@@ -5,7 +5,7 @@ local primary_monitor = "DP-1"
 -- 1. Primary monitor positioned at 0x0
 hl.monitor({
 	output = primary_monitor,
-	mode = "1920x1200@60Hz",
+	mode = "1920x1200@59.95Hz",
 	position = "0x0",
 	scale = 1.0,
 	bitdepth = 10,
@@ -15,7 +15,7 @@ hl.monitor({
 -- 2. Secondary monitor positioned to the right
 hl.monitor({
 	output = "VGA-1",
-	mode = "1920x1080@60.00Hz",
+	mode = "1680x1050@59.95Hz",
 	position = "1920x-30",
 	scale = 1.0,
 	cm = "srgb"
