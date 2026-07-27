@@ -36,7 +36,7 @@ def yesno(prompt: str) -> bool:
 def replace_placeholders(file: Path):
     try:
         content = file.read_text()
-    except:
+    except FileExistsError:
         return  # skip binary files
 
     home = str(Path.home())

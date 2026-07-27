@@ -1,7 +1,7 @@
 {
   "configs": {
     "nvim": {
-      "version": 2,
+      "version": 3,
       "install_path": null,
       "protected": [],
       "optional": false

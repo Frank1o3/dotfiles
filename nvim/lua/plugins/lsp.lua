@@ -40,8 +40,20 @@ return {
                 },
             },
         })
+
         vim.lsp.config("taplo", { capabilities = caps })
 
-        vim.lsp.enable({ "ty", "ruff", "jsonls", "yamlls", "taplo" })
+        vim.lsp.config("lua_ls", {
+            capabilities = caps,
+            settings = {
+                Lua = {
+                    diagnostics = { globals = { "vim" } },
+                    workspace = { checkThirdParty = false },
+                    telemetry = { enable = false },
+                },
+            },
+        })
+
+        vim.lsp.enable({ "ty", "ruff", "jsonls", "yamlls", "taplo", "lua_ls" })
     end,
 }

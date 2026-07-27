@@ -1,12 +1,13 @@
 {
-  "version": 2,
-  "message": "huge improvements to neovim setup now made primarily python based",
+  "version": 3,
+  "message": "Minor improvements to the config for neovim",
   "files": [
     "nvim/init.lua",
     "nvim/lua/config/lsp.lua",
     "nvim/lua/config/options.lua",
     "nvim/lua/config/keymaps.lua",
     "nvim/lua/config/autocmds.lua",
+    "nvim/lua/plugins/colorizer.lua",
     "nvim/lua/plugins/testing.lua",
     "nvim/lua/plugins/gitsigns.lua",
     "nvim/lua/plugins/treesitter.lua",
@@ -17,6 +18,7 @@
     "nvim/lua/plugins/telescope.lua",
     "nvim/lua/plugins/indent-line.lua",
     "nvim/lua/plugins/completion.lua",
+    "nvim/lua/plugins/persistence.lua",
     "nvim/lua/plugins/lazygit.lua",
     "nvim/lua/plugins/schemastore.lua",
     "nvim/lua/plugins/formatting.lua",

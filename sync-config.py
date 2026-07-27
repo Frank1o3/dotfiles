@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
+import configparser
 import os
 import subprocess
 from pathlib import Path
-import configparser
 
 ROOT = Path(__file__).resolve().parent
 CONFIG_HOME = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config"))
