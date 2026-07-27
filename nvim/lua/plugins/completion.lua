@@ -4,7 +4,7 @@ return {
 
     opts = {
         keymap = {
-            preset = "default",
+            preset = "super-tab",
         },
 
         appearance = {

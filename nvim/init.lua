@@ -14,10 +14,10 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 
-require("lua.config.options")
-require("lua.config.keymaps")
-require("lua.config.lsp")
-require("lua.config.autocmds")
+require("config.options")
+require("config.keymaps")
+require("config.lsp")
+require("config.autocmds")
 
 require("lazy").setup({
     spec = {

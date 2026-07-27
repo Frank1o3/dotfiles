@@ -14,5 +14,15 @@ vim.api.nvim_create_autocmd("LspAttach", {
         vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
         vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
         vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+
+        vim.keymap.set("n", "<leader>ci", function()
+            vim.lsp.buf.code_action({
+                context = {
+                    only = { "source.organizeImports" },
+                    diagnostics = {},
+                },
+                apply = true,
+            })
+        end, { buffer = event.buf, desc = "Organize imports" })
     end,
 })

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
+import configparser
 import json
 import subprocess
-from pathlib import Path
 import sys
-import configparser
+from pathlib import Path
 
-ROOT = Path(".").resolve()
+ROOT = Path.cwd()
 
 
 # =========================================================
@@ -85,7 +85,7 @@ def main():
         if ver_file.exists():
             try:
                 version = json.loads(ver_file.read_text())["version"] + 1
-            except:
+            except json.JSONDecodeError:
                 pass
 
         # file list (FULL PATHS)
@@ -125,9 +125,9 @@ def main():
     Path(".repo-manifest.json").write_text(json.dumps(repo_manifest, indent=2))
 
     if any_updates:
-        subprocess.run(["git", "add", "."])
-        subprocess.run(["git", "commit", "-m", f"release: {message}"])
-        subprocess.run(["git", "push"])
+        subprocess.run(["git", "add", "."], check=True)
+        subprocess.run(["git", "commit", "-m", f"release: {message}"], check=True)
+        subprocess.run(["git", "push"], check=True)
         print("\n✅ Released + pushed")
     else:
         print("\nℹ️ Nothing updated")

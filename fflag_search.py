@@ -13,13 +13,14 @@ Examples:
     python fflag_search.py "Render|Physics" --mode regex -o graphics.txt
 """
 
-import json
 import argparse
-import requests
+import json
 import re
 import sys
+from collections.abc import Callable
 from pathlib import Path
-from typing import Dict, List, Tuple, Callable
+
+import requests
 
 # =============================================================================
 # 📦 CONFIGURATION: Add/remove sources here - everything else auto-adapts!
@@ -28,7 +29,7 @@ SOURCES = {
     # Desktop Clients
     "PCDesktopClient.json": "https://raw.githubusercontent.com/MaximumADHD/Roblox-FFlag-Tracker/refs/heads/main/PCDesktopClient.json",
     "MacDesktopClient.json": "https://raw.githubusercontent.com/MaximumADHD/Roblox-FFlag-Tracker/refs/heads/main/MacDesktopClient.json",
-    "AndroidApp.json": "https://raw.githubusercontent.com/MaximumADHD/Roblox-FFlag-Tracker/refs/heads/main/AndroidApp.json"
+    "AndroidApp.json": "https://raw.githubusercontent.com/MaximumADHD/Roblox-FFlag-Tracker/refs/heads/main/AndroidApp.json",
 }
 # =============================================================================
 
@@ -88,7 +89,7 @@ def make_filter(query: str, mode: str, ignore_case: bool) -> Callable[[str], boo
 
 def filter_flags(
     data: dict, filter_func: Callable[[str], bool]
-) -> List[Tuple[str, any]]:
+) -> list[tuple[str, any]]:
     """Filter flags using the provided filter function"""
     matches = []
     for name, value in data.items():
@@ -108,10 +109,10 @@ def format_value_for_output(value: any) -> str:
 
 
 def format_output(
-    results: Dict[str, List[Tuple[str, any]]],
+    results: dict[str, list[tuple[str, any]]],
     query: str,
     mode: str,
-    source_order: List[str],
+    source_order: list[str],
 ) -> str:
     """Format results in the requested output style - DYNAMIC: uses source_order list"""
     lines = [
@@ -143,7 +144,7 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=f"""
 Available Sources ({len(SOURCES)} configured):
-  {chr(10).join(f"  • {name}" for name in SOURCES.keys())}
+  {chr(10).join()}
 
 Search Modes:
   prefix    - Match flags that START with the query (default)

@@ -1,4 +1,4 @@
-local idle_time = 2 * 1000
+local idle_time = 15 * 1000
 local timers = {}
 
 local function stop_timer(bufnr)
@@ -9,6 +9,22 @@ local function stop_timer(bufnr)
         timer:close()
         timers[bufnr] = nil
     end
+end
+
+local function has_syntax_error(bufnr)
+    local ok, parser = pcall(vim.treesitter.get_parser, bufnr, "python")
+    if not ok or not parser then
+        -- No parser available: don't block formatting, we simply can't verify
+        return false
+    end
+
+    local tree = parser:parse()[1]
+    if not tree then
+        return false
+    end
+
+    local root = tree:root()
+    return root:has_error()
 end
 
 local function format_python(bufnr)
@@ -24,11 +40,7 @@ local function format_python(bufnr)
         return
     end
 
-    local diagnostics = vim.diagnostic.get(bufnr, {
-        severity = vim.diagnostic.severity.ERROR,
-    })
-
-    if #diagnostics > 0 then
+    if has_syntax_error(bufnr) then
         return
     end
 
