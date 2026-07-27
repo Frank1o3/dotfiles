@@ -1,0 +1,11 @@
+{
+    "workspace.library": [
+        "/usr/share/nvim/runtime",
+        "/usr/share/hypr/stubs"
+    ],
+    "diagnostics.globals": [
+        "hl",
+        "vim"
+    ],
+    "runtime.version": "LuaJIT"
+}

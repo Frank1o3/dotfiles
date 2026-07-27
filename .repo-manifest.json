@@ -1,7 +1,7 @@
 {
   "configs": {
-    "hypr": {
-      "version": 25,
+    "nvim": {
+      "version": 1,
       "install_path": null,
       "protected": [],
       "optional": false

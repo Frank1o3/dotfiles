@@ -1,8 +1,5 @@
 {
-    "Lua.workspace.library": [
-        "/usr/share/hypr/stubs"
-    ],
-    "Lua.diagnostics.enableScheme": [
-        "hl"
-    ]
+    "git.autofetch": "all",
+    "git.autofetchPeriod": 15,
+    "git.autorefresh": true
 }

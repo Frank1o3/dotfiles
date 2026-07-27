@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "message": "making my neovim setup...",
+  "files": [
+    "nvim/init.lua",
+    "nvim/lua/config/lsp.lua",
+    "nvim/lua/config/options.lua",
+    "nvim/lua/config/keymaps.lua",
+    "nvim/lua/config/autocmds.lua",
+    "nvim/lua/plugins/gitsigns.lua",
+    "nvim/lua/plugins/treesitter.lua",
+    "nvim/lua/plugins/lsp.lua",
+    "nvim/lua/plugins/completion.lua",
+    "nvim/lua/plugins/formatting.lua",
+    "nvim/lua/plugins/catppuccin.lua"
+  ]
+}
