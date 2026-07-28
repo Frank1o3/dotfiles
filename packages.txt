@@ -8,7 +8,7 @@ kitty
 taplo
 neovim
 tree-sitter-cli
-vscode-json-language-server
+vscode-json-languageserver
 yaml-language-server
 python-debugpy
 waybar
