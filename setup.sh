@@ -40,8 +40,8 @@ rm -f "$tmpfile"
 echo "Making utility script executable"
 chmod +x ~/.config/hypr/scripts/pick-wallpaper.sh
 chmod +x ~/.config/hypr/scripts/power-menu.sh
+chmod +x ~/.config/hypr/scripts/emoticon.py
 chmod +x ~/.config/waybar/scripts/igpu.sh
-chmod +x ~/.config/waybar/scripts/emoticon.py
 
 echo "Setting up default apps"
 
