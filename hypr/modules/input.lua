@@ -6,9 +6,9 @@ hl.config({
 		kb_layout = "us",
 		kb_variant = "",
 		kb_model = "",
-		kb_options = "",
+		kb_options = "compose:ralt",
 		kb_rules = "",
-		numlock_by_default = true,
+		numlock_by_default = false,
 
 		-- Touchdevice
 		touchpad = { natural_scroll = true },

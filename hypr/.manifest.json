@@ -1,6 +1,6 @@
 {
-  "version": 25,
-  "message": "updated configs files and updates animations as well",
+  "version": 26,
+  "message": "added support for composite typing and fixes the updater file so the monitors.lua and some other changes hehehe",
   "files": [
     "hypr/hyprpaper.conf",
     "hypr/hyprland.lua",

@@ -183,3 +183,7 @@ hl.bind(mainMod .. " + NEXT", hl.dsp.exec_cmd("playerctl stop"), { locked = true
 --------------------------------------------------
 hl.bind("Print", hl.dsp.exec_cmd("grimblast --notify copy area"))
 hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd("grimblast --notify copy active"))
+
+--------------------------------------------------
+-- Other Shortcuts
+--------------------------------------------------

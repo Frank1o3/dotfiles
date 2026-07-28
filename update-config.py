@@ -7,6 +7,8 @@ from pathlib import Path
 REPO_RAW = "https://raw.githubusercontent.com/Frank1o3/dotfiles/main"
 TTY = open("/dev/tty", "r")
 
+# 🔥 NEW: Automatically protect these filenames from being overwritten
+PROTECTED_FILENAMES = {"monitors.lua", "hyprpaper.conf"}
 
 # =========================================================
 # Networking
@@ -14,7 +16,6 @@ TTY = open("/dev/tty", "r")
 def fetch(url):
     with urllib.request.urlopen(url, timeout=10) as r:
         return r.read()
-
 
 # =========================================================
 # Prompt
@@ -29,14 +30,13 @@ def yesno(prompt: str) -> bool:
         if ans in ("n", "no"):
             return False
 
-
 # =========================================================
 # Placeholder Replacement
 # =========================================================
 def replace_placeholders(file: Path):
     try:
         content = file.read_text()
-    except FileExistsError:
+    except UnicodeDecodeError:  # 🔥 FIXED: Was FileExistsError
         return  # skip binary files
 
     home = str(Path.home())
@@ -44,12 +44,10 @@ def replace_placeholders(file: Path):
     if "{HOME}" in content:
         file.write_text(content.replace("{HOME}", home))
 
-
 def replace_all(dest: Path):
     for f in dest.rglob("*"):
         if f.is_file():
             replace_placeholders(f)
-
 
 # =========================================================
 # Cleanup (rsync-like delete)
@@ -61,10 +59,13 @@ def cleanup_removed_files(install_path: Path, expected_files: set):
 
         rel = str(existing.relative_to(install_path))
 
+        # 🔥 NEW: Also protect our special files from being deleted during cleanup
+        if existing.name in PROTECTED_FILENAMES:
+            continue
+
         if rel not in expected_files and not rel.startswith(".version"):
             print(f"🧹 Removing old file: {rel}")
             existing.unlink()
-
 
 # =========================================================
 # Main
@@ -91,12 +92,12 @@ def main():
         if version_file.exists():
             try:
                 local_ver = json.loads(version_file.read_text())["version"]
-            except:
+            except Exception:
                 pass
 
         try:
             manifest = json.loads(fetch(f"{REPO_RAW}/{cfg}/.manifest.json"))
-        except:
+        except Exception:
             print(f"⚠️ {cfg}: no manifest")
             continue
 
@@ -123,6 +124,12 @@ def main():
 
             expected_files.add(str(subpath))
 
+            # 🔥 NEW: Auto-skip protected filenames if they already exist locally
+            if subpath.name in PROTECTED_FILENAMES and target.exists():
+                print(f"🔒 Skipping protected local file: {rel}")
+                continue
+
+            # Fallback to manifest protected list
             if str(subpath) in meta.get("protected", []) and target.exists():
                 print(f"🔒 Skipping protected: {rel}")
                 continue
@@ -138,7 +145,7 @@ def main():
                 # Write file
                 try:
                     target.write_text(content.decode())
-                except:
+                except UnicodeDecodeError:
                     target.write_bytes(content)
 
                 print(f"✔ {rel}")
@@ -149,7 +156,7 @@ def main():
         # 🧹 Cleanup removed files
         cleanup_removed_files(install_path, expected_files)
 
-        # 🔁 Replace ALL placeholders (like rsync script)
+        # 🔁 Replace ALL placeholders
         replace_all(install_path)
 
         # Write version
@@ -157,7 +164,6 @@ def main():
         (install_path / ".version").write_text(json.dumps({"version": remote_ver}))
 
         print(f"✨ {cfg} updated\n")
-
 
 if __name__ == "__main__":
     main()
