@@ -1,24 +1,40 @@
 {
-  "wallpaper": "/home/franklin/wallpapers/columbina-5k-3840x2160-25922.jpg",
-  "background": "#071810",
-  "foreground": "#B8ACB0",
-  "cursor": "#A8757B",
+  "wallpaper": "/home/franklin/wallpapers/wallpaperflare.com_wallpaper.jpg",
+  "background": "#1F0E07",
+  "foreground": "#B4ABB0",
+  "cursor": "#9E646E",
   "colors": [
-    "#34483D",
-    "#807C9C",
-    "#AF6A70",
-    "#527889",
-    "#444868",
-    "#535C51",
-    "#634851",
-    "#928086",
-    "#665A5E",
-    "#807C9C",
-    "#AF6A70",
-    "#527889",
-    "#444868",
-    "#535C51",
-    "#634851",
-    "#928086"
-  ]
+"#3B2420",
+
+"#B97176",
+
+"#A2515C",
+
+"#9C7371",
+
+"#7B4D58",
+
+"#5D5A62",
+
+"#594550",
+
+"#8C7E86",
+
+"#62585D",
+
+"#B97176",
+
+"#A2515C",
+
+"#9C7371",
+
+"#7B4D58",
+
+"#5D5A62",
+
+"#594550",
+
+"#8C7E86"
+
+]
 }
