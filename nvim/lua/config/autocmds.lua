@@ -56,11 +56,12 @@ local function reset_timer(bufnr)
 
     local timer = vim.uv.new_timer()
     timers[bufnr] = timer
-
-    timer:start(idle_time, 0, vim.schedule_wrap(function()
-        stop_timer(bufnr)
-        format_python(bufnr)
-    end))
+    if timer ~= nil then
+        timer:start(idle_time, 0, vim.schedule_wrap(function()
+            stop_timer(bufnr)
+            format_python(bufnr)
+        end))
+    end
 end
 
 local python_group = vim.api.nvim_create_augroup("PythonAutoFormat", {
@@ -83,5 +84,16 @@ vim.api.nvim_create_autocmd("BufDelete", {
     group = python_group,
     callback = function(args)
         stop_timer(args.buf)
+    end,
+})
+
+vim.api.nvim_create_autocmd("BufEnter", {
+    callback = function(args)
+        local file = vim.api.nvim_buf_get_name(args.buf)
+        if file == "" then return end
+        local root = vim.fs.root(file, { "pyproject.toml", "uv.lock", ".git" })
+        if root and root ~= vim.fn.getcwd() then
+            vim.fn.chdir(root)
+        end
     end,
 })

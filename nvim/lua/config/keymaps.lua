@@ -30,3 +30,8 @@ vim.keymap.set("n", "]d", function()
 end, {
     desc = "Next diagnostic",
 })
+
+vim.keymap.set("n", "<leader>pi", "<cmd>UvInit<cr>", { desc = "uv: init project here" })
+vim.keymap.set("n", "<leader>pa", "<cmd>UvAdd<cr>", { desc = "uv: add package" })
+vim.keymap.set("n", "<leader>pd", "<cmd>UvAddDev<cr>", { desc = "uv: add dev package" })
+vim.keymap.set("n", "<leader>ps", "<cmd>UvSync<cr>", { desc = "uv: sync" })

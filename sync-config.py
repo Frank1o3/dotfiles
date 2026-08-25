@@ -42,7 +42,7 @@ CONFIGS = find_configs()
 # Helpers
 # =========================================================
 def log(msg):
-    print(f"ℹ️  {msg}")
+    print(f"  {msg}")
 
 
 def run(cmd):
@@ -106,6 +106,7 @@ def sync(cfg):
         "--exclude=colors.css",
         "--exclude=colors.lua",
         "--exclude=colors.conf",
+        "--exclude=colors.json"
         "--exclude=*.cache",
     ]
 

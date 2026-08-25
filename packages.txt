@@ -19,6 +19,7 @@ hyprlock
 hyprpaper
 hyprshutdown
 hyprpolkitagent
+quickshell
 gnome-keyring
 nm-connection-editor
 network-manager-applet

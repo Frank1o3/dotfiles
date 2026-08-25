@@ -18,6 +18,7 @@ require("config.options")
 require("config.keymaps")
 require("config.lsp")
 require("config.autocmds")
+require("config.uv")
 
 require("lazy").setup({
     spec = {

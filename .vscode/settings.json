@@ -1,5 +1,9 @@
 {
     "git.autofetch": "all",
     "git.autofetchPeriod": 15,
-    "git.autorefresh": true
+    "git.autorefresh": true,
+    "qt-qml.qmlls.additionalImportPaths": [
+        "/usr/lib/qt6/qml",
+        "/run/media/franklin/storage/Projects/dotfiles/quickshell"
+    ]
 }
