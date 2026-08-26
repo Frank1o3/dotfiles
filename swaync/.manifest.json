@@ -1,8 +1,0 @@
-{
-  "version": 5,
-  "message": "Updated swaync config so it looks nicer and added a new hotkey for text base emojis",
-  "files": [
-    "swaync/config.json",
-    "swaync/style.css"
-  ]
-}

@@ -11,8 +11,6 @@ tree-sitter-cli
 vscode-json-languageserver
 yaml-language-server
 python-debugpy
-waybar
-swaync
 ripgrep
 hyprland
 hyprlock

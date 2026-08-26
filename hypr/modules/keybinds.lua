@@ -16,19 +16,25 @@ local script_power = CONFIG_DIR .. "/scripts/power-menu.sh"
 local script_games = CONFIG_DIR .. "/scripts/wofi-games.sh"
 local script_audio = CONFIG_DIR .. "/scripts/toggle-audio.sh"
 local script_emoticon = CONFIG_DIR .. "/scripts/emoticon.py"
+local script_launcher = "qs ipc call launcher toggle"
+
 
 --------------------------------------------------
 -- Applications
 --------------------------------------------------
 
+
+hl.bind(mainMod .. " + A", hl.dsp.exec_cmd(script_launcher))
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + RETURN", hl.dsp.exec_cmd(terminal))
 
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + G", hl.dsp.exec_cmd(script_games))
 hl.bind(mainMod .. " + M", hl.dsp.exec_cmd(script_emoticon))
-hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(menu))
-hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(menu))
+-- was: hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(menu))
+-- was: hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(menu))
+hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(script_launcher))
+hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(script_launcher))
 
 hl.bind(mainMod .. " + I", hl.dsp.exec_cmd(ide))
 
@@ -56,7 +62,8 @@ hl.bind(mainMod .. " + SHIFT + R", hl.dsp.exec_cmd("hyprctl reload"))
 
 hl.bind(mainMod .. " + SHIFT + L", hl.dsp.exec_cmd("loginctl lock-session"))
 
-hl.bind(mainMod .. " + n", hl.dsp.exec_cmd("swaync-client -t"))
+-- was: hl.bind(mainMod .. " + n", hl.dsp.exec_cmd("swaync-client -t"))
+hl.bind(mainMod .. " + n", hl.dsp.exec_cmd("qs ipc call notifications toggle"))
 
 --------------------------------------------------
 -- Focus Movement (vim + arrows)

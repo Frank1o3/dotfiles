@@ -53,10 +53,6 @@ check_contrast=true
     hypr={template='hyprland-colors.lua', target='~/.config/hypr/colors.lua'}
     kitty={template='kitty.conf', target='~/.config/kitty/colors.conf'}
     quickshell={template='quickshell.json', target='~/.config/quickshell/colors.json'}
-    swaync={template='swaync.css', target='~/.config/swaync/colors.css'}
-    waybar={template='waybar.css', target='~/.config/waybar/colors.css'}
     wofi={template='wofi.css', target='~/.config/wofi/colors.css'}
 
 [hooks]
-    # Run commands when wallust is invoked. Useful to avoid scripting.
-    #wallpaper = """swww img "$(find ~/Media/Pictures/Wallpapers -iregex '.*.\\(jpg\\|jpeg\\|png\\|gif\\)' -type f | shuf -n 1)" """

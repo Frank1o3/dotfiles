@@ -1,4 +1,5 @@
 import Quickshell
+import Quickshell.Wayland
 import QtQuick
 import QtQuick.Layouts
 import qs.config
@@ -11,6 +12,7 @@ Scope {
         PanelWindow {
             required property var modelData
             screen: modelData
+            WlrLayershell.namespace: "quickshell:bar"
 
             anchors {
                 top: true
@@ -20,49 +22,55 @@ Scope {
             implicitHeight: Appearance.barHeight
             color: "transparent"
 
-            RowLayout {
+            Rectangle {
+                id: pill
                 anchors.fill: parent
                 anchors.leftMargin: 10
                 anchors.rightMargin: 10
+                anchors.topMargin: 6
+                anchors.bottomMargin: 6
+                radius: Appearance.radius
+                color: Colors.background
+                opacity: Appearance.glassOpacity
+                border.width: 1
+                border.color: Colors.color(1)
+            }
 
-                // ── left ──
-                BarPill {
-                    Layout.alignment: Qt.AlignVCenter
-                    content: [
-                        Workspaces {}
-                    ]
+            RowLayout {
+                anchors.fill: pill
+                anchors.leftMargin: 16
+                anchors.rightMargin: 16
+
+                RowLayout {
+                    spacing: Appearance.spacing
+                    Workspaces {}
                 }
 
                 Item {
                     Layout.fillWidth: true
                 }
 
-                // ── center ──
-                BarPill {
-                    Layout.alignment: Qt.AlignVCenter
-                    content: [
-                        Clock {}
-                    ]
+                RowLayout {
+                    spacing: Appearance.spacing
+                    Clock {}
                 }
 
                 Item {
                     Layout.fillWidth: true
                 }
 
-                // ── right ──
-                BarPill {
-                    Layout.alignment: Qt.AlignVCenter
-                    content: [
-                        Cpu {},
-                        Igpu {},
-                        Temperature {},
-                        Memory {},
-                        Network {},
-                        Volume {},
-                        Backlight {},
-                        Battery {},
-                        Tray {}
-                    ]
+                RowLayout {
+                    spacing: Appearance.spacing
+                    Cpu {}
+                    Igpu {}
+                    Temperature {}
+                    Memory {}
+                    Network {}
+                    Volume {}
+                    Backlight {}
+                    Battery {}
+                    NotificationBell {}
+                    Tray {}
                 }
             }
         }

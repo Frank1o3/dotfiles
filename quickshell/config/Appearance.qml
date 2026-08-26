@@ -13,6 +13,7 @@ Singleton {
 
     readonly property real glassOpacity: 0.55
     readonly property real hoverOpacity: 0.18
+    readonly property real panelOpacity: 0.78
 
     readonly property int animFast: 150
     readonly property int animNormal: 250

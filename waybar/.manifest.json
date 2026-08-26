@@ -1,9 +1,0 @@
-{
-  "version": 15,
-  "message": "did some theming for swaync and updated some hotkeys and other misc stuff on the config files",
-  "files": [
-    "waybar/config.jsonc",
-    "waybar/style.css",
-    "waybar/scripts/igpu.sh"
-  ]
-}

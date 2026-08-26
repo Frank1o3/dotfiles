@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Window
 import Quickshell.Services.SystemTray
 import qs.config
 
@@ -10,29 +11,29 @@ RowLayout {
         model: SystemTray.items
 
         delegate: Item {
-            id: trayItem // 1. Give the delegate an ID
-
-            required property var modelData // You placed this perfectly!
+            id: trayItem
+            required property var modelData
 
             implicitWidth: 18
             implicitHeight: 18
 
             Image {
                 anchors.fill: parent
-                // 2. Qualify the access with the ID
                 source: trayItem.modelData.icon
                 fillMode: Image.PreserveAspectFit
             }
 
             MouseArea {
                 anchors.fill: parent
-                acceptedButtons: Qt.LeftButton | Qt.RightButton
+                acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
                 onClicked: mouse => {
-                    if (mouse.button === Qt.LeftButton)
+                    if (mouse.button === Qt.LeftButton) {
                         trayItem.modelData.activate();
-                    else
-                        // 3. Qualify here too
-                        trayItem.modelData.secondaryActivate(); // 4. And here
+                    } else if (mouse.button === Qt.RightButton) {
+                        trayItem.modelData.display(Window.window, mouse.x, mouse.y);
+                    } else {
+                        trayItem.modelData.secondaryActivate();
+                    }
                 }
             }
         }

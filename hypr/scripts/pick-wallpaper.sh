@@ -61,5 +61,6 @@ if ! hyprctl hyprpaper listactive | grep -q "$SELECTED_PATH"; then
     hyprctl hyprpaper preload "$SELECTED_PATH"
     hyprctl hyprpaper wallpaper ",$SELECTED_PATH"
 fi
-
+W
+pkill quickshell || true; quickshell & disown
 notify-send "✓ Complete" "Theme & wallpaper updated"
