@@ -1,6 +1,6 @@
 {
-  "version": 27,
-  "message": "minor changes and started adding animations for wallpaper changing next would be make the quickshell rice or well learn it and qml better so i can make it look good",
+  "version": 28,
+  "message": "forgot to make the awww daemon to auto start",
   "files": [
     "hypr/hyprpaper.conf",
     "hypr/hyprland.lua",

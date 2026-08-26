@@ -11,7 +11,8 @@ return function(WALLPAPER_DIR)
 
 		-- Generate wallust colors
 		hl.exec_cmd("wallust run " .. WALLPAPER_DIR .. "/wallpaper.jpg")
-		hl.exec_cmd("quickshell")
+		hl.exec_cmd("awww-daemon &")
+		hl.exec_cmd("quickshell &")
 		hl.exec_cmd("nm-applet --indicator &")
 	end)
 end
