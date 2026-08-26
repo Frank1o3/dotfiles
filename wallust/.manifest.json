@@ -1,19 +1,12 @@
 {
-  "version": 5,
-  "message": "did some theming for swaync and updated some hotkeys and other misc stuff on the config files",
+  "version": 6,
+  "message": "minor changes and started adding animations for wallpaper changing next would be make the quickshell rice or well learn it and qml better so i can make it look good",
   "files": [
     "wallust/wallust.toml",
     "wallust/templates/wofi.css",
     "wallust/templates/kitty.conf",
-    "wallust/templates/swaync.css",
     "wallust/templates/hyprland-colors.lua",
-    "wallust/templates/gtk3.css",
-    "wallust/templates/fuzzel.ini",
-    "wallust/templates/waybar.css",
-    "wallust/templates/colors.css",
-    "wallust/templates/gtk4.css",
-    "wallust/scripts/sync-theme.sh",
-    "wallust/.config/gtk-4.0/gtk.css",
-    "wallust/.config/gtk-3.0/gtk.css"
+    "wallust/templates/quickshell.json",
+    "wallust/scripts/sync-theme.sh"
   ]
 }

@@ -28,10 +28,28 @@ Scope {
 
     PanelWindow {
         id: win
-        visible: PanelState.controlCenterOpen
+        visible: mapped
         color: "transparent"
         exclusiveZone: 0
         WlrLayershell.namespace: "quickshell:panel"
+
+        property bool mapped: false
+        Timer {
+            id: closeTimer
+            interval: 220
+            onTriggered: win.mapped = false
+        }
+
+        property bool openLink: PanelState.controlCenterOpen
+
+        onOpenLinkChanged: {
+            if (openLink) {
+                closeTimer.stop();
+                win.mapped = true;
+            } else {
+                closeTimer.start();
+            }
+        }
 
         anchors {
             top: true
@@ -39,9 +57,6 @@ Scope {
             left: true
             right: true
         }
-
-        onVisibleChanged: if (visible)
-            popAnim.start()
 
         HyprlandFocusGrab {
             windows: [win]
@@ -56,29 +71,47 @@ Scope {
             Rectangle {
                 id: card
                 anchors.top: parent.top
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.topMargin: 58
-                width: 400
-                height: Math.min(760, 340 + notifList.contentHeight)
-                radius: 26
+                anchors.right: parent.right
+                anchors.topMargin: Appearance.barHeight + 4
+                anchors.rightMargin: 10
+                width: 380
+                height: Math.min(760, 300 + notifList.contentHeight)
+                radius: Appearance.radius
                 color: Colors.background
-                opacity: Appearance.panelOpacity
+                opacity: PanelState.controlCenterOpen ? Appearance.glassOpacity : 0
                 border.width: 1
                 border.color: Colors.color(1)
 
-                transformOrigin: Item.Top
-                scale: 0.85
+                transformOrigin: Item.TopRight
+                scale: PanelState.controlCenterOpen ? 1 : 0.85
 
-                SequentialAnimation {
-                    id: popAnim
+                Behavior on scale {
                     NumberAnimation {
-                        target: card
-                        property: "scale"
-                        to: 1
-                        duration: 220
+                        duration: 240
                         easing.type: Easing.OutBack
-                        easing.overshoot: 1.1
+                        easing.overshoot: 1.08
                     }
+                }
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: 200
+                    }
+                }
+
+                // small connector "tab" that visually welds the panel to the bar
+                Rectangle {
+                    width: 20
+                    height: 20
+                    radius: 4
+                    color: parent.color
+                    opacity: parent.opacity
+                    border.width: 1
+                    border.color: parent.border.color
+                    rotation: 45
+                    anchors.horizontalCenter: parent.right
+                    anchors.horizontalCenterOffset: -46
+                    y: -9
+                    z: -1
                 }
 
                 MouseArea {

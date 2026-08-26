@@ -1,6 +1,6 @@
 {
-  "version": 26,
-  "message": "added support for composite typing and fixes the updater file so the monitors.lua and some other changes hehehe",
+  "version": 27,
+  "message": "minor changes and started adding animations for wallpaper changing next would be make the quickshell rice or well learn it and qml better so i can make it look good",
   "files": [
     "hypr/hyprpaper.conf",
     "hypr/hyprland.lua",
@@ -13,10 +13,12 @@
     "hypr/modules/decorations.lua",
     "hypr/modules/animations.lua",
     "hypr/modules/misc.lua",
+    "hypr/modules/layer_rules.lua",
     "hypr/modules/env.lua",
     "hypr/scripts/emoticon.py",
     "hypr/scripts/toggle-audio.sh",
     "hypr/scripts/power-menu.sh",
+    "hypr/scripts/set-wallpaper.sh",
     "hypr/scripts/wofi-games.sh",
     "hypr/scripts/pick-wallpaper.sh"
   ]

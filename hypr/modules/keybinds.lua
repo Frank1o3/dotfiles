@@ -11,7 +11,6 @@ local browser = "xdg-open https://google.com"
 local fileManager = "xdg-open " .. HOME
 local mainMod = "SUPER"
 
-local script_pick = CONFIG_DIR .. "/scripts/pick-wallpaper.sh"
 local script_power = CONFIG_DIR .. "/scripts/power-menu.sh"
 local script_games = CONFIG_DIR .. "/scripts/wofi-games.sh"
 local script_audio = CONFIG_DIR .. "/scripts/toggle-audio.sh"
@@ -54,7 +53,7 @@ hl.bind(mainMod .. " + SHIFT + F", hl.dsp.window.float({ action = "toggle" }))
 -- Desktop / Session
 --------------------------------------------------
 
-hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("kitty --class wallpaper-picker -e " .. script_pick))
+hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("qs ipc call wallpaper toggle"))
 
 hl.bind(mainMod .. " + SHIFT + E", hl.dsp.exec_cmd("kitty --class power-menu -e " .. script_power))
 
