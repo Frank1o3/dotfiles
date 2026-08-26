@@ -15,7 +15,7 @@ RowLayout {
             required property var modelData
             property bool active: Hyprland.focusedWorkspace && Hyprland.focusedWorkspace.id === modelData.id
 
-            width: active ? 22 : 10
+            width: active ? 15 : 10
             height: 10
             radius: 5
             color: active ? Colors.color(4) : Qt.rgba(1, 1, 1, 0.25)
