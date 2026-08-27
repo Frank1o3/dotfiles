@@ -8,7 +8,7 @@ Singleton {
     readonly property int spacing: 6
     readonly property int barHeight: 45
 
-    readonly property string fontFamily: "JetBrainsMono Nerd Font"
+    readonly property string fontFamily: "SpaceMono Nerd Font"
     readonly property int fontSize: 12
 
     readonly property real glassOpacity: 0.55

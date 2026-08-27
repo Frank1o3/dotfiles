@@ -11,6 +11,7 @@ Text {
     color: Colors.color(1)
     font.family: Appearance.fontFamily
     font.pixelSize: Appearance.fontSize
+    font.weight: Font.Bold
     text: "󰍛 " + usage + "%"
 
     Process {

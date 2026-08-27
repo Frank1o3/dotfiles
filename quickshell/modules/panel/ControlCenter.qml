@@ -1,13 +1,13 @@
 import Quickshell.Wayland
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Controls
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
 import Quickshell.Services.Mpris
 import Quickshell.Services.Pipewire
 import qs.config
+import qs.config.components
 import qs.services
 
 Scope {
@@ -39,16 +39,13 @@ Scope {
             interval: 220
             onTriggered: win.mapped = false
         }
-
         property bool openLink: PanelState.controlCenterOpen
-
         onOpenLinkChanged: {
             if (openLink) {
                 closeTimer.stop();
                 win.mapped = true;
-            } else {
+            } else
                 closeTimer.start();
-            }
         }
 
         anchors {
@@ -75,10 +72,10 @@ Scope {
                 anchors.topMargin: Appearance.barHeight + 4
                 anchors.rightMargin: 10
                 width: 380
-                height: Math.min(760, 300 + notifList.contentHeight)
+                height: Math.min(760, 340 + notifList.contentHeight)
                 radius: Appearance.radius
                 color: Colors.background
-                opacity: PanelState.controlCenterOpen ? Appearance.glassOpacity : 0
+                opacity: PanelState.controlCenterOpen ? Appearance.panelOpacity : 0
                 border.width: 1
                 border.color: Colors.color(1)
 
@@ -98,7 +95,6 @@ Scope {
                     }
                 }
 
-                // small connector "tab" that visually welds the panel to the bar
                 Rectangle {
                     width: 20
                     height: 20
@@ -120,145 +116,171 @@ Scope {
 
                 ColumnLayout {
                     anchors.fill: parent
-                    anchors.margins: 20
-                    spacing: 16
+                    anchors.margins: 18
+                    spacing: 14
 
                     RowLayout {
                         Layout.fillWidth: true
                         Text {
-                            text: "  Control Center"
+                            text: "Control Center"
                             color: Colors.foreground
                             font.family: Appearance.fontFamily
-                            font.pixelSize: 18
+                            font.pixelSize: 17
                             font.bold: true
                             Layout.fillWidth: true
+                            font.weight: Font.Bold
                         }
-                        Button {
-                            text: " Clear All"
+                        GlassButton {
+                            icon: "󰆴"
+                            text: "Clear"
                             onClicked: Notifications.clearAll()
                         }
                     }
 
-                    RowLayout {
+                    // --- DND card ---
+                    Rectangle {
                         Layout.fillWidth: true
-                        Text {
-                            text: "  Do Not Disturb"
-                            color: Colors.foreground
-                            font.family: Appearance.fontFamily
-                            Layout.fillWidth: true
-                        }
-                        Switch {
-                            checked: Notifications.dnd
-                            onToggled: Notifications.toggleDnd()
-                        }
-                    }
+                        radius: 14
+                        color: Qt.rgba(1, 1, 1, 0.045)
+                        implicitHeight: dndRow.implicitHeight + 24
 
-                    ColumnLayout {
-                        id: volumeSection
-                        Layout.fillWidth: true
-                        spacing: 4
-                        readonly property PwNode sink: Pipewire.defaultAudioSink
-
-                        PwObjectTracker {
-                            objects: [volumeSection.sink]
-                        }
-
-                        Text {
-                            text: "  Volume"
-                            color: Colors.foreground
-                            font.family: Appearance.fontFamily
-                        }
-                        Slider {
-                            Layout.fillWidth: true
-                            from: 0
-                            to: 1
-                            value: volumeSection.sink?.audio?.volume ?? 0
-                            onMoved: {
-                                if (volumeSection.sink?.audio)
-                                    volumeSection.sink.audio.volume = value;
+                        RowLayout {
+                            id: dndRow
+                            anchors.fill: parent
+                            anchors.margins: 12
+                            Text {
+                                text: "󰂛  Do Not Disturb"
+                                color: Colors.foreground
+                                font.family: Appearance.fontFamily
+                                font.pixelSize: Appearance.fontSize + 1
+                                Layout.fillWidth: true
+                                font.weight: Font.Bold
+                            }
+                            GlassSwitch {
+                                checked: Notifications.dnd
+                                onToggled: Notifications.toggleDnd()
                             }
                         }
                     }
 
-                    ColumnLayout {
-                        id: blSection
+                    // --- Volume / Brightness card ---
+                    Rectangle {
                         Layout.fillWidth: true
-                        spacing: 4
-                        property real percent: 50
+                        radius: 14
+                        color: Qt.rgba(1, 1, 1, 0.045)
+                        implicitHeight: slidersCol.implicitHeight + 24
 
-                        Text {
-                            text: "  Brightness"
-                            color: Colors.foreground
-                            font.family: Appearance.fontFamily
-                        }
-                        Slider {
-                            id: blSlider
-                            Layout.fillWidth: true
-                            from: 1
-                            to: 100
-                            value: blSection.percent
-                            onMoved: {
-                                blSection.percent = value;
-                                setBrightness.running = true;
+                        ColumnLayout {
+                            id: slidersCol
+                            anchors.fill: parent
+                            anchors.margins: 12
+                            spacing: 14
+
+                            readonly property PwNode sink: Pipewire.defaultAudioSink
+                            PwObjectTracker {
+                                objects: [slidersCol.sink]
                             }
-                        }
 
-                        Process {
-                            id: getBrightness
-                            command: ["brightnessctl", "-m"]
-                            running: true
-                            stdout: StdioCollector {
-                                onStreamFinished: {
-                                    const match = this.text.match(/,(\d+)%,/);
-                                    if (match)
-                                        blSection.percent = Number(match[1]);
+                            GlassSlider {
+                                Layout.fillWidth: true
+                                icon: "󰕾"
+                                from: 0
+                                to: 1
+                                value: slidersCol.sink?.audio?.volume ?? 0
+                                onMoved: v => {
+                                    if (slidersCol.sink?.audio)
+                                        slidersCol.sink.audio.volume = v;
+                                }
+                            }
+
+                            GlassSlider {
+                                id: blSlider
+                                Layout.fillWidth: true
+                                icon: "󰃟"
+                                from: 1
+                                to: 100
+                                value: 50
+                                onMoved: v => setBrightness.command = ["brightnessctl", "set", Math.round(v) + "%"] && (setBrightness.running = true)
+
+                                Process {
+                                    id: getBrightness
+                                    command: ["brightnessctl", "-m"]
+                                    running: true
+                                    stdout: StdioCollector {
+                                        onStreamFinished: {
+                                            const match = this.text.match(/,(\d+)%,/);
+                                            if (match)
+                                                blSlider.value = Number(match[1]);
+                                        }
+                                    }
+                                }
+                                Process {
+                                    id: setBrightness
                                 }
                             }
                         }
+                    }
 
-                        Process {
-                            id: setBrightness
-                            command: ["brightnessctl", "set", Math.round(blSlider.value) + "%"]
+                    // --- Media card ---
+                    Rectangle {
+                        Layout.fillWidth: true
+                        visible: Mpris.players.values.length > 0
+                        radius: 14
+                        color: Qt.rgba(1, 1, 1, 0.045)
+                        implicitHeight: mprisCol.implicitHeight + 24
+
+                        ColumnLayout {
+                            id: mprisCol
+                            anchors.fill: parent
+                            anchors.margins: 12
+                            spacing: 6
+                            property var player: Mpris.players.values[0] ?? null
+
+                            Text {
+                                text: mprisCol.player ? mprisCol.player.trackTitle : ""
+                                color: Colors.foreground
+                                font.bold: true
+                                font.family: Appearance.fontFamily
+                                Layout.fillWidth: true
+                                elide: Text.ElideRight
+                                font.weight: Font.Bold
+                            }
+                            Text {
+                                text: mprisCol.player ? mprisCol.player.trackArtist : ""
+                                color: Colors.color(7)
+                                font.family: Appearance.fontFamily
+                                Layout.fillWidth: true
+                                elide: Text.ElideRight
+                                font.weight: Font.Bold
+                            }
+                            RowLayout {
+                                spacing: 8
+                                Layout.topMargin: 4
+                                GlassButton {
+                                    icon: "󰒮"
+                                    onClicked: mprisCol.player?.previous()
+                                }
+                                GlassButton {
+                                    icon: mprisCol.player?.playbackState === MprisPlaybackState.Playing ? "󰏤" : "󰐊"
+                                    accent: true
+                                    onClicked: mprisCol.player?.togglePlaying()
+                                }
+                                GlassButton {
+                                    icon: "󰒭"
+                                    onClicked: mprisCol.player?.next()
+                                }
+                            }
                         }
                     }
 
-                    ColumnLayout {
-                        id: mprisSection
-                        Layout.fillWidth: true
-                        visible: Mpris.players.values.length > 0
-                        spacing: 6
-                        property var player: Mpris.players.values[0] ?? null
-
-                        Text {
-                            text: mprisSection.player ? mprisSection.player.trackTitle : ""
-                            color: Colors.foreground
-                            font.bold: true
-                            font.family: Appearance.fontFamily
-                            Layout.fillWidth: true
-                            elide: Text.ElideRight
-                        }
-                        Text {
-                            text: mprisSection.player ? mprisSection.player.trackArtist : ""
-                            color: Colors.color(7)
-                            font.family: Appearance.fontFamily
-                            Layout.fillWidth: true
-                            elide: Text.ElideRight
-                        }
-                        RowLayout {
-                            spacing: 10
-                            Button {
-                                text: "󰒮"
-                                onClicked: mprisSection.player?.previous()
-                            }
-                            Button {
-                                text: mprisSection.player?.playbackState === MprisPlaybackState.Playing ? "󰏤" : "󰐊"
-                                onClicked: mprisSection.player?.togglePlaying()
-                            }
-                            Button {
-                                text: "󰒭"
-                                onClicked: mprisSection.player?.next()
-                            }
-                        }
+                    Text {
+                        text: "Notifications"
+                        visible: notifList.count > 0
+                        color: Colors.color(7)
+                        font.family: Appearance.fontFamily
+                        font.pixelSize: 12
+                        font.bold: true
+                        font.weight: Font.Bold
                     }
 
                     ListView {
@@ -275,11 +297,23 @@ Scope {
                             height: contentCol.implicitHeight + 20
                             radius: 14
                             color: Qt.rgba(1, 1, 1, 0.05)
+                            border.width: 1
+                            border.color: Qt.rgba(1, 1, 1, 0.06)
+
+                            Rectangle {
+                                width: 3
+                                anchors.top: parent.top
+                                anchors.bottom: parent.bottom
+                                anchors.left: parent.left
+                                radius: 2
+                                color: Colors.color(4)
+                            }
 
                             ColumnLayout {
                                 id: contentCol
                                 anchors.fill: parent
-                                anchors.margins: 10
+                                anchors.margins: 12
+                                anchors.leftMargin: 16
                                 spacing: 2
 
                                 RowLayout {
@@ -288,11 +322,12 @@ Scope {
                                         text: modelData.appName
                                         color: Colors.color(7)
                                         font.pixelSize: 11
+                                        font.family: Appearance.fontFamily
                                         Layout.fillWidth: true
+                                        font.weight: Font.Bold
                                     }
-                                    Button {
-                                        text: "✕"
-                                        flat: true
+                                    GlassButton {
+                                        icon: "✕"
                                         onClicked: Notifications.dismiss(modelData)
                                     }
                                 }
@@ -300,16 +335,20 @@ Scope {
                                     text: modelData.summary
                                     color: Colors.foreground
                                     font.bold: true
+                                    font.family: Appearance.fontFamily
                                     wrapMode: Text.Wrap
                                     Layout.fillWidth: true
+                                    font.weight: Font.Bold
                                 }
                                 Text {
                                     visible: modelData.body.length > 0
                                     text: modelData.body
                                     color: Colors.foreground
                                     opacity: 0.85
+                                    font.family: Appearance.fontFamily
                                     wrapMode: Text.Wrap
                                     Layout.fillWidth: true
+                                    font.weight: Font.Bold
                                 }
                             }
                         }
@@ -320,6 +359,7 @@ Scope {
                             text: "No notifications"
                             color: Colors.color(8)
                             font.family: Appearance.fontFamily
+                            font.weight: Font.Bold
                         }
                     }
                 }

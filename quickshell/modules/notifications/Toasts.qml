@@ -73,6 +73,7 @@ Scope {
                             color: Colors.color(7)
                             font.pixelSize: 11
                             font.family: Appearance.fontFamily
+                            font.weight: Font.Bold
                         }
                         Text {
                             text: toast.modelData.summary
@@ -81,6 +82,7 @@ Scope {
                             font.family: Appearance.fontFamily
                             wrapMode: Text.Wrap
                             Layout.fillWidth: true
+                            font.weight: Font.Bold
                         }
                         Text {
                             visible: toast.modelData.body.length > 0
@@ -90,6 +92,7 @@ Scope {
                             font.family: Appearance.fontFamily
                             wrapMode: Text.Wrap
                             Layout.fillWidth: true
+                            font.weight: Font.Bold
                         }
                     }
 

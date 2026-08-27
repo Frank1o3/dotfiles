@@ -8,6 +8,7 @@ Text {
     color: Colors.color(7)
     font.family: Appearance.fontFamily
     font.pixelSize: Appearance.fontSize
+    font.weight: Font.Bold
     text: "󰃟 " + percent + "%"
 
     property int percent: 0

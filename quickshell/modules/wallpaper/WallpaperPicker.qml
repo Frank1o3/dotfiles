@@ -148,6 +148,7 @@ Scope {
                             font.pixelSize: 18
                             font.bold: true
                             Layout.fillWidth: true
+                            font.weight: Font.Bold
                         }
                         Button {
                             text: "✕"
@@ -217,6 +218,7 @@ Scope {
                                         elide: Text.ElideRight
                                         width: parent.width - 12
                                         horizontalAlignment: Text.AlignHCenter
+                                        font.weight: Font.Bold
                                     }
                                 }
                             }

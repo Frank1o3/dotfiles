@@ -7,6 +7,7 @@ Text {
     color: Colors.color(2)
     font.family: Appearance.fontFamily
     font.pixelSize: Appearance.fontSize
+    font.weight: Font.Bold
     text: "  " + temp + "°C"
 
     property real temp: 0

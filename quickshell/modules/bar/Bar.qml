@@ -36,30 +36,27 @@ Scope {
                 border.color: Colors.color(1)
             }
 
-            RowLayout {
+            Item {
                 anchors.fill: pill
                 anchors.leftMargin: 16
                 anchors.rightMargin: 16
 
                 RowLayout {
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
                     spacing: Appearance.spacing
                     Workspaces {}
                 }
 
-                Item {
-                    Layout.fillWidth: true
-                }
-
                 RowLayout {
+                    anchors.centerIn: parent
                     spacing: Appearance.spacing
                     Clock {}
                 }
 
-                Item {
-                    Layout.fillWidth: true
-                }
-
                 RowLayout {
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
                     spacing: Appearance.spacing
                     Cpu {}
                     Igpu {}

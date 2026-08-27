@@ -13,6 +13,7 @@ Item {
         color: PanelState.controlCenterOpen ? Colors.color(4) : Colors.foreground
         font.family: Appearance.fontFamily
         font.pixelSize: Appearance.fontSize
+        font.weight: Font.Bold
         text: Notifications.dnd ? "󰂛" : "󰂚"
     }
 

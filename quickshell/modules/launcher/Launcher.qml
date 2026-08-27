@@ -116,6 +116,7 @@ Scope {
                         color: Colors.foreground
                         font.family: Appearance.fontFamily
                         font.pixelSize: Appearance.fontSize + 2
+                        font.weight: Font.Bold
 
                         background: Rectangle {
                             radius: 10
@@ -177,6 +178,7 @@ Scope {
                                     color: ListView.isCurrentItem ? Colors.background : Colors.foreground
                                     font.family: Appearance.fontFamily
                                     font.pixelSize: Appearance.fontSize + 1
+                                    font.weight: Font.Bold
                                     Layout.fillWidth: true
                                     elide: Text.ElideRight
                                 }
@@ -196,6 +198,7 @@ Scope {
                             text: "No matches"
                             color: Colors.color(8)
                             font.family: Appearance.fontFamily
+                            font.weight: Font.Bold
                         }
                     }
                 }

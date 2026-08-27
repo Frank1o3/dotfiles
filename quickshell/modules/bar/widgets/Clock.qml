@@ -8,6 +8,7 @@ Text {
     font.family: Appearance.fontFamily
     font.pixelSize: Appearance.fontSize + 1
     font.bold: true
+    font.weight: Font.Bold
 
     Process {
         id: proc
