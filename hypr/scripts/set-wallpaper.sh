@@ -1,18 +1,27 @@
 #!/usr/bin/env sh
+
 set -eu
 
 WALLPAPER_DIR="$HOME/wallpapers"
 SELECTED_PATH="${1:-}"
 
-[ -z "$SELECTED_PATH" ] && { echo "Usage: set-wallpaper.sh <path>"; exit 1; }
-[ -f "$SELECTED_PATH" ] || { notify-send "Error" "Wallpaper not found: $SELECTED_PATH"; exit 1; }
+[ -z "$SELECTED_PATH" ] && {
+    echo "Usage: set-wallpaper.sh <path>"
+    exit 1
+}
+
+[ -f "$SELECTED_PATH" ] || {
+    notify-send "Error" "Wallpaper not found: $SELECTED_PATH"
+    exit 1
+}
 
 SELECTED_NAME=$(basename "$SELECTED_PATH")
 
-ln -sf "$SELECTED_PATH" "$WALLPAPER_DIR/wallpaper.jpg"
+# Keep a real copy as the persistent wallpaper
+cp -f "$SELECTED_PATH" "$WALLPAPER_DIR/wallpaper.jpg"
 
 if ! pgrep -x awww-daemon >/dev/null 2>&1; then
-    awww-daemon &
+    awww-daemon & disown
     sleep 0.4
 fi
 

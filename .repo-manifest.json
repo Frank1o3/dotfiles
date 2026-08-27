@@ -1,7 +1,13 @@
 {
   "configs": {
     "hypr": {
-      "version": 28,
+      "version": 29,
+      "install_path": null,
+      "protected": [],
+      "optional": false
+    },
+    "quickshell": {
+      "version": 2,
       "install_path": null,
       "protected": [],
       "optional": false

@@ -1,6 +1,6 @@
 {
-  "version": 28,
-  "message": "forgot to make the awww daemon to auto start",
+  "version": 29,
+  "message": "wofi is not used so i mite as well remove it",
   "files": [
     "hypr/hyprpaper.conf",
     "hypr/hyprland.lua",

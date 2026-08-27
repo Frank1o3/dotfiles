@@ -10,9 +10,9 @@ return function(WALLPAPER_DIR)
 		hl.exec_cmd("gsettings set org.gnome.desktop.interface cursor-theme catppuccin-mocha-dark-cursors")
 
 		-- Generate wallust colors
-		hl.exec_cmd("wallust run " .. WALLPAPER_DIR .. "/wallpaper.jpg")
-		hl.exec_cmd("awww-daemon &")
-		hl.exec_cmd("quickshell &")
-		hl.exec_cmd("nm-applet --indicator &")
+		hl.exec_cmd("awww-daemon & disown")
+		hl.exec_cmd("awww img " .. WALLPAPER_DIR .. "/wallpaper.jpg")
+		hl.exec_cmd("quickshell & disown")
+		hl.exec_cmd("nm-applet --indicator & disown")
 	end)
 end

@@ -1,40 +1,40 @@
 {
-  "wallpaper": "/home/franklin/wallpapers/anime.jpg",
-  "background": "#1F1F0C",
-  "foreground": "#A7A8B7",
-  "cursor": "#BC6E88",
+  "wallpaper": "/home/franklin/wallpapers/wallpaperflare.com_wallpaper.jpg",
+  "background": "#1F0E07",
+  "foreground": "#B4ABB0",
+  "cursor": "#9E646E",
   "colors": [
-"#525139",
+"#3B2420",
 
-"#FF9142",
+"#B97176",
 
-"#DA5A79",
+"#A2515C",
 
-"#964D79",
+"#9C7371",
 
-"#968492",
+"#7B4D58",
 
-"#756E87",
+"#5D5A62",
 
-"#3C3E60",
+"#594550",
 
-"#797A90",
+"#8C7E86",
 
-"#545564",
+"#62585D",
 
-"#FF9142",
+"#B97176",
 
-"#DA5A79",
+"#A2515C",
 
-"#964D79",
+"#9C7371",
 
-"#968492",
+"#7B4D58",
 
-"#756E87",
+"#5D5A62",
 
-"#3C3E60",
+"#594550",
 
-"#797A90"
+"#8C7E86"
 
 ]
 }
