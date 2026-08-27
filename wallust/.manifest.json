@@ -1,9 +1,8 @@
 {
-  "version": 6,
-  "message": "minor changes and started adding animations for wallpaper changing next would be make the quickshell rice or well learn it and qml better so i can make it look good",
+  "version": 7,
+  "message": "micro patches",
   "files": [
     "wallust/wallust.toml",
-    "wallust/templates/wofi.css",
     "wallust/templates/kitty.conf",
     "wallust/templates/hyprland-colors.lua",
     "wallust/templates/quickshell.json",
