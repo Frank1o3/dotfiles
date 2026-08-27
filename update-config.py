@@ -7,7 +7,7 @@ from pathlib import Path
 REPO_RAW = "https://raw.githubusercontent.com/Frank1o3/dotfiles/main"
 TTY = open("/dev/tty", "r")
 
-# 🔥 NEW: Automatically protect these filenames from being overwritten
+# Automatically protect these filenames from being overwritten
 PROTECTED_FILENAMES = {"monitors.lua", "hyprpaper.conf"}
 
 # =========================================================
@@ -36,7 +36,7 @@ def yesno(prompt: str) -> bool:
 def replace_placeholders(file: Path):
     try:
         content = file.read_text()
-    except UnicodeDecodeError:  # 🔥 FIXED: Was FileExistsError
+    except UnicodeDecodeError:  # Was FileExistsError
         return  # skip binary files
 
     home = str(Path.home())
@@ -59,19 +59,19 @@ def cleanup_removed_files(install_path: Path, expected_files: set):
 
         rel = str(existing.relative_to(install_path))
 
-        # 🔥 NEW: Also protect our special files from being deleted during cleanup
+        # Also protect our special files from being deleted during cleanup
         if existing.name in PROTECTED_FILENAMES:
             continue
 
         if rel not in expected_files and not rel.startswith(".version"):
-            print(f"🧹 Removing old file: {rel}")
+            print(f"Removing old file: {rel}")
             existing.unlink()
 
 # =========================================================
 # Main
 # =========================================================
 def main():
-    print("🚀 Smart Update\n")
+    print("Smart Update\n")
 
     repo_manifest = json.loads(fetch(f"{REPO_RAW}/.repo-manifest.json"))
 
@@ -98,25 +98,25 @@ def main():
         try:
             manifest = json.loads(fetch(f"{REPO_RAW}/{cfg}/.manifest.json"))
         except Exception:
-            print(f"⚠️ {cfg}: no manifest")
+            print(f"{cfg}: no manifest")
             continue
 
         remote_ver = manifest["version"]
 
         if remote_ver <= local_ver:
-            print(f"✅ {cfg} up to date")
+            print(f"{cfg} up to date")
             continue
 
-        print(f"📦 {cfg}: v{local_ver} → v{remote_ver}")
+        print(f"{cfg}: v{local_ver} → v{remote_ver}")
 
         expected_files = set()
 
         for f in manifest["files"]:
             rel = Path(f)
 
-            # 🔒 SAFETY: ensure path starts with cfg
+            # SAFETY: ensure path starts with cfg
             if not str(rel).startswith(cfg):
-                print(f"⚠️ Skipping invalid path: {rel}")
+                print(f"Skipping invalid path: {rel}")
                 continue
 
             subpath = rel.relative_to(cfg)
@@ -124,14 +124,14 @@ def main():
 
             expected_files.add(str(subpath))
 
-            # 🔥 NEW: Auto-skip protected filenames if they already exist locally
+            # Auto-skip protected filenames if they already exist locally
             if subpath.name in PROTECTED_FILENAMES and target.exists():
-                print(f"🔒 Skipping protected local file: {rel}")
+                print(f"Skipping protected local file: {rel}")
                 continue
 
             # Fallback to manifest protected list
             if str(subpath) in meta.get("protected", []) and target.exists():
-                print(f"🔒 Skipping protected: {rel}")
+                print(f"Skipping protected: {rel}")
                 continue
 
             if target.exists():
@@ -148,22 +148,22 @@ def main():
                 except UnicodeDecodeError:
                     target.write_bytes(content)
 
-                print(f"✔ {rel}")
+                print(f"{rel}")
 
             except Exception as e:
-                print(f"❌ {rel}: {e}")
+                print(f"{rel}: {e}")
 
-        # 🧹 Cleanup removed files
+        # Cleanup removed files
         cleanup_removed_files(install_path, expected_files)
 
-        # 🔁 Replace ALL placeholders
+        # Replace ALL placeholders
         replace_all(install_path)
 
         # Write version
         install_path.mkdir(parents=True, exist_ok=True)
         (install_path / ".version").write_text(json.dumps({"version": remote_ver}))
 
-        print(f"✨ {cfg} updated\n")
+        print(f"{cfg} updated\n")
 
 if __name__ == "__main__":
     main()

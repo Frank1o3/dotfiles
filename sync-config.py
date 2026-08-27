@@ -136,7 +136,7 @@ def main():
         try:
             sync(cfg)
         except subprocess.CalledProcessError as e:
-            print(f"❌ Failed syncing {cfg}: {e}")
+            print(f"Failed syncing {cfg}: {e}")
 
 
 if __name__ == "__main__":

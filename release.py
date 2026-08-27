@@ -19,7 +19,7 @@ def find_configs():
         if marker.parent.parent.resolve() == ROOT:
             configs.append(marker.parent.name)
         else:
-            print(f"⚠️ Ignoring misplaced .config-root in {marker}")
+            print(f"Ignoring misplaced .config-root in {marker}")
 
     return sorted(set(configs))
 
@@ -97,7 +97,7 @@ def main():
         ]
 
         if not files and any(cfg_path.iterdir()):
-            print(f"⚠️ {cfg}: empty manifest, skipping")
+            print(f"{cfg}: empty manifest, skipping")
             continue
 
         manifest = {
@@ -128,9 +128,9 @@ def main():
         subprocess.run(["git", "add", "."], check=True)
         subprocess.run(["git", "commit", "-m", f"release: {message}"], check=True)
         subprocess.run(["git", "push"], check=True)
-        print("\n✅ Released + pushed")
+        print("\nReleased + pushed")
     else:
-        print("\nℹ️ Nothing updated")
+        print("\nNothing updated")
 
 
 if __name__ == "__main__":
