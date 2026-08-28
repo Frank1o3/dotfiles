@@ -1,8 +1,7 @@
 {
-  "version": 29,
-  "message": "wofi is not used so i mite as well remove it",
+  "version": 30,
+  "message": "Update to hyprland setup and hotkeys",
   "files": [
-    "hypr/hyprpaper.conf",
     "hypr/hyprland.lua",
     "hypr/modules/autostart.lua",
     "hypr/modules/layout.lua",

@@ -15,8 +15,5 @@ hl.config({
 	},
 	scrolling = {
 		fullscreen_on_one_column = true,
-	},
-	cursor = {
-		default_monitor = "DP-4",
 	}
 })

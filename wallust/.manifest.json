@@ -1,11 +1,10 @@
 {
-  "version": 7,
-  "message": "micro patches",
+  "version": 8,
+  "message": "Update to hyprland setup and hotkeys",
   "files": [
     "wallust/wallust.toml",
     "wallust/templates/kitty.conf",
     "wallust/templates/hyprland-colors.lua",
-    "wallust/templates/quickshell.json",
-    "wallust/scripts/sync-theme.sh"
+    "wallust/templates/quickshell.json"
   ]
 }

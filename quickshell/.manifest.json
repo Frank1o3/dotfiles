@@ -1,6 +1,6 @@
 {
-  "version": 2,
-  "message": "wofi is not used so i mite as well remove it",
+  "version": 3,
+  "message": "Update to hyprland setup and hotkeys",
   "files": [
     "quickshell/colors.json",
     "quickshell/shell.qml",
@@ -11,10 +11,13 @@
     "quickshell/config/PanelState.qml",
     "quickshell/config/Colors.qml",
     "quickshell/config/Appearance.qml",
+    "quickshell/config/components/GlassSlider.qml",
+    "quickshell/config/components/GlassSwitch.qml",
+    "quickshell/config/components/GlassButton.qml",
     "quickshell/modules/notifications/Toasts.qml",
     "quickshell/modules/bar/BarPill.qml",
     "quickshell/modules/bar/Bar.qml",
-    "quickshell/modules/panel/ControlCenter.qml",
+    "quickshell/modules/panel/ControlCenterContent.qml",
     "quickshell/modules/wallpaper/WallpaperPicker.qml",
     "quickshell/modules/launcher/Launcher.qml",
     "quickshell/modules/bar/widgets/Network.qml",

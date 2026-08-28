@@ -11,12 +11,8 @@ import qs.modules.panel
 Scope {
     id: root
 
-    // Convenience: the screen that Hyprland currently considers focused.
     readonly property string focusedScreen: Hyprland.focusedMonitor?.name ?? ""
 
-    // Single global IPC handler — declared once here, not inside Variants,
-    // so it isn't re-registered per monitor.
-    // Targets the *focused* monitor's panel instance.
     IpcHandler {
         target: "notifications"
         function toggle(): void {
@@ -39,7 +35,6 @@ Scope {
             screen: modelData
             WlrLayershell.namespace: "quickshell:bar"
 
-            // Per-instance open state, derived from the singleton map.
             readonly property bool panelOpen: PanelState.isOpen(modelData.name)
 
             anchors {
@@ -48,14 +43,24 @@ Scope {
                 right: true
             }
 
-            // Reserve only the bar's own height for tiling purposes.
-            // Setting exclusiveZone switches exclusionMode to Normal
-            // automatically, so the dropdown below can grow without
-            // pushing tiled windows down.
             exclusiveZone: Appearance.barHeight
 
-            implicitHeight: Appearance.barHeight + dropdownHost.height
+            // FIXED to the content's natural size — NOT to dropdownHost's
+            // animated height. This only changes when real content changes
+            // (new notification, MPRIS state), never mid-animation, so the
+            // actual Wayland surface only resizes rarely instead of every frame.
+            implicitHeight: Appearance.barHeight + bg.implicitHeight
             color: "transparent"
+
+            // Click-through mask: only the pill + whatever's currently visible
+            // of the dropdown is clickable. Everything else in the reserved
+            // space passes clicks straight through to windows behind it.
+            mask: Region {
+                item: pillRow
+                Region {
+                    item: dropdownHost
+                }
+            }
 
             HyprlandFocusGrab {
                 windows: [win]
@@ -127,9 +132,6 @@ Scope {
             // ---------------- Control Center, grown out of the pill ----------------
             Item {
                 id: dropdownHost
-                // Anchored just below the bar row.  We use pillRow
-                // (a sibling) rather than pill (pillRow's child) because
-                // QML anchoring only works between parent/sibling items.
                 anchors.top: pillRow.bottom
                 anchors.right: parent.right
                 anchors.rightMargin: 10
@@ -150,8 +152,6 @@ Scope {
                     implicitHeight: content.implicitHeight + 36
                     height: implicitHeight
 
-                    // Flat where it meets the pill, rounded where it ends —
-                    // this is what sells the "grew out of the bar" look.
                     topLeftRadius: 0
                     topRightRadius: 0
                     bottomLeftRadius: Appearance.radius
@@ -164,7 +164,7 @@ Scope {
 
                     MouseArea {
                         anchors.fill: parent
-                    } // eat clicks so they don't fall through to close
+                    }
 
                     ControlCenterContent {
                         id: content
@@ -174,15 +174,6 @@ Scope {
                         anchors.margins: 18
                     }
                 }
-            }
-
-            // click on the desktop below the panel closes it
-            MouseArea {
-                anchors.top: dropdownHost.bottom
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
-                onClicked: PanelState.setOpen(win.modelData.name, false)
             }
         }
     }

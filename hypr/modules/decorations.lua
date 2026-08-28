@@ -6,14 +6,14 @@ local w_col = ok and wallust.general and wallust.general.col or {}
 hl.config({
 	general = {
 		gaps_in = 5,
-		gaps_out = 10,
+		gaps_out = 15,
 		border_size = 2,
 		col = {
 			active_border = w_col.active_border or { colors = { "rgba(33ccffee)", "rgba(00ff99ee)" }, angle = 45 },
 			inactive_border = w_col.inactive_border or "rgba(595959aa)",
 		},
 		resize_on_border = false,
-		allow_tearing = false,
+		allow_tearing = true,
 	},
 	decoration = {
 		rounding = 10,
