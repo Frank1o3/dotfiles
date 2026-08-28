@@ -7,10 +7,14 @@ Item {
     implicitWidth: icon.implicitWidth + 6
     implicitHeight: icon.implicitHeight
 
+    // Injected by Bar.qml — per-monitor open state.
+    property bool panelOpen: false
+    signal togglePanel()
+
     Text {
         id: icon
         anchors.centerIn: parent
-        color: PanelState.controlCenterOpen ? Colors.color(4) : Colors.foreground
+        color: root.panelOpen ? Colors.color(4) : Colors.foreground
         font.family: Appearance.fontFamily
         font.pixelSize: Appearance.fontSize
         font.weight: Font.Bold
@@ -39,6 +43,6 @@ Item {
 
     MouseArea {
         anchors.fill: parent
-        onClicked: PanelState.toggleControlCenter()
+        onClicked: root.togglePanel()
     }
 }

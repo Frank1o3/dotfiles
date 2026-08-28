@@ -2,15 +2,27 @@ pragma Singleton
 import Quickshell
 
 Singleton {
-    property bool controlCenterOpen: false
+    // Per-monitor control-center state: keyed by screen name.
+    property var _openScreens: ({})
 
-    function toggleControlCenter() {
-        controlCenterOpen = !controlCenterOpen;
+    function isOpen(screenName) {
+        return !!_openScreens[screenName];
     }
-    function openControlCenter() {
-        controlCenterOpen = true;
+
+    function setOpen(screenName, open) {
+        let copy = Object.assign({}, _openScreens);
+        if (open)
+            copy[screenName] = true;
+        else
+            delete copy[screenName];
+        _openScreens = copy;
     }
-    function closeControlCenter() {
-        controlCenterOpen = false;
+
+    function toggle(screenName) {
+        setOpen(screenName, !isOpen(screenName));
+    }
+
+    function closeAll() {
+        _openScreens = {};
     }
 }
