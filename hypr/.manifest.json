@@ -1,6 +1,6 @@
 {
-  "version": 33,
-  "message": "More updates to quickshell and hyprland in general",
+  "version": 34,
+  "message": "minor fix on the keybinds",
   "files": [
     "hypr/hypridle.conf",
     "hypr/hyprlock.conf",
