@@ -25,4 +25,3 @@ hl.env("GDK_SCALE", "1")
 
 -- Terminal
 hl.env("TERMINAL", "kitty")
-hl.env("RIVET_DB", os.getenv("HOME") .. "/.rivet/db.json")

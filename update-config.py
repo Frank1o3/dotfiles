@@ -8,7 +8,7 @@ REPO_RAW = "https://raw.githubusercontent.com/Frank1o3/dotfiles/main"
 TTY = open("/dev/tty", "r")
 
 # Automatically protect these filenames from being overwritten
-PROTECTED_FILENAMES = {"monitors.lua", "hyprpaper.conf"}
+PROTECTED_FILENAMES = {"monitors.lua"}
 
 # =========================================================
 # Networking

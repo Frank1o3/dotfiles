@@ -1,6 +1,6 @@
 {
-  "version": 30,
-  "message": "Update to hyprland setup and hotkeys",
+  "version": 31,
+  "message": "minor change to the env files",
   "files": [
     "hypr/hyprland.lua",
     "hypr/modules/autostart.lua",
