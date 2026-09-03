@@ -1,7 +1,19 @@
 {
   "configs": {
+    "hypr": {
+      "version": 32,
+      "install_path": null,
+      "protected": [],
+      "optional": false
+    },
     "quickshell": {
-      "version": 4,
+      "version": 5,
+      "install_path": null,
+      "protected": [],
+      "optional": false
+    },
+    "wallust": {
+      "version": 9,
       "install_path": null,
       "protected": [],
       "optional": false

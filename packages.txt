@@ -14,7 +14,7 @@ python-debugpy
 ripgrep
 hyprland
 hyprlock
-hyprpaper
+hypridle
 hyprshutdown
 hyprpolkitagent
 quickshell

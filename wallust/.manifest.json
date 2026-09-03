@@ -1,8 +1,9 @@
 {
-  "version": 8,
-  "message": "Update to hyprland setup and hotkeys",
+  "version": 9,
+  "message": "More updates to quickshell and hyprland in general",
   "files": [
     "wallust/wallust.toml",
+    "wallust/templates/hyprlock-colors.conf",
     "wallust/templates/kitty.conf",
     "wallust/templates/hyprland-colors.lua",
     "wallust/templates/quickshell.json"

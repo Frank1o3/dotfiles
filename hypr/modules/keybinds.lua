@@ -29,6 +29,7 @@ local script_emoticon      = CONFIG_DIR .. "/scripts/emoticon.py"
 local script_launcher      = "qs ipc call launcher toggle"
 local script_wallpaper     = "qs ipc call wallpaper toggle"
 local script_notifications = "qs ipc call notifications toggle"
+local script_powermenu     = "qs ipc call powermenu toggle"
 
 -- =========================================================
 -- APPLICATIONS
@@ -165,9 +166,7 @@ hl.bind(
 -- Power menu
 hl.bind(
 	mainMod .. " + SHIFT + E",
-	hl.dsp.exec_cmd(
-		"kitty --class power-menu -e " .. script_power
-	)
+	hl.dsp.exec_cmd(script_powermenu)
 )
 
 -- Reload Hyprland

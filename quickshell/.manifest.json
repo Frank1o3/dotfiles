@@ -1,6 +1,6 @@
 {
-  "version": 4,
-  "message": "Kinda huge updates to the quickshell ui etc",
+  "version": 5,
+  "message": "More updates to quickshell and hyprland in general",
   "files": [
     "quickshell/colors.json",
     "quickshell/shell.qml",
@@ -16,6 +16,7 @@
     "quickshell/config/components/GlassSwitch.qml",
     "quickshell/config/components/GlassButton.qml",
     "quickshell/modules/notifications/Toasts.qml",
+    "quickshell/modules/powermenu/PowerMenu.qml",
     "quickshell/modules/bar/BarPill.qml",
     "quickshell/modules/bar/Bar.qml",
     "quickshell/modules/panel/ControlCenterContent.qml",

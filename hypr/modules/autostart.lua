@@ -40,6 +40,11 @@ return function(WALLPAPER_DIR)
 			"sh -c 'pgrep -x quickshell >/dev/null || quickshell >/dev/null 2>&1 &'"
 		)
 
+		-- Idle management (lock / dpms off / suspend on timers)
+		hl.exec_cmd(
+			"sh -c 'pgrep -x hypridle >/dev/null || hypridle >/dev/null 2>&1 &'"
+		)
+
 		-- NetworkManager tray applet
 		hl.exec_cmd(
 			"sh -c 'pgrep -x nm-applet >/dev/null || nm-applet --indicator >/dev/null 2>&1 &'"

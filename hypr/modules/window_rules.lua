@@ -79,16 +79,6 @@ hl.window_rule({
 })
 
 hl.window_rule({
-	name = "power-menu",
-	match = {
-		class = "^power-menu$",
-		initial_title = "^kitty$",
-	},
-	fullscreen = false,
-	tag = "menu-small",
-})
-
-hl.window_rule({
 	name = "kaomoji-picker",
 	match = {
 		initial_class = "^Tk$",
