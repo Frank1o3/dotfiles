@@ -1,5 +1,5 @@
 {
-  "version": 5,
+  "version": 6,
   "message": "More updates to quickshell and hyprland in general",
   "files": [
     "quickshell/colors.json",

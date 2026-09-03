@@ -9,6 +9,7 @@ Text {
     font.pixelSize: Appearance.fontSize + 1
     font.bold: true
     font.weight: Font.Bold
+    horizontalAlignment: Text.AlignHCenter
 
     property bool showDate: false
     property string timeText: ""
@@ -17,15 +18,10 @@ Text {
 
     Process {
         id: timeProc
-        command: ["sh", "-c", "date '+%I:%M' && date '+%H'"]
+        command: ["date", "+%H:%M"]
         running: true
         stdout: StdioCollector {
-            onStreamFinished: {
-                const lines = this.text.trim().split("\n");
-                const hm = lines[0];
-                const h24 = Number(lines[1]);
-                root.timeText = hm + " " + (h24 >= 12 ? "PM" : "AM");
-            }
+            onStreamFinished: root.timeText = this.text.trim()
         }
     }
 
@@ -51,12 +47,14 @@ Text {
 
     MouseArea {
         anchors.fill: parent
-        acceptedButtons: Qt.RightButton
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
         cursorShape: Qt.PointingHandCursor
-        onClicked: {
-            root.showDate = !root.showDate;
-            if (root.showDate)
-                dateProc.running = true;
+        onClicked: function (mouse) {
+            if (mouse.button === Qt.RightButton || mouse.button === Qt.LeftButton) {
+                root.showDate = !root.showDate;
+                if (root.showDate)
+                    dateProc.running = true;
+            }
         }
     }
 }

@@ -11,16 +11,19 @@ RowLayout {
         model: Hyprland.workspaces.values
 
         delegate: Rectangle {
-            id: dot
+            id: ws
             required property var modelData
             property bool active: Hyprland.focusedWorkspace && Hyprland.focusedWorkspace.id === modelData.id
+            property bool occupied: modelData.windows > 0
 
-            width: active ? 15 : 10
-            height: 10
+            implicitWidth: active ? 22 : 16
+            implicitHeight: 10
             radius: 5
-            color: active ? Colors.color(4) : Qt.rgba(1, 1, 1, 0.25)
+            color: active ? Colors.color(4) : (occupied ? Qt.rgba(1, 1, 1, 0.33) : Qt.rgba(1, 1, 1, 0.12))
+            border.width: active ? 0 : 1
+            border.color: Qt.rgba(1, 1, 1, 0.08)
 
-            Behavior on width {
+            Behavior on implicitWidth {
                 NumberAnimation {
                     duration: Appearance.animFast
                     easing.type: Easing.OutCubic
@@ -34,8 +37,10 @@ RowLayout {
 
             MouseArea {
                 anchors.fill: parent
-                anchors.margins: -4 // bigger hit target than the visible dot
-                onClicked: Hyprland.dispatch("workspace " + dot.modelData.id)
+                anchors.margins: -4
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: Hyprland.dispatch("workspace " + ws.modelData.id)
             }
         }
     }

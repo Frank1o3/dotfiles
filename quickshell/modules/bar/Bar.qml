@@ -105,10 +105,20 @@ Scope {
                         Workspaces {}
                     }
 
-                    RowLayout {
+                    Rectangle {
                         anchors.centerIn: parent
-                        spacing: Appearance.spacing
-                        Clock {}
+                        width: Math.min(110, parent.width * 0.28)
+                        height: 24
+                        radius: 12
+                        color: Qt.rgba(1, 1, 1, Appearance.panelSurfaceOpacity)
+                        border.width: 1
+                        border.color: Qt.rgba(1, 1, 1, Appearance.panelBorderOpacity)
+
+                        Clock {
+                            anchors.centerIn: parent
+                            width: parent.width
+                            horizontalAlignment: Text.AlignHCenter
+                        }
                     }
 
                     RowLayout {

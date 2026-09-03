@@ -14,6 +14,8 @@ ColumnLayout {
 
     RowLayout {
         Layout.fillWidth: true
+        spacing: 10
+
         Text {
             text: "Control Center"
             color: Colors.foreground
@@ -22,6 +24,26 @@ ColumnLayout {
             font.bold: true
             Layout.fillWidth: true
         }
+
+        Rectangle {
+            radius: 999
+            color: GameMode.active ? Qt.rgba(0.96, 0.76, 0.86, 0.18) : Qt.rgba(1, 1, 1, 0.07)
+            border.width: 1
+            border.color: GameMode.active ? Qt.rgba(1, 1, 1, 0.12) : Qt.rgba(1, 1, 1, 0.08)
+            implicitWidth: statusText.implicitWidth + 18
+            implicitHeight: 24
+
+            Text {
+                id: statusText
+                anchors.centerIn: parent
+                text: GameMode.active ? "Game mode" : (Notifications.dnd ? "Focus" : "Ready")
+                color: GameMode.active ? Colors.color(4) : Colors.foreground
+                font.family: Appearance.fontFamily
+                font.pixelSize: 11
+                font.bold: true
+            }
+        }
+
         GlassButton {
             icon: "󰆴"
             text: "Clear"
@@ -31,9 +53,79 @@ ColumnLayout {
 
     Rectangle {
         Layout.fillWidth: true
+        radius: 14
+        color: Qt.rgba(1, 1, 1, 0.035)
+        border.width: 1
+        border.color: Qt.rgba(1, 1, 1, 0.06)
+        implicitHeight: overviewRow.implicitHeight + 20
+
+        RowLayout {
+            id: overviewRow
+            anchors.fill: parent
+            anchors.margins: 12
+            spacing: 8
+
+            Repeater {
+                model: [
+                    {
+                        label: "Wi‑Fi",
+                        value: connCol.wifiOn ? "On" : "Off",
+                        accent: connCol.wifiOn ? Colors.color(4) : Colors.color(8)
+                    },
+                    {
+                        label: "BT",
+                        value: (connCol.btAdapter?.enabled ?? false) ? "On" : "Off",
+                        accent: (connCol.btAdapter?.enabled ?? false) ? Colors.color(4) : Colors.color(8)
+                    },
+                    {
+                        label: "DND",
+                        value: Notifications.dnd ? "On" : "Off",
+                        accent: Notifications.dnd ? Colors.color(3) : Colors.color(8)
+                    }
+                ]
+
+                delegate: Rectangle {
+                    required property var modelData
+                    Layout.fillWidth: true
+                    implicitHeight: 42
+                    radius: 10
+                    color: Qt.rgba(1, 1, 1, 0.03)
+                    border.width: 1
+                    border.color: Qt.rgba(1, 1, 1, 0.05)
+
+                    ColumnLayout {
+                        anchors.fill: parent
+                        anchors.margins: 8
+                        spacing: 2
+
+                        Text {
+                            text: modelData.label
+                            color: Colors.color(7)
+                            font.family: Appearance.fontFamily
+                            font.pixelSize: 10
+                            font.bold: true
+                        }
+
+                        Text {
+                            text: modelData.value
+                            color: modelData.accent
+                            font.family: Appearance.fontFamily
+                            font.pixelSize: 13
+                            font.bold: true
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    Rectangle {
+        Layout.fillWidth: true
         visible: GameMode.active
         radius: 14
         color: Qt.rgba(0.96, 0.76, 0.86, 0.12)
+        border.width: 1
+        border.color: Qt.rgba(1, 1, 1, 0.08)
         implicitHeight: gmRow.implicitHeight + 20
 
         RowLayout {
@@ -56,12 +148,24 @@ ColumnLayout {
         Layout.fillWidth: true
         radius: 14
         color: Qt.rgba(1, 1, 1, 0.045)
+        border.width: 1
+        border.color: Qt.rgba(1, 1, 1, 0.06)
         implicitHeight: connCol.implicitHeight + 24
+
+        Rectangle {
+            width: 3
+            radius: 2
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            color: Colors.color(4)
+        }
 
         ColumnLayout {
             id: connCol
             anchors.fill: parent
             anchors.margins: 12
+            anchors.leftMargin: 18
             spacing: 10
 
             readonly property BluetoothAdapter btAdapter: Bluetooth.defaultAdapter
@@ -157,12 +261,24 @@ ColumnLayout {
         Layout.fillWidth: true
         radius: 14
         color: Qt.rgba(1, 1, 1, 0.045)
+        border.width: 1
+        border.color: Qt.rgba(1, 1, 1, 0.06)
         implicitHeight: dndRow.implicitHeight + 24
+
+        Rectangle {
+            width: 3
+            radius: 2
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            color: Notifications.dnd ? Colors.color(3) : Colors.color(8)
+        }
 
         RowLayout {
             id: dndRow
             anchors.fill: parent
             anchors.margins: 12
+            anchors.leftMargin: 18
             Text {
                 text: "󰂛  Do Not Disturb"
                 color: Colors.foreground
@@ -182,12 +298,24 @@ ColumnLayout {
         Layout.fillWidth: true
         radius: 14
         color: Qt.rgba(1, 1, 1, 0.045)
+        border.width: 1
+        border.color: Qt.rgba(1, 1, 1, 0.06)
         implicitHeight: slidersCol.implicitHeight + 24
+
+        Rectangle {
+            width: 3
+            radius: 2
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            color: Colors.color(6)
+        }
 
         ColumnLayout {
             id: slidersCol
             anchors.fill: parent
             anchors.margins: 12
+            anchors.leftMargin: 18
             spacing: 14
 
             readonly property PwNode sink: Pipewire.defaultAudioSink
@@ -244,12 +372,24 @@ ColumnLayout {
         visible: Mpris.players.values.length > 0
         radius: 14
         color: Qt.rgba(1, 1, 1, 0.045)
+        border.width: 1
+        border.color: Qt.rgba(1, 1, 1, 0.06)
         implicitHeight: mprisCol.implicitHeight + 24
+
+        Rectangle {
+            width: 3
+            radius: 2
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            color: Colors.color(5)
+        }
 
         ColumnLayout {
             id: mprisCol
             anchors.fill: parent
             anchors.margins: 12
+            anchors.leftMargin: 18
             spacing: 6
             property var player: Mpris.players.values[0] ?? null
 

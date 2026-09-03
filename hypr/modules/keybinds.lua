@@ -93,6 +93,17 @@ hl.bind(
 	hl.dsp.layout("togglesplit")
 )
 
+-- Cycle through the visible window stack
+hl.bind(
+	"ALT + TAB",
+	hl.dsp.focus({ direction = "next" })
+)
+
+hl.bind(
+	"ALT + SHIFT + TAB",
+	hl.dsp.focus({ direction = "prev" })
+)
+
 -- =========================================================
 -- FOCUS MOVEMENT
 -- =========================================================

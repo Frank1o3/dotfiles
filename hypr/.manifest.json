@@ -1,5 +1,5 @@
 {
-  "version": 32,
+  "version": 33,
   "message": "More updates to quickshell and hyprland in general",
   "files": [
     "hypr/hypridle.conf",

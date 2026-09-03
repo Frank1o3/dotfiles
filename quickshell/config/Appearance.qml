@@ -11,9 +11,13 @@ Singleton {
     readonly property string fontFamily: "SpaceMono Nerd Font"
     readonly property int fontSize: 12
 
-    readonly property real glassOpacity: 0.55
-    readonly property real hoverOpacity: 0.18
-    readonly property real panelOpacity: 0.78
+    readonly property real glassOpacity: 0.62
+    readonly property real hoverOpacity: 0.22
+    readonly property real panelOpacity: 0.82
+
+    readonly property real panelSurfaceOpacity: 0.14
+    readonly property real panelBorderOpacity: 0.18
+    readonly property real accentStrength: 0.92
 
     readonly property int animFast: 150
     readonly property int animNormal: 250
