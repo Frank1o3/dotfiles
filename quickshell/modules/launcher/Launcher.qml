@@ -11,6 +11,7 @@ Scope {
 
     property bool shown: false
     property var apps: []
+    property var recents: []
 
     function open() {
         appProc.running = true;
@@ -31,10 +32,22 @@ Scope {
         if (!app)
             return;
         Quickshell.execDetached(["sh", "-c", app.exec]);
+        root.recents = [app.name, ...root.recents.filter(n => n !== app.name)].slice(0, 8);
         close();
     }
 
-    // qs ipc call launcher toggle|open|close
+    function highlight(name, query) {
+        if (!query)
+            return name;
+        const idx = name.toLowerCase().indexOf(query.toLowerCase());
+        if (idx === -1)
+            return name;
+        const before = name.substring(0, idx);
+        const match = name.substring(idx, idx + query.length);
+        const after = name.substring(idx + query.length);
+        return before + "<b><font color=\"" + Colors.color(4) + "\">" + match + "</font></b>" + after;
+    }
+
     IpcHandler {
         target: "launcher"
         function toggle(): void {
@@ -92,14 +105,13 @@ Scope {
                 id: card
                 anchors.centerIn: parent
                 width: 480
-                height: 440
+                height: 460
                 radius: Appearance.radius
                 color: Colors.background
                 opacity: 0.97
                 border.width: 1
                 border.color: Colors.color(1)
 
-                // eat clicks so interacting with the card doesn't close it
                 MouseArea {
                     anchors.fill: parent
                 }
@@ -107,7 +119,7 @@ Scope {
                 ColumnLayout {
                     anchors.fill: parent
                     anchors.margins: 18
-                    spacing: 12
+                    spacing: 10
 
                     TextField {
                         id: searchField
@@ -132,6 +144,15 @@ Scope {
                         onTextChanged: listView.currentIndex = 0
                     }
 
+                    Text {
+                        visible: searchField.text.length === 0 && root.recents.length > 0
+                        text: "Recent"
+                        color: Colors.color(8)
+                        font.family: Appearance.fontFamily
+                        font.pixelSize: 11
+                        font.weight: Font.Bold
+                    }
+
                     ListView {
                         id: listView
                         Layout.fillWidth: true
@@ -142,8 +163,13 @@ Scope {
 
                         model: {
                             const q = searchField.text.toLowerCase();
-                            if (!q)
-                                return root.apps;
+                            if (!q) {
+                                if (root.recents.length === 0)
+                                    return root.apps;
+                                const recentApps = root.recents.map(n => root.apps.find(a => a.name === n)).filter(Boolean);
+                                const rest = root.apps.filter(a => !root.recents.includes(a.name));
+                                return recentApps.concat(rest);
+                            }
                             return root.apps.filter(a => a.name.toLowerCase().includes(q));
                         }
 
@@ -174,7 +200,8 @@ Scope {
                                 }
 
                                 Text {
-                                    text: modelData.name
+                                    text: root.highlight(modelData.name, searchField.text)
+                                    textFormat: Text.RichText
                                     color: ListView.isCurrentItem ? Colors.background : Colors.foreground
                                     font.family: Appearance.fontFamily
                                     font.pixelSize: Appearance.fontSize + 1
@@ -199,6 +226,32 @@ Scope {
                             color: Colors.color(8)
                             font.family: Appearance.fontFamily
                             font.weight: Font.Bold
+                        }
+                    }
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 14
+                        Text {
+                            text: "↵ Launch"
+                            color: Colors.color(8)
+                            font.pixelSize: 10
+                            font.family: Appearance.fontFamily
+                        }
+                        Text {
+                            text: "↑↓ Navigate"
+                            color: Colors.color(8)
+                            font.pixelSize: 10
+                            font.family: Appearance.fontFamily
+                        }
+                        Text {
+                            text: "Esc Close"
+                            color: Colors.color(8)
+                            font.pixelSize: 10
+                            font.family: Appearance.fontFamily
+                        }
+                        Item {
+                            Layout.fillWidth: true
                         }
                     }
                 }

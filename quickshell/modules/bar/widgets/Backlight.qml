@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs.config
+import qs.services
 
 Text {
     id: root
@@ -18,7 +19,6 @@ Text {
         command: ["brightnessctl", "-m"]
         running: true
         stdout: StdioCollector {
-            // brightnessctl -m format: device,class,current,percent%,max
             onStreamFinished: {
                 const match = this.text.match(/,(\d+)%,/);
                 if (match)
@@ -31,7 +31,8 @@ Text {
         interval: 3000
         running: true
         repeat: true
-        onTriggered: getProc.running = true
+        onTriggered: if (!GameMode.active)
+            getProc.running = true
     }
 
     MouseArea {

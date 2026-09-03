@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell.Io
 import qs.config
+import qs.services
 
 Text {
     id: root
@@ -8,11 +9,17 @@ Text {
     property real prevIdle: 0
     property real prevTotal: 0
 
-    color: Colors.color(1)
+    color: usage >= 85 ? "#f38ba8" : (usage >= 60 ? "#f9e2af" : Colors.color(1))
     font.family: Appearance.fontFamily
     font.pixelSize: Appearance.fontSize
     font.weight: Font.Bold
     text: "󰍛 " + usage + "%"
+
+    Behavior on color {
+        ColorAnimation {
+            duration: Appearance.animFast
+        }
+    }
 
     Process {
         id: proc
@@ -39,6 +46,7 @@ Text {
         interval: 2000
         running: true
         repeat: true
-        onTriggered: proc.running = true
+        onTriggered: if (!GameMode.active)
+            proc.running = true
     }
 }

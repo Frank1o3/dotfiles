@@ -1,10 +1,11 @@
 {
-  "version": 3,
-  "message": "Update to hyprland setup and hotkeys",
+  "version": 4,
+  "message": "Kinda huge updates to the quickshell ui etc",
   "files": [
     "quickshell/colors.json",
     "quickshell/shell.qml",
     "quickshell/services/Notifications.qml",
+    "quickshell/services/GameMode.qml",
     "quickshell/scripts/list-apps.py",
     "quickshell/scripts/list-wallpapers.py",
     "quickshell/scripts/igpu.sh",

@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell.Io
 import qs.config
+import qs.services
 
 Text {
     id: root
@@ -30,7 +31,8 @@ Text {
         interval: 3000
         running: true
         repeat: true
-        onTriggered: proc.running = true
+        onTriggered: if (!GameMode.active)
+            proc.running = true
     }
 
     MouseArea {

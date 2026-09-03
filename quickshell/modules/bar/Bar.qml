@@ -4,6 +4,7 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 import QtQuick
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 import qs.config
 import qs.modules.bar.widgets
 import qs.modules.panel
@@ -45,16 +46,9 @@ Scope {
 
             exclusiveZone: Appearance.barHeight
 
-            // FIXED to the content's natural size — NOT to dropdownHost's
-            // animated height. This only changes when real content changes
-            // (new notification, MPRIS state), never mid-animation, so the
-            // actual Wayland surface only resizes rarely instead of every frame.
             implicitHeight: Appearance.barHeight + bg.implicitHeight
             color: "transparent"
 
-            // Click-through mask: only the pill + whatever's currently visible
-            // of the dropdown is clickable. Everything else in the reserved
-            // space passes clicks straight through to windows behind it.
             mask: Region {
                 item: pillRow
                 Region {
@@ -88,6 +82,15 @@ Scope {
                     opacity: Appearance.glassOpacity
                     border.width: 1
                     border.color: Colors.color(1)
+
+                    layer.enabled: true
+                    layer.effect: DropShadow {
+                        transparentBorder: true
+                        radius: 16
+                        samples: 33
+                        verticalOffset: 4
+                        color: "#66000000"
+                    }
                 }
 
                 Item {
@@ -112,14 +115,31 @@ Scope {
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
                         spacing: Appearance.spacing
+
                         Cpu {}
                         Igpu {}
                         Temperature {}
                         Memory {}
                         Network {}
+
+                        Rectangle {
+                            Layout.preferredWidth: 1
+                            Layout.preferredHeight: 16
+                            color: Colors.foreground
+                            opacity: 0.15
+                        }
+
                         Volume {}
                         Backlight {}
                         Battery {}
+
+                        Rectangle {
+                            Layout.preferredWidth: 1
+                            Layout.preferredHeight: 16
+                            color: Colors.foreground
+                            opacity: 0.15
+                        }
+
                         NotificationBell {
                             panelOpen: win.panelOpen
                             onTogglePanel: PanelState.toggle(win.modelData.name)
@@ -161,6 +181,15 @@ Scope {
                     opacity: Appearance.panelOpacity
                     border.width: 1
                     border.color: Colors.color(1)
+
+                    layer.enabled: true
+                    layer.effect: DropShadow {
+                        transparentBorder: true
+                        radius: 20
+                        samples: 41
+                        verticalOffset: 6
+                        color: "#77000000"
+                    }
 
                     MouseArea {
                         anchors.fill: parent

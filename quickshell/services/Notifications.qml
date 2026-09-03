@@ -1,6 +1,7 @@
 pragma Singleton
 import Quickshell
 import Quickshell.Services.Notifications
+import qs.services
 
 Singleton {
     id: root
@@ -22,7 +23,11 @@ Singleton {
 
         onNotification: notification => {
             notification.tracked = true;
-            if (!root.dnd) {
+
+            // In Game Mode, only urgent/critical notifications interrupt you.
+            const suppressedByGameMode = GameMode.active && notification.urgency !== NotificationUrgency.Critical;
+
+            if (!root.dnd && !suppressedByGameMode) {
                 root.popup(notification);
             }
         }

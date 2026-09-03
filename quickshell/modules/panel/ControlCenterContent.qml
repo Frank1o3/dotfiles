@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import Quickshell.Io
 import Quickshell.Services.Mpris
 import Quickshell.Services.Pipewire
+import Quickshell.Bluetooth
 import qs.config
 import qs.config.components
 import qs.services
@@ -21,7 +22,134 @@ ColumnLayout {
             font.bold: true
             Layout.fillWidth: true
         }
-        GlassButton { icon: "󰆴"; text: "Clear"; onClicked: Notifications.clearAll() }
+        GlassButton {
+            icon: "󰆴"
+            text: "Clear"
+            onClicked: Notifications.clearAll()
+        }
+    }
+
+    Rectangle {
+        Layout.fillWidth: true
+        visible: GameMode.active
+        radius: 14
+        color: Qt.rgba(0.96, 0.76, 0.86, 0.12)
+        implicitHeight: gmRow.implicitHeight + 20
+
+        RowLayout {
+            id: gmRow
+            anchors.fill: parent
+            anchors.margins: 10
+            Text {
+                text: "󰊴  Game Mode active — stats paused, only critical alerts shown"
+                color: Colors.foreground
+                font.family: Appearance.fontFamily
+                font.pixelSize: Appearance.fontSize
+                wrapMode: Text.Wrap
+                Layout.fillWidth: true
+            }
+        }
+    }
+
+    // --- Connectivity card ---
+    Rectangle {
+        Layout.fillWidth: true
+        radius: 14
+        color: Qt.rgba(1, 1, 1, 0.045)
+        implicitHeight: connCol.implicitHeight + 24
+
+        ColumnLayout {
+            id: connCol
+            anchors.fill: parent
+            anchors.margins: 12
+            spacing: 10
+
+            readonly property BluetoothAdapter btAdapter: Bluetooth.defaultAdapter
+            property bool wifiOn: false
+
+            Process {
+                id: wifiStatus
+                command: ["nmcli", "radio", "wifi"]
+                running: true
+                stdout: StdioCollector {
+                    onStreamFinished: connCol.wifiOn = this.text.trim() === "enabled"
+                }
+            }
+            Process {
+                id: wifiSet
+            }
+
+            RowLayout {
+                Text {
+                    text: "󰤨  Wi-Fi"
+                    color: Colors.foreground
+                    font.family: Appearance.fontFamily
+                    font.pixelSize: Appearance.fontSize + 1
+                    Layout.fillWidth: true
+                }
+                GlassSwitch {
+                    checked: connCol.wifiOn
+                    onToggled: {
+                        connCol.wifiOn = !connCol.wifiOn;
+                        wifiSet.command = ["nmcli", "radio", "wifi", connCol.wifiOn ? "on" : "off"];
+                        wifiSet.running = true;
+                    }
+                }
+            }
+
+            RowLayout {
+                Text {
+                    text: "󰂯  Bluetooth"
+                    color: Colors.foreground
+                    font.family: Appearance.fontFamily
+                    font.pixelSize: Appearance.fontSize + 1
+                    Layout.fillWidth: true
+                }
+                GlassSwitch {
+                    checked: connCol.btAdapter?.enabled ?? false
+                    onToggled: {
+                        if (connCol.btAdapter)
+                            connCol.btAdapter.enabled = !connCol.btAdapter.enabled;
+                    }
+                }
+            }
+
+            // Paired/connected devices — only shown once the adapter is on
+            ColumnLayout {
+                Layout.fillWidth: true
+                visible: (connCol.btAdapter?.enabled ?? false) && connCol.btAdapter.devices.values.length > 0
+                spacing: 4
+
+                Repeater {
+                    model: connCol.btAdapter ? connCol.btAdapter.devices.values : []
+
+                    delegate: RowLayout {
+                        Layout.fillWidth: true
+                        Layout.topMargin: 2
+                        required property var modelData
+
+                        Text {
+                            text: modelData.connected ? "󰂱" : "󰂯"
+                            color: modelData.connected ? Colors.color(4) : Colors.color(8)
+                            font.family: Appearance.fontFamily
+                            font.pixelSize: Appearance.fontSize
+                        }
+                        Text {
+                            text: modelData.name
+                            color: Colors.foreground
+                            font.family: Appearance.fontFamily
+                            font.pixelSize: Appearance.fontSize
+                            Layout.fillWidth: true
+                            elide: Text.ElideRight
+                        }
+                        GlassButton {
+                            text: modelData.connected ? "Disconnect" : "Connect"
+                            onClicked: modelData.connected ? modelData.disconnect() : modelData.connect()
+                        }
+                    }
+                }
+            }
+        }
     }
 
     // --- DND card ---
@@ -63,7 +191,9 @@ ColumnLayout {
             spacing: 14
 
             readonly property PwNode sink: Pipewire.defaultAudioSink
-            PwObjectTracker { objects: [slidersCol.sink] }
+            PwObjectTracker {
+                objects: [slidersCol.sink]
+            }
 
             GlassSlider {
                 Layout.fillWidth: true
@@ -101,7 +231,9 @@ ColumnLayout {
                         }
                     }
                 }
-                Process { id: setBrightness }
+                Process {
+                    id: setBrightness
+                }
             }
         }
     }
@@ -139,13 +271,19 @@ ColumnLayout {
             RowLayout {
                 spacing: 8
                 Layout.topMargin: 4
-                GlassButton { icon: "󰒮"; onClicked: mprisCol.player?.previous() }
+                GlassButton {
+                    icon: "󰒮"
+                    onClicked: mprisCol.player?.previous()
+                }
                 GlassButton {
                     icon: mprisCol.player?.playbackState === MprisPlaybackState.Playing ? "󰏤" : "󰐊"
                     accent: true
                     onClicked: mprisCol.player?.togglePlaying()
                 }
-                GlassButton { icon: "󰒭"; onClicked: mprisCol.player?.next() }
+                GlassButton {
+                    icon: "󰒭"
+                    onClicked: mprisCol.player?.next()
+                }
             }
         }
     }
@@ -204,7 +342,10 @@ ColumnLayout {
                         font.family: Appearance.fontFamily
                         Layout.fillWidth: true
                     }
-                    GlassButton { icon: "✕"; onClicked: Notifications.dismiss(modelData) }
+                    GlassButton {
+                        icon: "✕"
+                        onClicked: Notifications.dismiss(modelData)
+                    }
                 }
                 Text {
                     text: modelData.summary

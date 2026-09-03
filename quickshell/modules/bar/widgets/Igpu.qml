@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs.config
+import qs.services
 
 Text {
     id: root
@@ -15,7 +16,6 @@ Text {
 
     Process {
         id: proc
-        // ships alongside the bar module — see note below
         command: [`${Quickshell.env("HOME")}/.config/quickshell/scripts/igpu.sh`]
         running: true
         stdout: StdioCollector {
@@ -27,6 +27,7 @@ Text {
         interval: 2000
         running: true
         repeat: true
-        onTriggered: proc.running = true
+        onTriggered: if (!GameMode.active)
+            proc.running = true
     }
 }

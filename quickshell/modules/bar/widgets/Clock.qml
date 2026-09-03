@@ -10,12 +10,31 @@ Text {
     font.bold: true
     font.weight: Font.Bold
 
+    property bool showDate: false
+    property string timeText: ""
+    property string dateText: ""
+    text: root.showDate ? root.dateText : root.timeText
+
     Process {
-        id: proc
-        command: ["date", "+%I:%M %p"]
+        id: timeProc
+        command: ["sh", "-c", "date '+%I:%M' && date '+%H'"]
         running: true
         stdout: StdioCollector {
-            onStreamFinished: root.text = this.text.trim()
+            onStreamFinished: {
+                const lines = this.text.trim().split("\n");
+                const hm = lines[0];
+                const h24 = Number(lines[1]);
+                root.timeText = hm + " " + (h24 >= 12 ? "PM" : "AM");
+            }
+        }
+    }
+
+    Process {
+        id: dateProc
+        command: ["date", "+%a, %d %b"]
+        running: false
+        stdout: StdioCollector {
+            onStreamFinished: root.dateText = this.text.trim()
         }
     }
 
@@ -23,6 +42,21 @@ Text {
         interval: 1000
         running: true
         repeat: true
-        onTriggered: proc.running = true
+        onTriggered: {
+            timeProc.running = true;
+            if (root.showDate)
+                dateProc.running = true;
+        }
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        acceptedButtons: Qt.RightButton
+        cursorShape: Qt.PointingHandCursor
+        onClicked: {
+            root.showDate = !root.showDate;
+            if (root.showDate)
+                dateProc.running = true;
+        }
     }
 }

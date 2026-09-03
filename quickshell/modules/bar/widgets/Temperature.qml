@@ -1,10 +1,11 @@
 import QtQuick
 import Quickshell.Io
 import qs.config
+import qs.services
 
 Text {
     id: root
-    color: Colors.color(2)
+    color: temp >= 85 ? "#f38ba8" : (temp >= 70 ? "#f9e2af" : Colors.color(2))
     font.family: Appearance.fontFamily
     font.pixelSize: Appearance.fontSize
     font.weight: Font.Bold
@@ -12,9 +13,14 @@ Text {
 
     property real temp: 0
 
+    Behavior on color {
+        ColorAnimation {
+            duration: Appearance.animFast
+        }
+    }
+
     Process {
         id: proc
-        // ← same hwmon path you had in waybar/config.jsonc, update if it drifts
         command: ["cat", "/sys/class/hwmon/hwmon2/temp1_input"]
         running: true
         stdout: StdioCollector {
@@ -26,6 +32,7 @@ Text {
         interval: 3000
         running: true
         repeat: true
-        onTriggered: proc.running = true
+        onTriggered: if (!GameMode.active)
+            proc.running = true
     }
 }
