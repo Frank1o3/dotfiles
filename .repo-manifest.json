@@ -1,7 +1,7 @@
 {
   "configs": {
     "sddm": {
-      "version": 1,
+      "version": 2,
       "install_path": null,
       "protected": [],
       "optional": false

@@ -2,7 +2,7 @@
 Description=Watch for wallpaper changes to resync SDDM theme
 
 [Path]
-PathChanged=/home/franklin/wallpapers/wallpaper.jpg
+PathChanged={HOME}/wallpapers/wallpaper.jpg
 Unit=sddm-theme-sync.service
 
 [Install]

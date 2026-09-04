@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "message": "adding the sddm to the list of things that get synced",
+  "version": 2,
+  "message": "micro updates now sddm theme should be auto applied",
   "files": [
     "sddm/sddm-theme-sync.path",
     "sddm/sddm-theme-sync.py",
