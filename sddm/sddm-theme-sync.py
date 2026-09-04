@@ -9,7 +9,7 @@ import json
 import shutil
 from pathlib import Path
 
-USER_HOME = Path("/home/franklin")  # <-- EDIT ME
+USER_HOME = Path.home()
 COLORS_JSON = USER_HOME / ".config/quickshell/colors.json"
 WALLPAPER = USER_HOME / "wallpapers/wallpaper.jpg"
 

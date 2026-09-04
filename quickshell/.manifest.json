@@ -1,14 +1,15 @@
 {
-  "version": 6,
-  "message": "More updates to quickshell and hyprland in general",
+  "version": 7,
+  "message": "minor fixes and planning on fixing the apply script for sddm and updating the theme sync one as well",
   "files": [
     "quickshell/colors.json",
     "quickshell/shell.qml",
+    "quickshell/services/SysMonitor.qml",
     "quickshell/services/Notifications.qml",
     "quickshell/services/GameMode.qml",
+    "quickshell/scripts/sysmon.sh",
     "quickshell/scripts/list-apps.py",
     "quickshell/scripts/list-wallpapers.py",
-    "quickshell/scripts/igpu.sh",
     "quickshell/config/PanelState.qml",
     "quickshell/config/Colors.qml",
     "quickshell/config/Appearance.qml",

@@ -18,7 +18,7 @@ Text {
 
     Process {
         id: timeProc
-        command: ["date", "+%H:%M"]
+        command: ["date", "+%I:%M %p"]
         running: true
         stdout: StdioCollector {
             onStreamFinished: root.timeText = this.text.trim()

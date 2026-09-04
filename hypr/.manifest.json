@@ -1,6 +1,6 @@
 {
-  "version": 34,
-  "message": "minor fix on the keybinds",
+  "version": 35,
+  "message": "minor fixes and planning on fixing the apply script for sddm and updating the theme sync one as well",
   "files": [
     "hypr/hypridle.conf",
     "hypr/hyprlock.conf",
@@ -18,8 +18,6 @@
     "hypr/modules/env.lua",
     "hypr/scripts/emoticon.py",
     "hypr/scripts/toggle-audio.sh",
-    "hypr/scripts/set-wallpaper.sh",
-    "hypr/scripts/wofi-games.sh",
-    "hypr/scripts/pick-wallpaper.sh"
+    "hypr/scripts/set-wallpaper.sh"
   ]
 }

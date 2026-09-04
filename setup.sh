@@ -38,9 +38,9 @@ python3 "$tmpfile"
 rm -f "$tmpfile"
 
 echo "Making utility script executable"
-chmod +x ~/.config/hypr/scripts/pick-wallpaper.sh
+chmod +x ~/.config/hypr/scripts/set-wallpaper.sh
 chmod +x ~/.config/hypr/scripts/emoticon.py
-chmod +x ~/.config/quickshell/scripts/igpu.sh
+chmod +x ~/.config/quickshell/scripts/sysmon.sh
 
 echo "Setting up default apps"
 
