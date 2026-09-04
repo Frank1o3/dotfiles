@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "message": "adding the sddm to the list of things that get synced",
+  "files": [
+    "sddm/sddm-theme-sync.path",
+    "sddm/sddm-theme-sync.py",
+    "sddm/sddm-theme-sync.service",
+    "sddm/theme/Main.qml",
+    "sddm/theme/theme.conf",
+    "sddm/theme/metadata.desktop"
+  ]
+}

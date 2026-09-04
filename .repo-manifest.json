@@ -1,7 +1,7 @@
 {
   "configs": {
-    "quickshell": {
-      "version": 8,
+    "sddm": {
+      "version": 1,
       "install_path": null,
       "protected": [],
       "optional": false
