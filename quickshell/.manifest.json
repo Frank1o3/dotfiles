@@ -1,6 +1,6 @@
 {
-  "version": 7,
-  "message": "minor fixes and planning on fixing the apply script for sddm and updating the theme sync one as well",
+  "version": 8,
+  "message": "minor update to notification toasts",
   "files": [
     "quickshell/colors.json",
     "quickshell/shell.qml",
