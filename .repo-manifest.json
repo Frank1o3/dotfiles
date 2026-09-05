@@ -1,13 +1,13 @@
 {
   "configs": {
     "nvim": {
-      "version": 4,
+      "version": 5,
       "install_path": null,
       "protected": [],
       "optional": false
     },
     "quickshell": {
-      "version": 9,
+      "version": 10,
       "install_path": null,
       "protected": [],
       "optional": false

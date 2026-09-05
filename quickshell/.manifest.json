@@ -1,6 +1,6 @@
 {
-  "version": 9,
-  "message": "some changes to my neovim setup for python development",
+  "version": 10,
+  "message": "upgraded my neovim setup now uses mason so theirs no need to gave the packages physically installed",
   "files": [
     "quickshell/colors.json",
     "quickshell/shell.qml",
