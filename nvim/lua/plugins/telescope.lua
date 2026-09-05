@@ -11,6 +11,7 @@ return {
         { "<leader>sb", "<cmd>Telescope buffers<cr>",              desc = "Search buffers" },
         { "<leader>sr", "<cmd>Telescope oldfiles<cr>",             desc = "Recent files" },
         { "<leader>ss", "<cmd>Telescope lsp_document_symbols<cr>", desc = "Search symbols" },
+        { "<leader>sd", "<cmd>Telescope diagnostics<cr>",          desc = "Search diagnostics" },
     },
 
     config = function()

@@ -1,6 +1,6 @@
 {
-  "version": 8,
-  "message": "minor update to notification toasts",
+  "version": 9,
+  "message": "some changes to my neovim setup for python development",
   "files": [
     "quickshell/colors.json",
     "quickshell/shell.qml",

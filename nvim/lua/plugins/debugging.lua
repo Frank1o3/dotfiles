@@ -4,19 +4,27 @@ return {
         "mfussenegger/nvim-dap-python",
         "rcarriga/nvim-dap-ui",
         "nvim-neotest/nvim-nio",
+        "mason-org/mason.nvim",
     },
 
     config = function()
         local dap = require("dap")
         local dapui = require("dapui")
 
-        -- Prefer project-local (uv) venv over a hardcoded global interpreter
+        -- Prefer project-local (uv) venv, then Mason's debugpy venv,
+        -- then whatever python3 is on PATH.
         local function resolve_python()
             local cwd = vim.fn.getcwd()
             local venv_python = cwd .. "/.venv/bin/python"
             if vim.fn.executable(venv_python) == 1 then
                 return venv_python
             end
+
+            local mason_python = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python"
+            if vim.fn.executable(mason_python) == 1 then
+                return mason_python
+            end
+
             return vim.fn.exepath("python3") or "python3"
         end
 

@@ -1,16 +1,10 @@
 fd
-ty
 git
-ruff
 fish
 wofi
 kitty
-taplo
 neovim
 tree-sitter-cli
-vscode-json-languageserver
-yaml-language-server
-python-debugpy
 ripgrep
 hyprland
 hyprlock
@@ -29,3 +23,6 @@ papirus-icon-theme
 adwaita-cursors
 aur/catppuccin-cursors-mocha
 aur/wallust
+unzip
+nodejs
+npm
