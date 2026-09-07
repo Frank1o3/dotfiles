@@ -1,6 +1,6 @@
 {
-  "version": 35,
-  "message": "minor fixes and planning on fixing the apply script for sddm and updating the theme sync one as well",
+  "version": 36,
+  "message": "made some updates to quickshell and sddm theme",
   "files": [
     "hypr/hypridle.conf",
     "hypr/hyprlock.conf",

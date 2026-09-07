@@ -7,6 +7,9 @@ Singleton {
     readonly property int radius: 16
     readonly property int spacing: 6
     readonly property int barHeight: 45
+    readonly property int cardRadius: 14
+    readonly property int cardPadding: 14
+    readonly property int sectionSpacing: 18
 
     readonly property string fontFamily: "SpaceMono Nerd Font"
     readonly property int fontSize: 12

@@ -1,13 +1,13 @@
 {
   "configs": {
-    "nvim": {
-      "version": 5,
+    "hypr": {
+      "version": 36,
       "install_path": null,
       "protected": [],
       "optional": false
     },
     "quickshell": {
-      "version": 10,
+      "version": 11,
       "install_path": null,
       "protected": [],
       "optional": false

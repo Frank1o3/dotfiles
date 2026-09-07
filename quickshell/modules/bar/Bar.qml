@@ -126,10 +126,7 @@ Scope {
                         anchors.verticalCenter: parent.verticalCenter
                         spacing: Appearance.spacing
 
-                        Cpu {}
                         Igpu {}
-                        Temperature {}
-                        Memory {}
                         Network {}
 
                         Rectangle {
@@ -165,7 +162,7 @@ Scope {
                 anchors.top: pillRow.bottom
                 anchors.right: parent.right
                 anchors.rightMargin: 10
-                width: 380
+                width: 420
                 height: win.panelOpen ? bg.implicitHeight : 0
                 clip: true
 

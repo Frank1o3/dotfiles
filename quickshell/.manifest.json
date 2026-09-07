@@ -1,6 +1,6 @@
 {
-  "version": 10,
-  "message": "upgraded my neovim setup now uses mason so theirs no need to gave the packages physically installed",
+  "version": 11,
+  "message": "made some updates to quickshell and sddm theme",
   "files": [
     "quickshell/colors.json",
     "quickshell/shell.qml",
@@ -15,7 +15,9 @@
     "quickshell/config/Appearance.qml",
     "quickshell/config/components/GlassSlider.qml",
     "quickshell/config/components/GlassSwitch.qml",
+    "quickshell/config/components/QuickToggle.qml",
     "quickshell/config/components/GlassButton.qml",
+    "quickshell/config/components/SectionLabel.qml",
     "quickshell/modules/notifications/Toasts.qml",
     "quickshell/modules/powermenu/PowerMenu.qml",
     "quickshell/modules/bar/BarPill.qml",

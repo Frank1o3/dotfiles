@@ -10,19 +10,97 @@ import qs.services
 
 ColumnLayout {
     id: root
-    spacing: 14
+    spacing: Appearance.sectionSpacing
+
+    // ============================================================
+    // Backing state (Processes are QtObjects, not Items, so they're
+    // safe to hang directly off this ColumnLayout without eating a
+    // layout slot — same trick used elsewhere in this codebase).
+    // ============================================================
+
+    property bool wifiOn: false
+    readonly property BluetoothAdapter btAdapter: Bluetooth.defaultAdapter
+    property int memPercent: 0
+    property int cpuTemp: 0
+    property string clockText: Qt.formatDateTime(new Date(), "dddd, MMM d · hh:mm AP")
+
+    Timer {
+        interval: 1000
+        running: true
+        repeat: true
+        onTriggered: root.clockText = Qt.formatDateTime(new Date(), "dddd, MMM d · hh:mm AP")
+    }
+
+    Process {
+        id: wifiStatus
+        command: ["nmcli", "radio", "wifi"]
+        running: true
+        stdout: StdioCollector {
+            onStreamFinished: root.wifiOn = this.text.trim() === "enabled"
+        }
+    }
+    Process { id: wifiSet }
+
+    Process {
+        id: memProc
+        command: ["sh", "-c", "grep -E '^(MemTotal|MemAvailable):' /proc/meminfo"]
+        running: true
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const lines = this.text.trim().split("\n");
+                const total = Number(lines[0].match(/\d+/)[0]);
+                const avail = Number(lines[1].match(/\d+/)[0]);
+                root.memPercent = Math.round((1 - avail / total) * 100);
+            }
+        }
+    }
+
+    Process {
+        id: tempProc
+        command: ["cat", "/sys/class/hwmon/hwmon2/temp1_input"]
+        running: true
+        stdout: StdioCollector {
+            onStreamFinished: root.cpuTemp = Math.round(Number(this.text.trim()) / 1000)
+        }
+    }
+
+    Timer {
+        interval: 3000
+        running: true
+        repeat: true
+        onTriggered: {
+            if (!GameMode.active) {
+                memProc.running = true;
+                tempProc.running = true;
+            }
+        }
+    }
+
+    // ============================================================
+    // Header
+    // ============================================================
 
     RowLayout {
         Layout.fillWidth: true
         spacing: 10
 
-        Text {
-            text: "Control Center"
-            color: Colors.foreground
-            font.family: Appearance.fontFamily
-            font.pixelSize: 17
-            font.bold: true
+        ColumnLayout {
             Layout.fillWidth: true
+            spacing: 0
+
+            Text {
+                text: "Control Center"
+                color: Colors.foreground
+                font.family: Appearance.fontFamily
+                font.pixelSize: 18
+                font.bold: true
+            }
+            Text {
+                text: root.clockText
+                color: Colors.color(7)
+                font.family: Appearance.fontFamily
+                font.pixelSize: 11
+            }
         }
 
         Rectangle {
@@ -43,194 +121,94 @@ ColumnLayout {
                 font.bold: true
             }
         }
-
-        GlassButton {
-            icon: "󰆴"
-            text: "Clear"
-            onClicked: Notifications.clearAll()
-        }
     }
 
-    Rectangle {
-        Layout.fillWidth: true
-        radius: 14
-        color: Qt.rgba(1, 1, 1, 0.035)
-        border.width: 1
-        border.color: Qt.rgba(1, 1, 1, 0.06)
-        implicitHeight: overviewRow.implicitHeight + 20
+    // ============================================================
+    // Quick Settings — 2x2 toggle grid
+    // ============================================================
 
-        RowLayout {
-            id: overviewRow
-            anchors.fill: parent
-            anchors.margins: 12
-            spacing: 8
+    ColumnLayout {
+        Layout.fillWidth: true
+        spacing: 8
+
+        SectionLabel { icon: "󰐥"; text: "Quick Settings" }
+
+        GridLayout {
+            Layout.fillWidth: true
+            columns: 2
+            columnSpacing: 8
+            rowSpacing: 8
+
+            QuickToggle {
+                Layout.fillWidth: true
+                icon: "󰤨"
+                label: "Wi-Fi"
+                active: root.wifiOn
+                subLabel: root.wifiOn ? "Enabled" : "Disabled"
+                onClicked: {
+                    root.wifiOn = !root.wifiOn;
+                    wifiSet.command = ["nmcli", "radio", "wifi", root.wifiOn ? "on" : "off"];
+                    wifiSet.running = true;
+                }
+            }
+
+            QuickToggle {
+                Layout.fillWidth: true
+                icon: "󰂯"
+                label: "Bluetooth"
+                active: root.btAdapter?.enabled ?? false
+                subLabel: (root.btAdapter?.enabled ?? false)
+                    ? (root.btAdapter.devices.values.filter(d => d.connected).length + " connected")
+                    : "Disabled"
+                onClicked: {
+                    if (root.btAdapter)
+                        root.btAdapter.enabled = !root.btAdapter.enabled;
+                }
+            }
+
+            QuickToggle {
+                Layout.fillWidth: true
+                icon: "󰂛"
+                label: "Do Not Disturb"
+                active: Notifications.dnd
+                subLabel: Notifications.dnd ? "On" : "Off"
+                onClicked: Notifications.toggleDnd()
+            }
+
+            QuickToggle {
+                Layout.fillWidth: true
+                icon: "󰊴"
+                label: "Game Mode"
+                active: GameMode.active
+                interactive: false
+                subLabel: GameMode.active ? "Active" : "Idle"
+            }
+        }
+
+        // Paired Bluetooth devices — only when it's worth showing
+        ColumnLayout {
+            Layout.fillWidth: true
+            visible: (root.btAdapter?.enabled ?? false) && root.btAdapter.devices.values.length > 0
+            spacing: 6
+            Layout.topMargin: 2
 
             Repeater {
-                model: [
-                    {
-                        label: "Wi‑Fi",
-                        value: connCol.wifiOn ? "On" : "Off",
-                        accent: connCol.wifiOn ? Colors.color(4) : Colors.color(8)
-                    },
-                    {
-                        label: "BT",
-                        value: (connCol.btAdapter?.enabled ?? false) ? "On" : "Off",
-                        accent: (connCol.btAdapter?.enabled ?? false) ? Colors.color(4) : Colors.color(8)
-                    },
-                    {
-                        label: "DND",
-                        value: Notifications.dnd ? "On" : "Off",
-                        accent: Notifications.dnd ? Colors.color(3) : Colors.color(8)
-                    }
-                ]
+                model: root.btAdapter ? root.btAdapter.devices.values : []
 
                 delegate: Rectangle {
                     required property var modelData
                     Layout.fillWidth: true
-                    implicitHeight: 42
+                    implicitHeight: 36
                     radius: 10
-                    color: Qt.rgba(1, 1, 1, 0.03)
+                    color: Qt.rgba(1, 1, 1, 0.035)
                     border.width: 1
                     border.color: Qt.rgba(1, 1, 1, 0.05)
 
-                    ColumnLayout {
+                    RowLayout {
                         anchors.fill: parent
-                        anchors.margins: 8
-                        spacing: 2
-
-                        Text {
-                            text: modelData.label
-                            color: Colors.color(7)
-                            font.family: Appearance.fontFamily
-                            font.pixelSize: 10
-                            font.bold: true
-                        }
-
-                        Text {
-                            text: modelData.value
-                            color: modelData.accent
-                            font.family: Appearance.fontFamily
-                            font.pixelSize: 13
-                            font.bold: true
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    Rectangle {
-        Layout.fillWidth: true
-        visible: GameMode.active
-        radius: 14
-        color: Qt.rgba(0.96, 0.76, 0.86, 0.12)
-        border.width: 1
-        border.color: Qt.rgba(1, 1, 1, 0.08)
-        implicitHeight: gmRow.implicitHeight + 20
-
-        RowLayout {
-            id: gmRow
-            anchors.fill: parent
-            anchors.margins: 10
-            Text {
-                text: "󰊴  Game Mode active — stats paused, only critical alerts shown"
-                color: Colors.foreground
-                font.family: Appearance.fontFamily
-                font.pixelSize: Appearance.fontSize
-                wrapMode: Text.Wrap
-                Layout.fillWidth: true
-            }
-        }
-    }
-
-    // --- Connectivity card ---
-    Rectangle {
-        Layout.fillWidth: true
-        radius: 14
-        color: Qt.rgba(1, 1, 1, 0.045)
-        border.width: 1
-        border.color: Qt.rgba(1, 1, 1, 0.06)
-        implicitHeight: connCol.implicitHeight + 24
-
-        Rectangle {
-            width: 3
-            radius: 2
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            color: Colors.color(4)
-        }
-
-        ColumnLayout {
-            id: connCol
-            anchors.fill: parent
-            anchors.margins: 12
-            anchors.leftMargin: 18
-            spacing: 10
-
-            readonly property BluetoothAdapter btAdapter: Bluetooth.defaultAdapter
-            property bool wifiOn: false
-
-            Process {
-                id: wifiStatus
-                command: ["nmcli", "radio", "wifi"]
-                running: true
-                stdout: StdioCollector {
-                    onStreamFinished: connCol.wifiOn = this.text.trim() === "enabled"
-                }
-            }
-            Process {
-                id: wifiSet
-            }
-
-            RowLayout {
-                Text {
-                    text: "󰤨  Wi-Fi"
-                    color: Colors.foreground
-                    font.family: Appearance.fontFamily
-                    font.pixelSize: Appearance.fontSize + 1
-                    Layout.fillWidth: true
-                }
-                GlassSwitch {
-                    checked: connCol.wifiOn
-                    onToggled: {
-                        connCol.wifiOn = !connCol.wifiOn;
-                        wifiSet.command = ["nmcli", "radio", "wifi", connCol.wifiOn ? "on" : "off"];
-                        wifiSet.running = true;
-                    }
-                }
-            }
-
-            RowLayout {
-                Text {
-                    text: "󰂯  Bluetooth"
-                    color: Colors.foreground
-                    font.family: Appearance.fontFamily
-                    font.pixelSize: Appearance.fontSize + 1
-                    Layout.fillWidth: true
-                }
-                GlassSwitch {
-                    checked: connCol.btAdapter?.enabled ?? false
-                    onToggled: {
-                        if (connCol.btAdapter)
-                            connCol.btAdapter.enabled = !connCol.btAdapter.enabled;
-                    }
-                }
-            }
-
-            // Paired/connected devices — only shown once the adapter is on
-            ColumnLayout {
-                Layout.fillWidth: true
-                visible: (connCol.btAdapter?.enabled ?? false) && connCol.btAdapter.devices.values.length > 0
-                spacing: 4
-
-                Repeater {
-                    model: connCol.btAdapter ? connCol.btAdapter.devices.values : []
-
-                    delegate: RowLayout {
-                        Layout.fillWidth: true
-                        Layout.topMargin: 2
-                        required property var modelData
+                        anchors.leftMargin: 10
+                        anchors.rightMargin: 8
+                        spacing: 8
 
                         Text {
                             text: modelData.connected ? "󰂱" : "󰂯"
@@ -242,7 +220,7 @@ ColumnLayout {
                             text: modelData.name
                             color: Colors.foreground
                             font.family: Appearance.fontFamily
-                            font.pixelSize: Appearance.fontSize
+                            font.pixelSize: 11
                             Layout.fillWidth: true
                             elide: Text.ElideRight
                         }
@@ -254,265 +232,327 @@ ColumnLayout {
                 }
             }
         }
+
+        // Game mode banner
+        Rectangle {
+            Layout.fillWidth: true
+            visible: GameMode.active
+            radius: Appearance.cardRadius
+            color: Qt.rgba(0.96, 0.76, 0.86, 0.12)
+            border.width: 1
+            border.color: Qt.rgba(1, 1, 1, 0.08)
+            implicitHeight: gmRow.implicitHeight + 20
+
+            RowLayout {
+                id: gmRow
+                anchors.fill: parent
+                anchors.margins: 10
+                Text {
+                    text: "󰊴  Game Mode active — stats paused, only critical alerts shown"
+                    color: Colors.foreground
+                    font.family: Appearance.fontFamily
+                    font.pixelSize: Appearance.fontSize
+                    wrapMode: Text.Wrap
+                    Layout.fillWidth: true
+                }
+            }
+        }
     }
 
-    // --- DND card ---
-    Rectangle {
-        Layout.fillWidth: true
-        radius: 14
-        color: Qt.rgba(1, 1, 1, 0.045)
-        border.width: 1
-        border.color: Qt.rgba(1, 1, 1, 0.06)
-        implicitHeight: dndRow.implicitHeight + 24
+    // ============================================================
+    // System — at-a-glance health
+    // ============================================================
 
-        Rectangle {
-            width: 3
-            radius: 2
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            color: Notifications.dnd ? Colors.color(3) : Colors.color(8)
-        }
+    ColumnLayout {
+        Layout.fillWidth: true
+        spacing: 8
+
+        SectionLabel { icon: "󰍛"; text: "System" }
 
         RowLayout {
-            id: dndRow
-            anchors.fill: parent
-            anchors.margins: 12
-            anchors.leftMargin: 18
-            Text {
-                text: "󰂛  Do Not Disturb"
-                color: Colors.foreground
-                font.family: Appearance.fontFamily
-                font.pixelSize: Appearance.fontSize + 1
-                Layout.fillWidth: true
-            }
-            GlassSwitch {
-                checked: Notifications.dnd
-                onToggled: Notifications.toggleDnd()
-            }
-        }
-    }
+            Layout.fillWidth: true
+            spacing: 8
 
-    // --- Volume / Brightness card ---
-    Rectangle {
-        Layout.fillWidth: true
-        radius: 14
-        color: Qt.rgba(1, 1, 1, 0.045)
-        border.width: 1
-        border.color: Qt.rgba(1, 1, 1, 0.06)
-        implicitHeight: slidersCol.implicitHeight + 24
+            Repeater {
+                model: [
+                    { label: "CPU", value: SysMonitor.cpuUsage + "%", accent: SysMonitor.cpuUsage >= 85 ? "#f38ba8" : (SysMonitor.cpuUsage >= 60 ? "#f9e2af" : Colors.color(1)) },
+                    { label: "RAM", value: root.memPercent + "%", accent: root.memPercent >= 85 ? "#f38ba8" : Colors.color(4) },
+                    { label: "Temp", value: root.cpuTemp + "°C", accent: root.cpuTemp >= 85 ? "#f38ba8" : (root.cpuTemp >= 70 ? "#f9e2af" : Colors.color(2)) }
+                ]
 
-        Rectangle {
-            width: 3
-            radius: 2
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            color: Colors.color(6)
-        }
+                delegate: Rectangle {
+                    required property var modelData
+                    Layout.fillWidth: true
+                    implicitHeight: 56
+                    radius: Appearance.cardRadius
+                    color: Qt.rgba(1, 1, 1, 0.045)
+                    border.width: 1
+                    border.color: Qt.rgba(1, 1, 1, 0.06)
 
-        ColumnLayout {
-            id: slidersCol
-            anchors.fill: parent
-            anchors.margins: 12
-            anchors.leftMargin: 18
-            spacing: 14
-
-            readonly property PwNode sink: Pipewire.defaultAudioSink
-            PwObjectTracker {
-                objects: [slidersCol.sink]
-            }
-
-            GlassSlider {
-                Layout.fillWidth: true
-                icon: "󰕾"
-                from: 0
-                to: 1
-                value: slidersCol.sink?.audio?.volume ?? 0
-                onMoved: v => {
-                    if (slidersCol.sink?.audio)
-                        slidersCol.sink.audio.volume = v;
-                }
-            }
-
-            GlassSlider {
-                id: blSlider
-                Layout.fillWidth: true
-                icon: "󰃟"
-                from: 1
-                to: 100
-                value: 50
-                onMoved: v => {
-                    setBrightness.command = ["brightnessctl", "set", Math.round(v) + "%"];
-                    setBrightness.running = true;
-                }
-
-                Process {
-                    id: getBrightness
-                    command: ["brightnessctl", "-m"]
-                    running: true
-                    stdout: StdioCollector {
-                        onStreamFinished: {
-                            const match = this.text.match(/,(\d+)%,/);
-                            if (match)
-                                blSlider.value = Number(match[1]);
+                    ColumnLayout {
+                        anchors.centerIn: parent
+                        spacing: 2
+                        Text {
+                            text: modelData.value
+                            color: modelData.accent
+                            font.family: Appearance.fontFamily
+                            font.pixelSize: 16
+                            font.bold: true
+                            Layout.alignment: Qt.AlignHCenter
+                        }
+                        Text {
+                            text: modelData.label
+                            color: Colors.color(7)
+                            font.family: Appearance.fontFamily
+                            font.pixelSize: 10
+                            Layout.alignment: Qt.AlignHCenter
                         }
                     }
                 }
-                Process {
-                    id: setBrightness
-                }
             }
         }
     }
 
-    // --- Media card ---
-    Rectangle {
+    // ============================================================
+    // Quick Controls — volume / brightness
+    // ============================================================
+
+    ColumnLayout {
         Layout.fillWidth: true
-        visible: Mpris.players.values.length > 0
-        radius: 14
-        color: Qt.rgba(1, 1, 1, 0.045)
-        border.width: 1
-        border.color: Qt.rgba(1, 1, 1, 0.06)
-        implicitHeight: mprisCol.implicitHeight + 24
+        spacing: 8
+
+        SectionLabel { icon: "󰕾"; text: "Quick Controls" }
 
         Rectangle {
-            width: 3
-            radius: 2
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            color: Colors.color(5)
-        }
-
-        ColumnLayout {
-            id: mprisCol
-            anchors.fill: parent
-            anchors.margins: 12
-            anchors.leftMargin: 18
-            spacing: 6
-            property var player: Mpris.players.values[0] ?? null
-
-            Text {
-                text: mprisCol.player ? mprisCol.player.trackTitle : ""
-                color: Colors.foreground
-                font.bold: true
-                font.family: Appearance.fontFamily
-                Layout.fillWidth: true
-                elide: Text.ElideRight
-            }
-            Text {
-                text: mprisCol.player ? mprisCol.player.trackArtist : ""
-                color: Colors.color(7)
-                font.family: Appearance.fontFamily
-                Layout.fillWidth: true
-                elide: Text.ElideRight
-            }
-            RowLayout {
-                spacing: 8
-                Layout.topMargin: 4
-                GlassButton {
-                    icon: "󰒮"
-                    onClicked: mprisCol.player?.previous()
-                }
-                GlassButton {
-                    icon: mprisCol.player?.playbackState === MprisPlaybackState.Playing ? "󰏤" : "󰐊"
-                    accent: true
-                    onClicked: mprisCol.player?.togglePlaying()
-                }
-                GlassButton {
-                    icon: "󰒭"
-                    onClicked: mprisCol.player?.next()
-                }
-            }
-        }
-    }
-
-    Text {
-        text: "Notifications"
-        visible: notifList.count > 0
-        color: Colors.color(7)
-        font.family: Appearance.fontFamily
-        font.pixelSize: 12
-        font.bold: true
-    }
-
-    // No fillHeight here — this Column sizes to its content since the
-    // whole panel now grows/shrinks by height animation, so the list
-    // gets a capped preferred height and scrolls internally past that.
-    ListView {
-        id: notifList
-        Layout.fillWidth: true
-        Layout.preferredHeight: Math.min(360, contentHeight)
-        clip: true
-        spacing: 8
-        model: Notifications.list
-
-        delegate: Rectangle {
-            required property var modelData
-            width: notifList.width
-            height: contentCol.implicitHeight + 20
-            radius: 14
-            color: Qt.rgba(1, 1, 1, 0.05)
+            Layout.fillWidth: true
+            radius: Appearance.cardRadius
+            color: Qt.rgba(1, 1, 1, 0.045)
             border.width: 1
             border.color: Qt.rgba(1, 1, 1, 0.06)
+            implicitHeight: slidersCol.implicitHeight + Appearance.cardPadding * 2
+
+            ColumnLayout {
+                id: slidersCol
+                anchors.fill: parent
+                anchors.margins: Appearance.cardPadding
+                spacing: 14
+
+                readonly property PwNode sink: Pipewire.defaultAudioSink
+                PwObjectTracker {
+                    objects: [slidersCol.sink]
+                }
+
+                GlassSlider {
+                    Layout.fillWidth: true
+                    icon: "󰕾"
+                    from: 0
+                    to: 1
+                    value: slidersCol.sink?.audio?.volume ?? 0
+                    onMoved: v => {
+                        if (slidersCol.sink?.audio)
+                            slidersCol.sink.audio.volume = v;
+                    }
+                }
+
+                GlassSlider {
+                    id: blSlider
+                    Layout.fillWidth: true
+                    icon: "󰃟"
+                    from: 1
+                    to: 100
+                    value: 50
+                    onMoved: v => {
+                        setBrightness.command = ["brightnessctl", "set", Math.round(v) + "%"];
+                        setBrightness.running = true;
+                    }
+
+                    Process {
+                        id: getBrightness
+                        command: ["brightnessctl", "-m"]
+                        running: true
+                        stdout: StdioCollector {
+                            onStreamFinished: {
+                                const match = this.text.match(/,(\d+)%,/);
+                                if (match)
+                                    blSlider.value = Number(match[1]);
+                            }
+                        }
+                    }
+                    Process { id: setBrightness }
+                }
+            }
+        }
+    }
+
+    // ============================================================
+    // Media
+    // ============================================================
+
+    ColumnLayout {
+        Layout.fillWidth: true
+        visible: Mpris.players.values.length > 0
+        spacing: 8
+
+        SectionLabel { icon: "󰎈"; text: "Now Playing" }
+
+        Rectangle {
+            Layout.fillWidth: true
+            radius: Appearance.cardRadius
+            color: Qt.rgba(1, 1, 1, 0.045)
+            border.width: 1
+            border.color: Qt.rgba(1, 1, 1, 0.06)
+            implicitHeight: mprisCol.implicitHeight + Appearance.cardPadding * 2
 
             Rectangle {
                 width: 3
+                radius: 2
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
-                radius: 2
-                color: Colors.color(4)
+                color: Colors.color(5)
             }
 
             ColumnLayout {
-                id: contentCol
+                id: mprisCol
                 anchors.fill: parent
-                anchors.margins: 12
-                anchors.leftMargin: 16
-                spacing: 2
+                anchors.margins: Appearance.cardPadding
+                anchors.leftMargin: Appearance.cardPadding + 6
+                spacing: 6
+                property var player: Mpris.players.values[0] ?? null
 
-                RowLayout {
-                    Layout.fillWidth: true
-                    Text {
-                        text: modelData.appName
-                        color: Colors.color(7)
-                        font.pixelSize: 11
-                        font.family: Appearance.fontFamily
-                        Layout.fillWidth: true
-                    }
-                    GlassButton {
-                        icon: "✕"
-                        onClicked: Notifications.dismiss(modelData)
-                    }
-                }
                 Text {
-                    text: modelData.summary
+                    text: mprisCol.player ? mprisCol.player.trackTitle : ""
                     color: Colors.foreground
                     font.bold: true
                     font.family: Appearance.fontFamily
-                    wrapMode: Text.Wrap
                     Layout.fillWidth: true
+                    elide: Text.ElideRight
                 }
                 Text {
-                    visible: modelData.body.length > 0
-                    text: modelData.body
-                    color: Colors.foreground
-                    opacity: 0.85
+                    text: mprisCol.player ? mprisCol.player.trackArtist : ""
+                    color: Colors.color(7)
                     font.family: Appearance.fontFamily
-                    wrapMode: Text.Wrap
                     Layout.fillWidth: true
+                    elide: Text.ElideRight
+                }
+                RowLayout {
+                    spacing: 8
+                    Layout.topMargin: 4
+                    GlassButton {
+                        icon: "󰒮"
+                        onClicked: mprisCol.player?.previous()
+                    }
+                    GlassButton {
+                        icon: mprisCol.player?.playbackState === MprisPlaybackState.Playing ? "󰏤" : "󰐊"
+                        accent: true
+                        onClicked: mprisCol.player?.togglePlaying()
+                    }
+                    GlassButton {
+                        icon: "󰒭"
+                        onClicked: mprisCol.player?.next()
+                    }
                 }
             }
         }
+    }
 
-        Text {
-            anchors.centerIn: parent
-            visible: notifList.count === 0
-            text: "No notifications"
-            color: Colors.color(8)
-            font.family: Appearance.fontFamily
+    // ============================================================
+    // Notifications
+    // ============================================================
+
+    ColumnLayout {
+        Layout.fillWidth: true
+        spacing: 8
+
+        RowLayout {
+            Layout.fillWidth: true
+            SectionLabel {
+                icon: "󰂚"
+                text: Notifications.count > 0 ? ("Notifications · " + Notifications.count) : "Notifications"
+                Layout.fillWidth: true
+            }
+            GlassButton {
+                visible: notifList.count > 0
+                icon: "󰆴"
+                text: "Clear"
+                onClicked: Notifications.clearAll()
+            }
+        }
+
+        ListView {
+            id: notifList
+            Layout.fillWidth: true
+            Layout.preferredHeight: Math.min(360, contentHeight)
+            clip: true
+            spacing: 8
+            model: Notifications.list
+
+            delegate: Rectangle {
+                required property var modelData
+                width: notifList.width
+                height: contentCol.implicitHeight + 20
+                radius: Appearance.cardRadius
+                color: Qt.rgba(1, 1, 1, 0.05)
+                border.width: 1
+                border.color: Qt.rgba(1, 1, 1, 0.06)
+
+                Rectangle {
+                    width: 3
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.left: parent.left
+                    radius: 2
+                    color: modelData.urgency === NotificationUrgency.Critical ? "#f38ba8" : Colors.color(4)
+                }
+
+                ColumnLayout {
+                    id: contentCol
+                    anchors.fill: parent
+                    anchors.margins: 12
+                    anchors.leftMargin: 16
+                    spacing: 2
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        Text {
+                            text: modelData.appName
+                            color: Colors.color(7)
+                            font.pixelSize: 11
+                            font.family: Appearance.fontFamily
+                            Layout.fillWidth: true
+                        }
+                        GlassButton {
+                            icon: "✕"
+                            onClicked: Notifications.dismiss(modelData)
+                        }
+                    }
+                    Text {
+                        text: modelData.summary
+                        color: Colors.foreground
+                        font.bold: true
+                        font.family: Appearance.fontFamily
+                        wrapMode: Text.Wrap
+                        Layout.fillWidth: true
+                    }
+                    Text {
+                        visible: modelData.body.length > 0
+                        text: modelData.body
+                        color: Colors.foreground
+                        opacity: 0.85
+                        font.family: Appearance.fontFamily
+                        wrapMode: Text.Wrap
+                        Layout.fillWidth: true
+                    }
+                }
+            }
+
+            Text {
+                anchors.centerIn: parent
+                visible: notifList.count === 0
+                text: "No notifications"
+                color: Colors.color(8)
+                font.family: Appearance.fontFamily
+            }
         }
     }
 }
