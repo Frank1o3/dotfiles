@@ -44,7 +44,7 @@ done
 # ---------------------------------------------------------------------------
 
 echo "Installing theme files..."
-
+sudo rm -rf "$SDDM_THEME_DEST"
 sudo mkdir -p "$SDDM_THEME_DEST/backgrounds"
 
 sudo cp -r "$THEME_SRC/." "$SDDM_THEME_DEST/"
