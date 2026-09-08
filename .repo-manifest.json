@@ -11,6 +11,18 @@
       "install_path": null,
       "protected": [],
       "optional": false
+    },
+    "wallust": {
+      "version": 9,
+      "install_path": null,
+      "protected": [],
+      "optional": false
+    },
+    "nvim": {
+      "version": 5,
+      "install_path": null,
+      "protected": [],
+      "optional": false
     }
   }
 }
