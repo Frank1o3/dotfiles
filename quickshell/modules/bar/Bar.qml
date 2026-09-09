@@ -4,8 +4,8 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 import QtQuick
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 import qs.config
+import qs.config.components
 import qs.modules.bar.widgets
 import qs.modules.panel
 
@@ -62,7 +62,7 @@ Scope {
                 onCleared: PanelState.setOpen(win.modelData.name, false)
             }
 
-            // ---------------- Bar pill ----------------
+            // ---------------- Three pills ----------------
             Item {
                 id: pillRow
                 anchors.top: parent.top
@@ -70,60 +70,61 @@ Scope {
                 anchors.right: parent.right
                 height: Appearance.barHeight
 
-                Rectangle {
-                    id: pill
-                    anchors.fill: parent
+                // Left pill: Workspaces
+                GlassCard {
+                    id: leftPill
+                    anchors.left: parent.left
                     anchors.leftMargin: 10
-                    anchors.rightMargin: 10
-                    anchors.topMargin: 6
-                    anchors.bottomMargin: 6
-                    radius: Appearance.radius
-                    color: Colors.background
-                    opacity: Appearance.glassOpacity
-                    border.width: 1
-                    border.color: Colors.color(1)
+                    anchors.verticalCenter: parent.verticalCenter
+                    height: parent.height - 12
+                    width: workspacesContent.implicitWidth + 24
+                    cardRadius: Appearance.radius
+                    surfaceOpacity: Appearance.glassOpacity
+                    shadowRadius: Appearance.shadowRadiusMedium
+                    shadowOffset: Appearance.shadowOffsetMedium
 
-                    layer.enabled: true
-                    layer.effect: DropShadow {
-                        transparentBorder: true
-                        radius: 16
-                        samples: 33
-                        verticalOffset: 4
-                        color: "#66000000"
+                    Workspaces {
+                        id: workspacesContent
+                        anchors.centerIn: parent
                     }
                 }
 
-                Item {
-                    anchors.fill: pill
-                    anchors.leftMargin: 16
-                    anchors.rightMargin: 16
+                // Center pill: Clock
+                GlassCard {
+                    id: centerPill
+                    anchors.centerIn: parent
+                    height: parent.height - 12
+                    // Keep it compact – width fits the clock text plus padding, but not too wide
+                    width: Math.min(clockContent.implicitWidth + 24, 280)
+                    cardRadius: Appearance.radius
+                    surfaceOpacity: Appearance.glassOpacity
+                    shadowRadius: Appearance.shadowRadiusMedium
+                    shadowOffset: Appearance.shadowOffsetMedium
 
-                    RowLayout {
-                        anchors.left: parent.left
-                        anchors.verticalCenter: parent.verticalCenter
-                        spacing: Appearance.spacing
-                        Workspaces {}
-                    }
-
-                    Rectangle {
+                    Clock {
+                        id: clockContent
                         anchors.centerIn: parent
-                        width: Math.min(110, parent.width * 0.28)
-                        height: 24
-                        radius: 12
-                        color: Qt.rgba(1, 1, 1, Appearance.panelSurfaceOpacity)
-                        border.width: 1
-                        border.color: Qt.rgba(1, 1, 1, Appearance.panelBorderOpacity)
-
-                        Clock {
-                            anchors.centerIn: parent
-                            width: parent.width
-                            horizontalAlignment: Text.AlignHCenter
-                        }
+                        width: parent.width
+                        horizontalAlignment: Text.AlignHCenter
                     }
+                }
+
+                // Right pill: System status
+                GlassCard {
+                    id: rightPill
+                    anchors.right: parent.right
+                    anchors.rightMargin: 10
+                    anchors.verticalCenter: parent.verticalCenter
+                    height: parent.height - 12
+                    width: rightContent.implicitWidth + 24
+                    cardRadius: Appearance.radius
+                    surfaceOpacity: Appearance.glassOpacity
+                    shadowRadius: Appearance.shadowRadiusMedium
+                    shadowOffset: Appearance.shadowOffsetMedium
 
                     RowLayout {
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
+                        id: rightContent
+                        anchors.centerIn: parent
                         spacing: Appearance.spacing
 
                         Igpu {}
@@ -156,7 +157,7 @@ Scope {
                 }
             }
 
-            // ---------------- Control Center, grown out of the pill ----------------
+            // ---------------- Control Center dropdown ----------------
             Item {
                 id: dropdownHost
                 anchors.top: pillRow.bottom
@@ -173,7 +174,7 @@ Scope {
                     }
                 }
 
-                Rectangle {
+                GlassCard {
                     id: bg
                     width: parent.width
                     implicitHeight: content.implicitHeight + 36
@@ -181,22 +182,13 @@ Scope {
 
                     topLeftRadius: 0
                     topRightRadius: 0
-                    bottomLeftRadius: Appearance.radius
-                    bottomRightRadius: Appearance.radius
+                    bottomLeftRadius: Appearance.radiusLarge
+                    bottomRightRadius: Appearance.radiusLarge
 
-                    color: Colors.background
-                    opacity: Appearance.panelOpacity
-                    border.width: 1
-                    border.color: Colors.color(1)
-
-                    layer.enabled: true
-                    layer.effect: DropShadow {
-                        transparentBorder: true
-                        radius: 20
-                        samples: 41
-                        verticalOffset: 6
-                        color: "#77000000"
-                    }
+                    surfaceOpacity: Appearance.panelOpacity
+                    shadowRadius: Appearance.shadowRadiusLarge
+                    shadowOffset: Appearance.shadowOffsetLarge
+                    showHighlight: false
 
                     MouseArea {
                         anchors.fill: parent

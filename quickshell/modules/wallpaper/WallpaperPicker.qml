@@ -6,6 +6,7 @@ import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Hyprland
 import qs.config
+import qs.config.components
 
 Scope {
     id: root
@@ -103,17 +104,17 @@ Scope {
             anchors.fill: parent
             onClicked: root.hide()
 
-            Rectangle {
+            GlassCard {
                 id: card
                 anchors.centerIn: parent
                 width: Math.min(parent.width * 0.7, 900)
                 height: Math.min(parent.height * 0.75, 640)
-                radius: Appearance.radius
-                color: Colors.background
-                opacity: root.open ? Appearance.panelOpacity : 0
-                border.width: 1
-                border.color: Colors.color(1)
+                cardRadius: Appearance.radiusLarge
+                surfaceOpacity: Appearance.panelOpacity
+                shadowRadius: Appearance.shadowRadiusMedium
+                shadowOffset: Appearance.shadowOffsetMedium
 
+                opacity: root.open ? 1 : 0
                 transformOrigin: Item.Center
                 scale: root.open ? 1 : 0.9
 

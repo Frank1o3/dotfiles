@@ -1,4 +1,5 @@
 import QtQuick
+import Qt5Compat.GraphicalEffects
 import qs.config
 
 Item {
@@ -11,7 +12,30 @@ Item {
     implicitWidth: label.implicitWidth + (root.icon.length > 0 ? 28 : 20) + 20
     implicitHeight: 32
 
+    // Soft glow behind accent buttons — a small hint of the same
+    // ambient-shadow language used on the bigger glass panels, scaled
+    // down and tinted so it reads as "glowing" rather than "shadowed".
     Rectangle {
+        id: glowSource
+        anchors.fill: parent
+        radius: 10
+        color: Colors.color(4)
+        visible: false
+    }
+
+    Glow {
+        anchors.fill: glowSource
+        source: glowSource
+        visible: root.accent
+        radius: 14
+        samples: 29
+        color: Colors.color(4)
+        spread: 0.15
+        opacity: 0.35
+    }
+
+    Rectangle {
+        id: surface
         anchors.fill: parent
         radius: 10
         color: root.accent ? Colors.color(4) : (mouse.containsMouse ? Qt.rgba(1, 1, 1, 0.10) : Qt.rgba(1, 1, 1, 0.05))
@@ -22,6 +46,18 @@ Item {
                 duration: Appearance.animFast
             }
         }
+    }
+
+    // Top-edge highlight, same "light catching glass" idea as GlassCard,
+    // scaled down to button size.
+    Rectangle {
+        anchors.top: surface.top
+        anchors.left: surface.left
+        anchors.right: surface.right
+        anchors.margins: 1
+        height: surface.height * 0.5
+        radius: surface.radius
+        color: Qt.rgba(1, 1, 1, root.accent ? 0.12 : Appearance.glassHighlightOpacity)
     }
 
     Row {

@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
+import Qt5Compat.GraphicalEffects
 import Quickshell.Services.Notifications
 import qs.config
 import qs.services
@@ -63,6 +64,17 @@ Scope {
             opacity: !entered ? 0 : (closing ? 0 : 0.97)
             scale: !entered ? 0.9 : (closing ? 0.85 : 1.0)
 
+            // Layered contact shadow, follows opacity/scale automatically
+            // since it's a post-processing layer effect on this item.
+            layer.enabled: true
+            layer.effect: DropShadow {
+                transparentBorder: true
+                radius: Appearance.shadowRadiusSmall
+                samples: Appearance.shadowRadiusSmall * 2 + 1
+                verticalOffset: Appearance.shadowOffsetSmall
+                color: Appearance.shadowColorAmbient
+            }
+
             transform: Translate {
                 x: toast.entered && !toast.closing ? 0 : 24
                 Behavior on x {
@@ -117,6 +129,23 @@ Scope {
                 interval: toast.notification.expireTimeout > 0 ? toast.notification.expireTimeout : toast.defaultDuration()
                 running: true
                 onTriggered: toast.close()
+            }
+
+            // Glass highlight streak — same language as GlassCard, kept
+            // inline here since the toast's border color is dynamic
+            // (urgency) which GlassCard doesn't model.
+            Rectangle {
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.margins: 1
+                height: parent.height * Appearance.glassHighlightHeightRatio
+                radius: parent.radius
+
+                gradient: Gradient {
+                    GradientStop { position: 0.0; color: Qt.rgba(1, 1, 1, Appearance.glassHighlightOpacity) }
+                    GradientStop { position: 1.0; color: Qt.rgba(1, 1, 1, 0) }
+                }
             }
 
             ColumnLayout {

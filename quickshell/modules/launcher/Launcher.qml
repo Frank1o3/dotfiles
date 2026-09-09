@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
 import qs.config
+import qs.config.components
 
 Scope {
     id: root
@@ -379,7 +380,7 @@ Scope {
             anchors.fill: parent
             onClicked: root.close()
 
-            Rectangle {
+            GlassCard {
                 id: card
 
                 anchors.centerIn: parent
@@ -387,12 +388,10 @@ Scope {
                 width: 480
                 height: 460
 
-                radius: Appearance.radius
-                color: Colors.background
-                opacity: 0.97
-
-                border.width: 1
-                border.color: Colors.color(1)
+                cardRadius: Appearance.radiusLarge
+                surfaceOpacity: Appearance.panelOpacity
+                shadowRadius: Appearance.shadowRadiusMedium
+                shadowOffset: Appearance.shadowOffsetMedium
 
                 MouseArea {
                     anchors.fill: parent
