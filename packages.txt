@@ -21,6 +21,7 @@ ttf-nerd-fonts-symbols-common
 adw-gtk-theme
 papirus-icon-theme
 adwaita-cursors
+qt5-graphicaleffects
 aur/catppuccin-cursors-mocha
 aur/wallust
 unzip

@@ -1,7 +1,8 @@
-import QtQuick
-import QtQuick.Layouts
+import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import ".."
+import "../components"
 
 Item {
     id: root
@@ -9,72 +10,28 @@ Item {
     RowLayout {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-
         anchors.margins: 24
+        spacing: 10
 
-        spacing: 14
-
-        Text {
+        PowerButton {
             visible: sddm.canSuspend
-
-            text: "󰤄"
-
-            color: Theme.fg
-
-            font.family: Theme.fontFamily
-            font.pixelSize: 22
-
-            MouseArea {
-                anchors.fill: parent
-
-                hoverEnabled: true
-
-                cursorShape: Qt.PointingHandCursor
-
-                onClicked: sddm.suspend()
-            }
+            icon: "󰤄"
+            label: "Sleep"
+            onClicked: sddm.suspend()
         }
 
-        Text {
+        PowerButton {
             visible: sddm.canReboot
-
-            text: "󰜉"
-
-            color: Theme.fg
-
-            font.family: Theme.fontFamily
-            font.pixelSize: 22
-
-            MouseArea {
-                anchors.fill: parent
-
-                hoverEnabled: true
-
-                cursorShape: Qt.PointingHandCursor
-
-                onClicked: sddm.reboot()
-            }
+            icon: "󰜉"
+            label: "Reboot"
+            onClicked: sddm.reboot()
         }
 
-        Text {
+        PowerButton {
             visible: sddm.canPowerOff
-
-            text: "󰐥"
-
-            color: Theme.fg
-
-            font.family: Theme.fontFamily
-            font.pixelSize: 22
-
-            MouseArea {
-                anchors.fill: parent
-
-                hoverEnabled: true
-
-                cursorShape: Qt.PointingHandCursor
-
-                onClicked: sddm.powerOff()
-            }
+            icon: "󰐥"
+            label: "Shutdown"
+            onClicked: sddm.powerOff()
         }
     }
 }

@@ -1,5 +1,5 @@
-import QtQuick
-import QtQuick.Layouts
+import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import ".."
 
@@ -7,7 +7,7 @@ Item {
     id: root
 
     property string clockText: ""
-    property string dateText: ""
+    property string dateString: ""
 
     Timer {
         interval: 1000
@@ -19,17 +19,16 @@ Item {
             const now = new Date();
 
             root.clockText = Qt.formatTime(now, "hh:mm AP");
-
-            root.dateText = Qt.formatDate(now, "dddd, MMMM d");
+            root.dateString = Qt.formatDate(now, "dddd, MMMM d");
         }
     }
 
     ColumnLayout {
         anchors.centerIn: parent
 
-        anchors.verticalCenterOffset: -140
+        anchors.verticalCenterOffset: -150
 
-        spacing: 6
+        spacing: 10
 
         Text {
             text: root.clockText
@@ -37,22 +36,34 @@ Item {
             color: Theme.fg
 
             font.family: Theme.fontFamily
-            font.pixelSize: 72
+            font.pixelSize: 74
             font.bold: true
 
             Layout.alignment: Qt.AlignHCenter
         }
 
-        Text {
-            text: root.dateText
-
-            color: Theme.fg
-            opacity: 0.8
-
-            font.family: Theme.fontFamily
-            font.pixelSize: 18
-
+        Rectangle {
             Layout.alignment: Qt.AlignHCenter
+
+            radius: 999
+            color: Qt.rgba(1, 1, 1, 0.06)
+            border.width: 1
+            border.color: Qt.rgba(1, 1, 1, 0.10)
+
+            implicitWidth: dateLabel.implicitWidth + 26
+            implicitHeight: dateLabel.implicitHeight + 10
+
+            Text {
+                id: dateLabel
+                anchors.centerIn: parent
+
+                text: root.dateString
+
+                color: Theme.muted
+
+                font.family: Theme.fontFamily
+                font.pixelSize: 13
+            }
         }
     }
 }

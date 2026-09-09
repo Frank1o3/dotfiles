@@ -1,5 +1,5 @@
-import QtQuick
-import QtQuick.Effects
+import QtQuick 2.15
+import QtGraphicalEffects 1.15
 
 import ".."
 
@@ -20,29 +20,24 @@ Item {
         visible: false
     }
 
-    MultiEffect {
+    // Qt5 replacement for MultiEffect's blur — QtQuick.Effects doesn't exist
+    // on Qt5, so QtGraphicalEffects' FastBlur takes over the wallpaper blur.
+    FastBlur {
         anchors.fill: wallpaper
-
         source: wallpaper
-
-        blurEnabled: true
-        blurMax: 64
-        blur: 0.72
-
-        brightness: -0.08
-
-        autoPaddingEnabled: false
+        radius: 64
+        transparentBorder: false
     }
 
-    // Main dark overlay.
+    // Dimming previously came from MultiEffect's `brightness: -0.08`.
+    // A plain overlay does the same job without an extra shader pass.
     Rectangle {
         anchors.fill: parent
-
         color: "#000000"
-        opacity: 0.38
+        opacity: 0.40
     }
 
-    // Slightly darker lower edge.
+    // Slightly darker lower edge, so the power controls stay legible.
     Rectangle {
         anchors.fill: parent
 
@@ -54,17 +49,17 @@ Item {
 
             GradientStop {
                 position: 0.55
-                color: "#00000020"
+                color: "#00000022"
             }
 
             GradientStop {
                 position: 1.0
-                color: "#00000085"
+                color: "#00000090"
             }
         }
     }
 
-    // Very subtle dark center veil behind the login UI.
+    // Very subtle tint veil behind the login UI, matches Theme.bg.
     Rectangle {
         anchors.fill: parent
 
