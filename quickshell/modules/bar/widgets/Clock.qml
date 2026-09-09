@@ -10,6 +10,9 @@ Text {
     font.bold: true
     font.weight: Font.Bold
     horizontalAlignment: Text.AlignHCenter
+    verticalAlignment: Text.AlignVCenter
+    elide: Text.ElideNone
+    wrapMode: Text.NoWrap
 
     property bool showDate: false
     property string timeText: ""
@@ -18,7 +21,7 @@ Text {
 
     Process {
         id: timeProc
-        command: ["date", "+%I:%M %p"]
+        command: ["sh", "-c", "LC_TIME=C date '+%I:%M %p'"]
         running: true
         stdout: StdioCollector {
             onStreamFinished: root.timeText = this.text.trim()

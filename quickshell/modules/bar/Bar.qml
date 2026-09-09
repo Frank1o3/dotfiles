@@ -94,8 +94,7 @@ Scope {
                     id: centerPill
                     anchors.centerIn: parent
                     height: parent.height - 12
-                    // Keep it compact – width fits the clock text plus padding, but not too wide
-                    width: Math.min(clockContent.implicitWidth + 24, 280)
+                    width: Math.max(clockContent.implicitWidth + 24, 130)
                     cardRadius: Appearance.radius
                     surfaceOpacity: Appearance.glassOpacity
                     shadowRadius: Appearance.shadowRadiusMedium
@@ -104,7 +103,7 @@ Scope {
                     Clock {
                         id: clockContent
                         anchors.centerIn: parent
-                        width: parent.width
+                        width: parent.width - 12
                         horizontalAlignment: Text.AlignHCenter
                     }
                 }
@@ -169,7 +168,7 @@ Scope {
 
                 Behavior on height {
                     NumberAnimation {
-                        duration: 280
+                        duration: 320
                         easing.type: Easing.OutExpo
                     }
                 }
@@ -190,16 +189,48 @@ Scope {
                     shadowOffset: Appearance.shadowOffsetLarge
                     showHighlight: false
 
+                    // Pop‑out scaling & fade
+                    transform: Scale {
+                        id: popScale
+                        origin.x: bg.width
+                        origin.y: 0
+                        xScale: win.panelOpen ? 1 : 0.85
+                        yScale: win.panelOpen ? 1 : 0.85
+                    }
+                    opacity: win.panelOpen ? 1 : 0
+
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: 200
+                            easing.type: Easing.OutCubic
+                        }
+                    }
+                    Behavior on transform {
+                        NumberAnimation {
+                            duration: 280
+                            easing.type: Easing.OutExpo
+                        }
+                    }
+
                     MouseArea {
                         anchors.fill: parent
                     }
 
+                    // Content with staggered fade‑in
                     ControlCenterContent {
                         id: content
                         anchors.left: parent.left
                         anchors.right: parent.right
                         anchors.top: parent.top
                         anchors.margins: 18
+                        opacity: win.panelOpen ? 1 : 0
+
+                        Behavior on opacity {
+                            NumberAnimation {
+                                duration: 200
+                                delay: 120  // appear slightly after the card finishes expanding
+                            }
+                        }
                     }
                 }
             }
