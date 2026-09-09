@@ -228,7 +228,6 @@ Scope {
                         Behavior on opacity {
                             NumberAnimation {
                                 duration: 200
-                                delay: 120  // appear slightly after the card finishes expanding
                             }
                         }
                     }
