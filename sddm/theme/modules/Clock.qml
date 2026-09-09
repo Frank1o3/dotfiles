@@ -1,10 +1,13 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
+import QtGraphicalEffects 1.15
 
 import ".."
 
-Item {
+ColumnLayout {
     id: root
+
+    spacing: 10
 
     property string clockText: ""
     property string dateString: ""
@@ -23,47 +26,49 @@ Item {
         }
     }
 
-    ColumnLayout {
-        anchors.centerIn: parent
+    Text {
+        id: timeLabel
+        text: root.clockText
 
-        anchors.verticalCenterOffset: -150
+        color: Theme.fg
 
-        spacing: 10
+        font.family: Theme.fontFamily
+        font.pixelSize: 74
+        font.bold: true
+
+        Layout.alignment: Qt.AlignHCenter
+
+        layer.enabled: true
+        layer.effect: DropShadow {
+            transparentBorder: true
+            radius: 12
+            samples: 25
+            verticalOffset: 2
+            color: "#66000000"
+        }
+    }
+
+    Rectangle {
+        Layout.alignment: Qt.AlignHCenter
+
+        radius: 999
+        color: Qt.rgba(1, 1, 1, 0.06)
+        border.width: 1
+        border.color: Qt.rgba(1, 1, 1, 0.10)
+
+        implicitWidth: dateLabel.implicitWidth + 26
+        implicitHeight: dateLabel.implicitHeight + 10
 
         Text {
-            text: root.clockText
+            id: dateLabel
+            anchors.centerIn: parent
 
-            color: Theme.fg
+            text: root.dateString
+
+            color: Theme.muted
 
             font.family: Theme.fontFamily
-            font.pixelSize: 74
-            font.bold: true
-
-            Layout.alignment: Qt.AlignHCenter
-        }
-
-        Rectangle {
-            Layout.alignment: Qt.AlignHCenter
-
-            radius: 999
-            color: Qt.rgba(1, 1, 1, 0.06)
-            border.width: 1
-            border.color: Qt.rgba(1, 1, 1, 0.10)
-
-            implicitWidth: dateLabel.implicitWidth + 26
-            implicitHeight: dateLabel.implicitHeight + 10
-
-            Text {
-                id: dateLabel
-                anchors.centerIn: parent
-
-                text: root.dateString
-
-                color: Theme.muted
-
-                font.family: Theme.fontFamily
-                font.pixelSize: 13
-            }
+            font.pixelSize: 13
         }
     }
 }

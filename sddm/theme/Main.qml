@@ -1,4 +1,5 @@
 import QtQuick 2.15
+import QtQuick.Layouts 1.15
 import "modules"
 
 Item {
@@ -6,12 +7,17 @@ Item {
         anchors.fill: parent
     }
 
-    Clock {
-        anchors.fill: parent
-    }
-
-    LoginPanel {
+    ColumnLayout {
         anchors.centerIn: parent
+        spacing: 40
+
+        Clock {
+            Layout.alignment: Qt.AlignHCenter
+        }
+
+        LoginPanel {
+            Layout.alignment: Qt.AlignHCenter
+        }
     }
 
     PowerControls {

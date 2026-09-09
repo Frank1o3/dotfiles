@@ -1,7 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Basic 2.15
 import QtGraphicalEffects 1.15
 
 import ".."
@@ -13,8 +12,6 @@ Item {
     width: card.width
     height: card.height
 
-    // Drives the entrance animation (fade + scale-in), same pattern used
-    // by PowerMenu.qml / WallpaperPicker.qml in the main Quickshell shell.
     property real entrance: 0
 
     NumberAnimation {
@@ -125,6 +122,7 @@ Item {
                 id: userCombo
 
                 Layout.fillWidth: true
+                implicitHeight: 44
 
                 model: userModel
                 textRole: "name"
@@ -132,6 +130,56 @@ Item {
                 currentIndex: userModel.lastIndex
 
                 font.family: Theme.fontFamily
+
+                indicator: Text {
+                    x: userCombo.width - width - 12
+                    y: (userCombo.height - height) / 2
+                    text: "󰄽"
+                    color: userCombo.activeFocus ? Theme.accent : Theme.muted
+                    font.family: Theme.fontFamily
+                    font.pixelSize: 14
+                }
+
+                delegate: ItemDelegate {
+                    width: userCombo.width
+                    implicitHeight: 38
+                    highlighted: userCombo.highlightedIndex === index
+
+                    contentItem: Text {
+                        text: model.name
+                        color: parent.highlighted ? Theme.accent : Theme.fg
+                        font.family: Theme.fontFamily
+                        font.pixelSize: 13
+                        leftPadding: 12
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    background: Rectangle {
+                        radius: 8
+                        color: parent.highlighted ? Qt.rgba(1, 1, 1, 0.08) : "transparent"
+                    }
+                }
+
+                popup: Popup {
+                    y: userCombo.height + 6
+                    width: userCombo.width
+                    implicitHeight: Math.min(contentItem.implicitHeight + 8, 220)
+                    padding: 4
+
+                    contentItem: ListView {
+                        clip: true
+                        implicitHeight: contentHeight
+                        model: userCombo.popup.visible ? userCombo.delegateModel : null
+                        currentIndex: userCombo.highlightedIndex
+                        boundsBehavior: Flickable.StopAtBounds
+                    }
+
+                    background: Rectangle {
+                        radius: Theme.radius
+                        color: Qt.rgba(Theme.bg.r, Theme.bg.g, Theme.bg.b, 0.94)
+                        border.width: 1
+                        border.color: Theme.inputBorder
+                    }
+                }
 
                 background: Rectangle {
                     radius: Theme.radius
@@ -153,7 +201,7 @@ Item {
                     font.pixelSize: 13
                     verticalAlignment: Text.AlignVCenter
                     leftPadding: 10
-                    rightPadding: 10
+                    rightPadding: 30
                 }
             }
 
@@ -164,6 +212,7 @@ Item {
                 id: passwordField
 
                 Layout.fillWidth: true
+                implicitHeight: 44
 
                 echoMode: TextInput.Password
                 placeholderText: "Password"
@@ -216,6 +265,7 @@ Item {
                 id: sessionCombo
 
                 Layout.fillWidth: true
+                implicitHeight: 44
 
                 model: sessionModel
                 textRole: "name"
@@ -223,6 +273,56 @@ Item {
                 currentIndex: sessionModel.lastIndex
 
                 font.family: Theme.fontFamily
+
+                indicator: Text {
+                    x: sessionCombo.width - width - 12
+                    y: (sessionCombo.height - height) / 2
+                    text: "󰄽"
+                    color: sessionCombo.activeFocus ? Theme.accent : Theme.muted
+                    font.family: Theme.fontFamily
+                    font.pixelSize: 14
+                }
+
+                delegate: ItemDelegate {
+                    width: sessionCombo.width
+                    implicitHeight: 38
+                    highlighted: sessionCombo.highlightedIndex === index
+
+                    contentItem: Text {
+                        text: model.name
+                        color: parent.highlighted ? Theme.accent : Theme.fg
+                        font.family: Theme.fontFamily
+                        font.pixelSize: 13
+                        leftPadding: 12
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    background: Rectangle {
+                        radius: 8
+                        color: parent.highlighted ? Qt.rgba(1, 1, 1, 0.08) : "transparent"
+                    }
+                }
+
+                popup: Popup {
+                    y: sessionCombo.height + 6
+                    width: sessionCombo.width
+                    implicitHeight: Math.min(contentItem.implicitHeight + 8, 220)
+                    padding: 4
+
+                    contentItem: ListView {
+                        clip: true
+                        implicitHeight: contentHeight
+                        model: sessionCombo.popup.visible ? sessionCombo.delegateModel : null
+                        currentIndex: sessionCombo.highlightedIndex
+                        boundsBehavior: Flickable.StopAtBounds
+                    }
+
+                    background: Rectangle {
+                        radius: Theme.radius
+                        color: Qt.rgba(Theme.bg.r, Theme.bg.g, Theme.bg.b, 0.94)
+                        border.width: 1
+                        border.color: Theme.inputBorder
+                    }
+                }
 
                 background: Rectangle {
                     radius: Theme.radius
@@ -244,7 +344,7 @@ Item {
                     font.pixelSize: 13
                     verticalAlignment: Text.AlignVCenter
                     leftPadding: 10
-                    rightPadding: 10
+                    rightPadding: 30
                 }
             }
 
@@ -271,6 +371,7 @@ Item {
 
                 Layout.fillWidth: true
                 Layout.topMargin: 4
+                implicitHeight: 44
 
                 text: "Log In"
                 font.family: Theme.fontFamily

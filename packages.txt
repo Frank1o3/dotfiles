@@ -22,6 +22,7 @@ adw-gtk-theme
 papirus-icon-theme
 adwaita-cursors
 qt5-graphicaleffects
+qt5-quickcontrols2
 aur/catppuccin-cursors-mocha
 aur/wallust
 unzip
