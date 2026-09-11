@@ -171,7 +171,11 @@ Scope {
                             Layout.fillWidth: true
                             icon: "󰍃"
                             text: "Sign Out"
-                            onClicked: root.runAction("hyprctl dispatch exit", "Signing out", "Ending Hyprland session...")
+                            onClicked: root.runAction(
+                                "loginctl terminate-user \"$USER\"",
+                                "Signing out",
+                                "Ending Hyprland session..."
+                            )
                         }
                     }
                 }
