@@ -1,4 +1,3 @@
-```bash
 #!/bin/sh
 
 set -e
@@ -64,4 +63,3 @@ git config --global merge.tool vscode
 git config --global mergetool.vscode.cmd 'code --wait "$MERGED"'
 
 echo "Done."
-```
