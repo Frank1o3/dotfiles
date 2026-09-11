@@ -1,66 +1,67 @@
+```bash
 #!/bin/sh
 
 set -e
 
-echo "This script will install the packages needed to use my config."
-echo "It will also run the config installation script."
+REPO_URL="https://github.com/Frank1o3/dotfiles.git"
+TMP_DIR="$(mktemp -d)"
 
-for cmd in curl paru python3; do
-    command -v "$cmd" >/dev/null 2>&1 || {
+trap 'rm -rf "$TMP_DIR"' EXIT
+
+echo "Checking prerequisites..."
+
+for cmd in git paru; do
+    if ! command -v "$cmd" >/dev/null 2>&1; then
         echo "Error: $cmd is not installed."
         exit 1
-    }
+    fi
 done
 
-URL="https://raw.githubusercontent.com/Frank1o3/dotfiles/main/packages.txt"
-SCRIPT_URL="https://raw.githubusercontent.com/Frank1o3/dotfiles/main/update-config.py"
+echo "Cloning dotfiles repository..."
+
+git clone --depth 1 "$REPO_URL" "$TMP_DIR"
 
 echo "Installing packages..."
 
 paru -Syu --needed --noconfirm --skipreview $(
-    curl -fsSL "$URL" |
-    grep -v '^#' |
+    grep -v '^#' "$TMP_DIR/packages.txt" |
     grep -v '^$'
 )
 
-echo "Enable services..."
-systemctl --user enable gnome-keyring-daemon.service || true
-systemctl --user start gnome-keyring-daemon.service || true
+echo "Enabling services..."
 
-systemctl --user enable hyprpolkitagent.service || true
-systemctl --user start hyprpolkitagent.service || true
-
-echo "Cloning dotfiles repository..."
-
-REPO_URL="https://github.com/Frank1o3/dotfiles.git"
-TMP_DIR=$(mktemp -d)
-trap 'rm -rf "$TMP_DIR"' EXIT
-
-git clone --depth 1 "$REPO_URL" "$TMP_DIR"
+systemctl --user enable --now gnome-keyring-daemon.service || true
+systemctl --user enable --now hyprpolkitagent.service || true
 
 echo "Synchronizing configuration..."
+
 python3 "$TMP_DIR/sync-config.py"
 
 echo "Setting up SDDM theme..."
+
 chmod +x "$TMP_DIR/update-theme.sh"
 "$TMP_DIR/update-theme.sh"
 
-echo "Making utility script executable"
+echo "Making utility scripts executable..."
+
 chmod +x ~/.config/hypr/scripts/set-wallpaper.sh
 chmod +x ~/.config/hypr/scripts/emoticon.py
 chmod +x ~/.config/quickshell/scripts/sysmon.sh
 
-echo "Setting up default apps"
+echo "Setting up default applications..."
 
 xdg-mime default thunar.desktop inode/directory
 xdg-mime default thunar.desktop application/x-directory
+
 xdg-mime default code.desktop text/plain
 xdg-mime default code.desktop text/x-shellscript
 xdg-mime default code.desktop text/x-python
 
+echo "Configuring Git..."
+
 git config --global core.editor "code --wait"
 git config --global merge.tool vscode
-git config --global mergetool.vscode.cmd "code --wait $MERGED"
-
+git config --global mergetool.vscode.cmd 'code --wait "$MERGED"'
 
 echo "Done."
+```
