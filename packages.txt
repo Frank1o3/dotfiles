@@ -1,7 +1,6 @@
 fd
 git
 fish
-wofi
 kitty
 neovim
 tree-sitter-cli
@@ -24,7 +23,8 @@ adwaita-cursors
 qt5-graphicaleffects
 qt5-quickcontrols2
 aur/catppuccin-cursors-mocha
-aur/wallust
+rustup
+aur/wallust-git
 unzip
 nodejs
 npm
