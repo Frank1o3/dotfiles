@@ -1,40 +1,40 @@
 {
-  "wallpaper": "/home/franklin/wallpapers/dramatic-scenery-3840x2160-20802.jpg",
-  "background": "#361F1A",
-  "foreground": "#C4CACE",
-  "cursor": "#9F6A6F",
+  "wallpaper": "/home/franklin/wallpapers/anime.jpg",
+  "background": "#1F1F0C",
+  "foreground": "#A7A8B7",
+  "cursor": "#BC6E88",
   "colors": [
-"#583A34",
+"#525139",
 
-"#F75847",
+"#FF9142",
 
-"#994146",
+"#DA5A79",
 
-"#9A7683",
+"#964D79",
 
-"#60454F",
+"#968492",
 
-"#425D63",
+"#756E87",
 
-"#7C8A92",
+"#3C3E60",
 
-"#A2ABB0",
+"#797A90",
 
-"#71787B",
+"#545564",
 
-"#F75847",
+"#FF9142",
 
-"#994146",
+"#DA5A79",
 
-"#9A7683",
+"#964D79",
 
-"#60454F",
+"#968492",
 
-"#425D63",
+"#756E87",
 
-"#7C8A92",
+"#3C3E60",
 
-"#A2ABB0"
+"#797A90"
 
 ]
 }
