@@ -298,7 +298,7 @@ ColumnLayout {
                     model: [
                         { label: "CPU", value: SysMonitor.cpuUsage + "%", accent: SysMonitor.cpuUsage >= 85 ? "#f38ba8" : (SysMonitor.cpuUsage >= 60 ? "#f9e2af" : Colors.color(1)), icon: "󰍛" },
                         { label: "RAM", value: root.memPercent + "%", accent: root.memPercent >= 85 ? "#f38ba8" : Colors.color(4), icon: "󰘚" },
-                        { label: "Temp", value: root.cpuTemp + "°C", accent: root.cpuTemp >= 85 ? "#f38ba8" : (root.cpuTemp >= 70 ? "#f9e2af" : Colors.color(2)), icon: "󰔄" }
+                        { label: "Temp", value: root.cpuTemp, accent: root.cpuTemp >= 85 ? "#f38ba8" : (root.cpuTemp >= 70 ? "#f9e2af" : Colors.color(2)), icon: "󰔄" }
                     ]
 
                     delegate: Rectangle {
