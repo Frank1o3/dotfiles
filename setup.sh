@@ -32,10 +32,14 @@ echo "Enabling services..."
 systemctl --user enable --now gnome-keyring-daemon.service || true
 systemctl --user enable --now hyprpolkitagent.service || true
 
-echo "Synchronizing configuration..."
+echo
+echo "==> Synchronizing configuration..."
+echo
 
-python3 "$TMP_DIR/sync-config.py"
+AUTO=1 python3 -u "$TMP_DIR/sync-config.py"
 
+echo
+echo "==> Configuration synchronization complete."
 echo "Setting up SDDM theme..."
 
 chmod +x "$TMP_DIR/update-theme.sh"
