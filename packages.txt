@@ -24,7 +24,7 @@ qt5-graphicaleffects
 qt5-quickcontrols2
 aur/catppuccin-cursors-mocha
 rustup
-aur/wallust
+aur/wallust-git
 unzip
 nodejs
 npm
