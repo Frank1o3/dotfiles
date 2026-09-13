@@ -1,40 +1,40 @@
 {
   "wallpaper": "/home/franklin/wallpapers/romantic-night-sky-3840x2160-25549.jpg",
-  "background": "#0D000A",
-  "foreground": "#B4B2BE",
-  "cursor": "#9DA1D5",
+  "background": "#000103",
+  "foreground": "#FFADE8",
+  "cursor": "#C0ACE3",
   "colors": [
-"#241822",
+"#010104",
 
-"#C576BB",
+"#434655",
 
-"#8790EC",
-
-"#526FC9",
+"#5F6FA0",
 
 "#945C9C",
 
-"#707C8B",
+"#AA93D0",
 
-"#59556E",
+"#80ABDE",
 
-"#8B8999",
+"#F481B9",
 
-"#61606B",
+"#FFA2DC",
 
-"#C576BB",
+"#C95E94",
 
-"#8790EC",
+"#434655",
 
-"#526FC9",
+"#5F6FA0",
 
 "#945C9C",
 
-"#707C8B",
+"#AA93D0",
 
-"#59556E",
+"#80ABDE",
 
-"#8B8999"
+"#F481B9",
+
+"#F7C8E5"
 
 ]
 }
