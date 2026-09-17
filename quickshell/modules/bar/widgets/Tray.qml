@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
 
@@ -22,6 +23,30 @@ RowLayout {
 
             implicitWidth: 20
             implicitHeight: 20
+
+            // StatusNotifierItem tooltip text (e.g. RVPN's connected/disconnected
+            // status). The item only publishes this over D-Bus -- Quickshell, as
+            // the tray host, is responsible for actually displaying it on hover.
+            readonly property string tooltipText: {
+                const titleText = trayItem.modelData.tooltipTitle ?? "";
+                const descriptionText = trayItem.modelData.tooltipDescription ?? "";
+
+                if (titleText.length > 0 && descriptionText.length > 0)
+                    return titleText + "\n" + descriptionText;
+                if (titleText.length > 0)
+                    return titleText;
+                if (descriptionText.length > 0)
+                    return descriptionText;
+
+                // Fall back to the app name so items that never set a
+                // tooltip (unlike RVPN) still show something identifying.
+                return trayItem.modelData.title ?? "";
+            }
+
+            ToolTip.visible: hoverArea.containsMouse && trayItem.tooltipText.length > 0
+            ToolTip.text: trayItem.tooltipText
+            ToolTip.delay: 400
+            ToolTip.timeout: 5000
 
             Rectangle {
                 anchors.fill: parent
