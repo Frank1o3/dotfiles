@@ -18,18 +18,17 @@ return {
         event = "VeryLazy",
         opts = {
             ensure_installed = {
-                -- LSP servers (match the names used in plugins/lsp.lua)
-                "lua-language-server",  -- lua_ls
-                "json-lsp",             -- jsonls
-                "yaml-language-server", -- yamlls
-                "taplo",                -- taplo
-                "ruff",                 -- ruff
-                "ty",                   -- ty
-
-                -- DAP
+                "rust-analyzer",
+                "clangd",
+                "codelldb",
+                "clang-format",
+                "lua-language-server",
+                "json-lsp",
+                "yaml-language-server",
+                "taplo",
+                "ruff",
+                "ty",
                 "debugpy",
-
-                -- Formatters (consumed by conform.nvim)
                 "stylua",
                 "shfmt",
                 "prettier",
