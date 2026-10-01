@@ -6,13 +6,10 @@ return {
         "nvim-neotest/nvim-nio",
         "mason-org/mason.nvim",
     },
-
     config = function()
         local dap = require("dap")
         local dapui = require("dapui")
 
-        -- Prefer project-local (uv) venv, then Mason's debugpy venv,
-        -- then whatever python3 is on PATH.
         local function resolve_python()
             local cwd = vim.fn.getcwd()
             local venv_python = cwd .. "/.venv/bin/python"
@@ -29,8 +26,38 @@ return {
         end
 
         require("dap-python").setup(resolve_python())
-
         dapui.setup()
+
+        local mason_codelldb = vim.fn.stdpath("data") .. "/mason/bin/codelldb"
+        local codelldb = vim.fn.executable(mason_codelldb) == 1 and mason_codelldb or "codelldb"
+        local dap_port = "$" .. "{port}"
+
+        dap.adapters.codelldb = {
+            type = "server",
+            port = dap_port,
+            executable = {
+                command = codelldb,
+                args = { "--port", dap_port },
+            },
+        }
+
+        local cpp = {
+            name = "Launch C/C++ executable",
+            type = "codelldb",
+            request = "launch",
+            program = function()
+                local default = vim.fn.getcwd() .. "/build/"
+                return vim.fn.input("Executable: ", default, "file")
+            end,
+            cwd = vim.fn.getcwd(),
+            stopOnEntry = false,
+            runInTerminal = true,
+        }
+
+        dap.configurations.cpp = { cpp }
+        dap.configurations.c = { vim.deepcopy(cpp) }
+        dap.configurations.objcpp = { vim.deepcopy(cpp) }
+        dap.configurations.objc = { vim.deepcopy(cpp) }
 
         dap.listeners.after.event_initialized["dapui_config"] = function()
             dapui.open()
@@ -41,11 +68,5 @@ return {
         dap.listeners.before.event_exited["dapui_config"] = function()
             dapui.close()
         end
-
-        vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "Toggle breakpoint" })
-        vim.keymap.set("n", "<leader>dc", dap.continue, { desc = "Continue" })
-        vim.keymap.set("n", "<leader>do", dap.step_over, { desc = "Step over" })
-        vim.keymap.set("n", "<leader>di", dap.step_into, { desc = "Step into" })
-        vim.keymap.set("n", "<leader>dO", dap.step_out, { desc = "Step out" })
     end,
 }
