@@ -11,7 +11,21 @@ vim.api.nvim_create_autocmd("LspAttach", {
         vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
         vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
         vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-        vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+
+        local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(event.buf), ":t")
+        if filename == "Cargo.toml" then
+            local ok, crates = pcall(require, "crates")
+            if ok and crates.popup_available() then
+                vim.keymap.set("n", "K", function()
+                    crates.show_popup()
+                end, vim.tbl_extend("force", opts, { desc = "Crate information" }))
+            else
+                vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+            end
+        else
+            vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+        end
+
         vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
         vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
 
