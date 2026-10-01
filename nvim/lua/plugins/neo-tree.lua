@@ -12,13 +12,13 @@ return {
         { "<leader>ge", "<cmd>Neotree float git_status<cr>", desc = "Git status explorer" },
     },
     opts = {
-        close_if_last_window = true,
+        -- Never allow the explorer to turn an otherwise valid Neovim session
+        -- into a :quit/:qa condition when the last source buffer is deleted.
+        close_if_last_window = false,
         window = {
             width = 32,
         },
         filesystem = {
-            -- Oil already owns netrw / directory-as-buffer editing;
-            -- Neo-tree here is purely an explicit sidebar.
             hijack_netrw_behavior = "disabled",
             follow_current_file = { enabled = true },
             use_libuv_file_watcher = true,
