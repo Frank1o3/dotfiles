@@ -23,8 +23,14 @@ adwaita-cursors
 qt5-graphicaleffects
 qt5-quickcontrols2
 aur/catppuccin-cursors-mocha
-rustup
 aur/wallust-git
 unzip
 nodejs
 npm
+rustup
+cmake
+ninja
+clang
+lldb
+gdb
+graphviz
