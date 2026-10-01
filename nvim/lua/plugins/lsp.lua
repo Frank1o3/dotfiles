@@ -1,9 +1,21 @@
 return {
     "neovim/nvim-lspconfig",
-    dependencies = { "mason-org/mason.nvim" },
-
+    dependencies = {
+        "mason-org/mason.nvim",
+        "b0o/schemastore.nvim",
+    },
     config = function()
         local caps = require("blink.cmp").get_lsp_capabilities()
+
+        vim.lsp.config("clangd", {
+            capabilities = caps,
+            cmd = {
+                "clangd",
+                "--background-index",
+                "--clang-tidy",
+                "--header-insertion=iwyu",
+            },
+        })
 
         vim.lsp.config("ty", {
             cmd = { "ty", "server" },
@@ -15,7 +27,6 @@ return {
             capabilities = caps,
             init_options = {
                 settings = {
-                    -- Let Ty own hover/type info; Ruff just lints/fixes
                     lint = { enable = true },
                     organizeImports = true,
                 },
@@ -55,6 +66,15 @@ return {
             },
         })
 
-        vim.lsp.enable({ "ty", "ruff", "jsonls", "yamlls", "taplo", "lua_ls" })
+        -- Rust is intentionally omitted: rustaceanvim owns rust-analyzer.
+        vim.lsp.enable({
+            "clangd",
+            "ty",
+            "ruff",
+            "jsonls",
+            "yamlls",
+            "taplo",
+            "lua_ls",
+        })
     end,
 }
