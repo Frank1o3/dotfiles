@@ -3,7 +3,6 @@ local timers = {}
 
 local function stop_timer(bufnr)
     local timer = timers[bufnr]
-
     if timer then
         timer:stop()
         timer:close()
@@ -14,35 +13,20 @@ end
 local function has_syntax_error(bufnr)
     local ok, parser = pcall(vim.treesitter.get_parser, bufnr, "python")
     if not ok or not parser then
-        -- No parser available: don't block formatting, we simply can't verify
         return false
     end
-
     local tree = parser:parse()[1]
     if not tree then
         return false
     end
-
-    local root = tree:root()
-    return root:has_error()
+    return tree:root():has_error()
 end
 
 local function format_python(bufnr)
-    if not vim.api.nvim_buf_is_valid(bufnr) then
-        return
-    end
-
-    if vim.bo[bufnr].filetype ~= "python" then
-        return
-    end
-
-    if not vim.bo[bufnr].modified then
-        return
-    end
-
-    if has_syntax_error(bufnr) then
-        return
-    end
+    if not vim.api.nvim_buf_is_valid(bufnr) then return end
+    if vim.bo[bufnr].filetype ~= "python" then return end
+    if not vim.bo[bufnr].modified then return end
+    if has_syntax_error(bufnr) then return end
 
     require("conform").format({
         bufnr = bufnr,
@@ -53,7 +37,6 @@ end
 
 local function reset_timer(bufnr)
     stop_timer(bufnr)
-
     local timer = vim.uv.new_timer()
     timers[bufnr] = timer
     if timer ~= nil then
@@ -64,14 +47,9 @@ local function reset_timer(bufnr)
     end
 end
 
-local python_group = vim.api.nvim_create_augroup("PythonAutoFormat", {
-    clear = true,
-})
+local python_group = vim.api.nvim_create_augroup("PythonAutoFormat", { clear = true })
 
-vim.api.nvim_create_autocmd({
-    "TextChanged",
-    "TextChangedI",
-}, {
+vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI" }, {
     group = python_group,
     callback = function(args)
         if vim.bo[args.buf].filetype == "python" then
@@ -89,10 +67,26 @@ vim.api.nvim_create_autocmd("BufDelete", {
 
 vim.api.nvim_create_autocmd("BufEnter", {
     callback = function(args)
-        local file = vim.api.nvim_buf_get_name(args.buf)
+        local bufnr = args.buf
+        if not vim.api.nvim_buf_is_valid(bufnr) then return end
+
+        local ft = vim.bo[bufnr].filetype
+        local supported = {
+            rust = true,
+            c = true,
+            cpp = true,
+            objc = true,
+            objcpp = true,
+            cmake = true,
+            python = true,
+        }
+        if not supported[ft] then return end
+
+        local file = vim.api.nvim_buf_get_name(bufnr)
         if file == "" then return end
-        local root = vim.fs.root(file, { "pyproject.toml", "uv.lock", ".git" })
-        if root and root ~= vim.fn.getcwd() then
+
+        local root = require("config.project").root(file)
+        if root and root ~= vim.uv.cwd() then
             vim.fn.chdir(root)
         end
     end,
