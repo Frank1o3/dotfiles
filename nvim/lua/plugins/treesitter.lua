@@ -2,23 +2,23 @@ return {
     "nvim-treesitter/nvim-treesitter",
     branch = "main",
     build = ":TSUpdate",
-
     config = function()
         require("nvim-treesitter").setup()
 
         require("nvim-treesitter").install({
-            "python", "lua", "c", "cpp", "rust",
+            "rust", "c", "cpp", "cmake", "toml",
+            "python", "lua",
             "javascript", "typescript", "tsx",
-            "json", "yaml", "toml", "markdown", "markdown_inline",
+            "json", "yaml", "markdown", "markdown_inline",
             "bash", "query", "vim", "vimdoc",
         })
 
-        -- Highlighting is now enabled per-buffer via autocmd, not a config table
         vim.api.nvim_create_autocmd("FileType", {
             pattern = {
-                "python", "lua", "c", "cpp", "rust",
+                "rust", "c", "cpp", "objc", "objcpp", "cmake", "toml",
+                "python", "lua",
                 "javascript", "typescript", "tsx",
-                "json", "yaml", "toml", "markdown",
+                "json", "yaml", "markdown",
                 "bash", "query", "vim", "help",
             },
             callback = function()
