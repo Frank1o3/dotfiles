@@ -49,9 +49,15 @@ function M.run(args, opts)
     end
 end
 
+local function args_or_default(default_args, args)
+    if args and #args > 0 then
+        return args
+    end
+    return vim.deepcopy(default_args)
+end
+
 function M.add(dev)
-    local root = current_root()
-    if not root then
+    if not current_root() then
         return
     end
 
@@ -72,8 +78,7 @@ function M.add(dev)
 end
 
 function M.remove()
-    local root = current_root()
-    if not root then
+    if not current_root() then
         return
     end
 
@@ -86,8 +91,7 @@ function M.remove()
 end
 
 function M.search()
-    local root = current_root()
-    if not root then
+    if not current_root() then
         return
     end
 
@@ -101,11 +105,11 @@ end
 
 function M.menu()
     local actions = {
-        { label = "check", args = { "check", "--workspace" } },
-        { label = "build (workspace)", args = { "build", "--workspace" } },
-        { label = "build --release", args = { "build", "--workspace", "--release" } },
-        { label = "test (workspace)", args = { "test", "--workspace" } },
-        { label = "clippy (workspace)", args = { "clippy", "--workspace", "--all-targets", "--all-features" } },
+        { label = "check --workspace", args = { "check", "--workspace" } },
+        { label = "build --workspace", args = { "build", "--workspace" } },
+        { label = "build --workspace --release", args = { "build", "--workspace", "--release" } },
+        { label = "test --workspace", args = { "test", "--workspace" } },
+        { label = "clippy --workspace --all-targets --all-features", args = { "clippy", "--workspace", "--all-targets", "--all-features" } },
         { label = "fmt --all", args = { "fmt", "--all" } },
         { label = "run", args = { "run" } },
         { label = "run --release", args = { "run", "--release" } },
@@ -128,21 +132,31 @@ function M.menu()
     end)
 end
 
+local function register(name, default_args)
+    vim.api.nvim_create_user_command(name, function(cmd)
+        M.run(args_or_default(default_args, vim.split(cmd.args, "%s+", { trimempty = true })))
+    end, {
+        nargs = "*",
+        complete = "file",
+    })
+end
+
 vim.api.nvim_create_user_command("Cargo", M.menu, {})
 vim.api.nvim_create_user_command("CargoAdd", function() M.add(false) end, {})
 vim.api.nvim_create_user_command("CargoAddDev", function() M.add(true) end, {})
 vim.api.nvim_create_user_command("CargoRemove", M.remove, {})
 vim.api.nvim_create_user_command("CargoSearch", M.search, {})
-vim.api.nvim_create_user_command("CargoCheck", function() M.run({ "check", "--workspace" }) end, {})
-vim.api.nvim_create_user_command("CargoBuild", function() M.run({ "build", "--workspace" }) end, {})
-vim.api.nvim_create_user_command("CargoBuildRelease", function() M.run({ "build", "--workspace", "--release" }) end, {})
-vim.api.nvim_create_user_command("CargoRun", function() M.run({ "run" }) end, {})
-vim.api.nvim_create_user_command("CargoRunRelease", function() M.run({ "run", "--release" }) end, {})
-vim.api.nvim_create_user_command("CargoTest", function() M.run({ "test", "--workspace" }) end, {})
-vim.api.nvim_create_user_command("CargoClippy", function() M.run({ "clippy", "--workspace", "--all-targets", "--all-features" }) end, {})
-vim.api.nvim_create_user_command("CargoFmt", function() M.run({ "fmt", "--all" }) end, {})
-vim.api.nvim_create_user_command("CargoDoc", function() M.run({ "doc", "--workspace", "--no-deps" }) end, {})
-vim.api.nvim_create_user_command("CargoTree", function() M.run({ "tree", "--workspace" }) end, {})
-vim.api.nvim_create_user_command("CargoUpdate", function() M.run({ "update" }) end, {})
+
+register("CargoCheck", { "check", "--workspace" })
+register("CargoBuild", { "build", "--workspace" })
+register("CargoBuildRelease", { "build", "--workspace", "--release" })
+register("CargoRun", { "run" })
+register("CargoRunRelease", { "run", "--release" })
+register("CargoTest", { "test", "--workspace" })
+register("CargoClippy", { "clippy", "--workspace", "--all-targets", "--all-features" })
+register("CargoFmt", { "fmt", "--all" })
+register("CargoDoc", { "doc", "--workspace", "--no-deps" })
+register("CargoTree", { "tree", "--workspace" })
+register("CargoUpdate", { "update" })
 
 return M
