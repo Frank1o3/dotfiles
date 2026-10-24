@@ -16,9 +16,9 @@ Item {
     Rectangle {
         anchors.fill: parent
         radius: width / 2
-        color: mouse.containsMouse ? Qt.rgba(1, 1, 1, 0.12) : Qt.rgba(1, 1, 1, 0.05)
+        color: mouse.containsMouse ? Qt.rgba(1, 1, 1, 0.16) : Qt.rgba(1, 1, 1, 0.06)
         border.width: 1
-        border.color: Qt.rgba(1, 1, 1, 0.10)
+        border.color: mouse.containsMouse ? Qt.rgba(1, 1, 1, 0.30) : Qt.rgba(1, 1, 1, 0.12)
 
         Behavior on color {
             ColorAnimation {

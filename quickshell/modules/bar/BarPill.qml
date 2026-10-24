@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.config
+import qs.config.components
 
 Item {
     id: root
@@ -11,17 +12,16 @@ Item {
     implicitWidth: row.implicitWidth + Appearance.spacing * 4
     implicitHeight: Appearance.barHeight - 12
 
-    Rectangle {
+    GlassCard {
         anchors.fill: parent
-        radius: Appearance.radius
-        color: Colors.background
-        opacity: root.hovered ? Appearance.hoverOpacity + 0.15 : Appearance.glassOpacity
-        border.width: 1
-        border.color: Colors.color(1)
-
-        Behavior on opacity {
-            NumberAnimation { duration: Appearance.animFast }
-        }
+        cardRadius: Math.round(root.height / 2)
+        surfaceOpacity: root.hovered ? Math.min(0.95, Appearance.glassOpacity + 0.12) : Appearance.glassOpacity
+        borderColor: root.hovered ? Qt.rgba(1, 1, 1, 0.35) : Qt.rgba(1, 1, 1, 0.18)
+        borderWidth: 1
+        shadowRadius: Appearance.shadowRadiusSmall
+        shadowOffset: Appearance.shadowOffsetSmall
+        showHighlight: true
+        showTint: true
     }
 
     RowLayout {

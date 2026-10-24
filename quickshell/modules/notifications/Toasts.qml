@@ -74,7 +74,7 @@ Scope {
                 ? 2
                 : 1
 
-            opacity: !entered ? 0 : (closing ? 0 : 0.97)
+            opacity: !entered ? 0 : (closing ? 0 : Appearance.panelOpacity)
             scale: !entered ? 0.9 : (closing ? 0.85 : 1.0)
 
             layer.enabled: true
@@ -177,6 +177,17 @@ Scope {
                         color: Qt.rgba(1, 1, 1, 0)
                     }
                 }
+            }
+
+            // Top rim specular bead
+            Rectangle {
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.margins: 1
+                height: 1
+                radius: parent.radius
+                color: Qt.rgba(1, 1, 1, Math.min(1.0, Appearance.glassHighlightOpacity * 2.0))
             }
 
             ColumnLayout {

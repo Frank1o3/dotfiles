@@ -4,11 +4,10 @@
   "foreground": "{{foreground}}",
   "cursor": "{{cursor}}",
   "colors": [
-{% for c in colors -%}
-{% if loop.index <= 16 -%}
-    "{{ c }}"{% if loop.index < 16 %},{% endif %}
-
-{% endif -%}
-{% endfor -%}
+  {% for c in colors -%}
+  {% if loop.index <= 16 -%}
+  "{{ c }}"{% if loop.index < 16 %},{% endif %}
+  {% endif -%}
+  {% endfor -%}
   ]
 }

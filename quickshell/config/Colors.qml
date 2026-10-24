@@ -1,9 +1,14 @@
 pragma Singleton
+import QtQuick
 import Quickshell
 import Quickshell.Io
 
 Singleton {
     id: root
+
+    readonly property color glassRim: Qt.rgba(1, 1, 1, 0.25)
+    readonly property color glassHighlight: Qt.rgba(1, 1, 1, 0.38)
+    readonly property color glassInnerBorder: Qt.rgba(1, 1, 1, 0.12)
 
     readonly property string wallpaper: adapter.wallpaper
     readonly property string background: adapter.background

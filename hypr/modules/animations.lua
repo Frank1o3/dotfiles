@@ -26,6 +26,22 @@ type = "bezier",
 points = { {0, 0}, {1, 1} }
 })
 
+-- Fluid Glass curves
+hl.curve("fluidGlass", {
+type = "bezier",
+points = { {0.25, 0.8}, {0.25, 1.0} }
+})
+
+hl.curve("glassReveal", {
+type = "bezier",
+points = { {0.16, 1.0}, {0.30, 1.0} }
+})
+
+hl.curve("glassFade", {
+type = "bezier",
+points = { {0.40, 0.0}, {0.20, 1.0} }
+})
+
 -- Soft, premium spring
 hl.curve("floaty", {
 type = "spring",
@@ -87,8 +103,8 @@ style = "popin 85%"
 hl.animation({
 leaf = "windowsOut",
 enabled = true,
-speed = 6,
-bezier = "snappy",
+speed = 5,
+bezier = "glassFade",
 style = "popin 85%"
 })
 
@@ -136,8 +152,8 @@ spring = "floaty"
 hl.animation({
 leaf = "layersIn",
 enabled = true,
-speed = 6,
-spring = "floaty",
+speed = 5,
+bezier = "glassReveal",
 style = "fade"
 })
 
@@ -146,7 +162,7 @@ hl.animation({
 leaf = "layersOut",
 enabled = true,
 speed = 4,
-bezier = "snappy",
+bezier = "glassFade",
 style = "fade"
 })
 

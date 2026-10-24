@@ -191,6 +191,36 @@ hl.window_rule({
 	tag = "+game",
 })
 
+-- roblox-runtime
+hl.window_rule({
+	name = "roblox-runtime",
+
+	match = {
+		title = "roblox-runtime",
+	},
+
+	fullscreen = false,
+
+	-- Apply the shared game profile
+	float = game_profile.float,
+	persistent_size = game_profile.persistent_size,
+	size = game_profile.size,
+
+	no_anim = game_profile.no_anim,
+	no_blur = game_profile.no_blur,
+	no_dim = game_profile.no_dim,
+	no_vrr = game_profile.no_vrr,
+	immediate = game_profile.immediate,
+
+	idle_inhibit = game_profile.idle_inhibit,
+	workspace = game_profile.workspace,
+
+	border_size = game_profile.border_size,
+	rounding = game_profile.rounding,
+
+	tag = "+game",
+})
+
 -- Minecraft
 hl.window_rule({
 	name = "minecraft",
@@ -284,3 +314,26 @@ hl.window_rule({
 	no_dim = false,
 	idle_inhibit = "always",
 })
+
+-- =========================================================
+-- FLUID GLASS WINDOW RULES
+-- =========================================================
+
+hl.window_rule({
+	name = "glass-terminals",
+	match = { class = "^(kitty|Alacritty|foot)$" },
+	opacity = { 0.85, 0.78 },
+})
+
+hl.window_rule({
+	name = "glass-file-manager",
+	match = { class = "^(thunar|nemo|org.gnome.Nautilus)$" },
+	opacity = { 0.92, 0.85 },
+})
+
+hl.window_rule({
+	name = "opaque-media-browsers",
+	match = { class = "^(firefox|chromium|brave-browser|Opera|mpv|vlc)$" },
+	opacity = { 1.0, 1.0 },
+})
+

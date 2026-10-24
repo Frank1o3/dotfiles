@@ -103,8 +103,22 @@ Item {
 
         gradient: Gradient {
             GradientStop { position: 0.0; color: Qt.rgba(1, 1, 1, Appearance.glassHighlightOpacity) }
+            GradientStop { position: 0.35; color: Qt.rgba(1, 1, 1, Appearance.glassHighlightOpacity * 0.4) }
             GradientStop { position: 1.0; color: Qt.rgba(1, 1, 1, 0) }
         }
+    }
+
+    // Top rim specular bead (sharp crisp 1px light catch on upper glass curve)
+    Rectangle {
+        visible: root.showHighlight
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.margins: root.borderWidth
+        height: 1
+        topLeftRadius: root.topLeftRadius
+        topRightRadius: root.topRightRadius
+        color: Qt.rgba(1, 1, 1, Math.min(1.0, Appearance.glassHighlightOpacity * 2.0))
     }
 
     // Subtle inner border for extra edge definition on top of the glass.

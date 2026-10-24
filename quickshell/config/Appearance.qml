@@ -17,12 +17,12 @@ Singleton {
     readonly property string fontFamily: "SpaceMono Nerd Font"
     readonly property int fontSize: 12
 
-    readonly property real glassOpacity: 0.62
-    readonly property real hoverOpacity: 0.22
-    readonly property real panelOpacity: 0.82
+    readonly property real glassOpacity: 0.70
+    readonly property real hoverOpacity: 0.25
+    readonly property real panelOpacity: 0.85
 
-    readonly property real panelSurfaceOpacity: 0.14
-    readonly property real panelBorderOpacity: 0.18
+    readonly property real panelSurfaceOpacity: 0.16
+    readonly property real panelBorderOpacity: 0.22
     readonly property real accentStrength: 0.92
 
     readonly property int animFast: 150
@@ -35,8 +35,8 @@ Singleton {
     // A tighter "contact" shadow anchors them to what's behind them.
     // Using both together (rather than one big shadow) is what reads
     // as "glass" instead of "flat card with a blur."
-    readonly property string shadowColorAmbient: "#55000000"
-    readonly property string shadowColorContact: "#99000000"
+    readonly property string shadowColorAmbient: "#44000000"
+    readonly property string shadowColorContact: "#88000000"
 
     readonly property int shadowRadiusSmall: 22   // widgets, toasts, buttons
     readonly property int shadowRadiusMedium: 30  // bar pill, launcher, power menu
@@ -47,12 +47,12 @@ Singleton {
     readonly property int shadowOffsetLarge: 10
 
     // Top-edge highlight streak, mimicking light catching glass.
-    readonly property real glassHighlightOpacity: 0.09
-    readonly property real glassHighlightHeightRatio: 0.42
+    readonly property real glassHighlightOpacity: 0.18
+    readonly property real glassHighlightHeightRatio: 0.40
 
     // Faint accent-tinted layer stacked under the highlight for
     // a bit of color depth instead of pure neutral glass.
-    readonly property real glassTintOpacity: 0.035
+    readonly property real glassTintOpacity: 0.045
 
-    readonly property real glassInnerBorderOpacity: 0.07
+    readonly property real glassInnerBorderOpacity: 0.12
 }
