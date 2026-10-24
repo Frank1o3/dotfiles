@@ -89,22 +89,37 @@ Scope {
                     }
                 }
 
-                // Center pill: Clock
+                // Center pill: Media + Clock
                 GlassCard {
                     id: centerPill
                     anchors.centerIn: parent
                     height: parent.height - 12
-                    width: Math.max(clockContent.implicitWidth + 28, 120)
+                    width: centerRow.implicitWidth + 28
                     cardRadius: Math.round(height / 2)
                     surfaceOpacity: Appearance.glassOpacity
                     shadowRadius: Appearance.shadowRadiusSmall
                     shadowOffset: Appearance.shadowOffsetSmall
 
-                    Clock {
-                        id: clockContent
+                    RowLayout {
+                        id: centerRow
                         anchors.centerIn: parent
-                        width: parent.width - 12
-                        horizontalAlignment: Text.AlignHCenter
+                        spacing: 12
+
+                        MediaPill {
+                            id: mediaWidget
+                        }
+
+                        Rectangle {
+                            visible: mediaWidget.visible
+                            Layout.preferredWidth: 1
+                            Layout.preferredHeight: 14
+                            color: Qt.rgba(1, 1, 1, 0.20)
+                        }
+
+                        Clock {
+                            id: clockContent
+                            Layout.alignment: Qt.AlignVCenter
+                        }
                     }
                 }
 
@@ -124,10 +139,10 @@ Scope {
                     RowLayout {
                         id: rightContent
                         anchors.centerIn: parent
-                        spacing: Appearance.spacing
+                        spacing: 10
 
-                        Igpu {}
-                        Network {}
+                        Cpu {}
+                        Memory {}
 
                         Rectangle {
                             Layout.preferredWidth: 1
@@ -138,6 +153,7 @@ Scope {
                         Volume {}
                         Backlight {}
                         Battery {}
+                        Network {}
 
                         Rectangle {
                             Layout.preferredWidth: 1
@@ -158,9 +174,10 @@ Scope {
             Item {
                 id: dropdownHost
                 anchors.top: pillRow.bottom
+                anchors.topMargin: 8
                 anchors.right: parent.right
-                anchors.rightMargin: 10
-                width: 420
+                anchors.rightMargin: 12
+                width: 440
                 height: win.panelOpen ? bg.implicitHeight : 0
                 clip: true
 
@@ -177,10 +194,7 @@ Scope {
                     implicitHeight: content.implicitHeight + 36
                     height: implicitHeight
 
-                    topLeftRadius: 0
-                    topRightRadius: 0
-                    bottomLeftRadius: Appearance.radiusLarge
-                    bottomRightRadius: Appearance.radiusLarge
+                    cardRadius: Appearance.radiusLarge
 
                     surfaceOpacity: Appearance.panelOpacity
                     shadowRadius: Appearance.shadowRadiusLarge

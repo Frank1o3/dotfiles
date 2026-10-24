@@ -14,6 +14,13 @@ Scope {
     property bool open: false
     property bool mapped: false
     property var wallpapers: []
+    property string searchQuery: ""
+
+    readonly property var filteredWallpapers: {
+        if (!searchQuery.trim()) return wallpapers;
+        const q = searchQuery.toLowerCase().trim();
+        return wallpapers.filter(w => (w.name || "").toLowerCase().includes(q));
+    }
 
     function show() {
         listProc.running = true;
@@ -36,15 +43,9 @@ Scope {
 
     IpcHandler {
         target: "wallpaper"
-        function toggle(): void {
-            root.toggle();
-        }
-        function open(): void {
-            root.show();
-        }
-        function close(): void {
-            root.hide();
-        }
+        function toggle(): void { root.toggle(); }
+        function open(): void { root.show(); }
+        function close(): void { root.hide(); }
     }
 
     Process {
@@ -63,9 +64,7 @@ Scope {
 
     Process {
         id: applyProc
-
         property string path: ""
-
         command: ["sh", Quickshell.env("HOME") + "/.config/hypr/scripts/set-wallpaper.sh", path]
     }
 
@@ -95,11 +94,7 @@ Scope {
             onCleared: root.hide()
         }
 
-        onVisibleChanged: if (visible)
-            searchNothing()
-        function searchNothing() {
-        } // placeholder for future search field focus
-
+        // Dimmed backdrop click to dismiss
         MouseArea {
             anchors.fill: parent
             onClicked: root.hide()
@@ -107,16 +102,16 @@ Scope {
             GlassCard {
                 id: card
                 anchors.centerIn: parent
-                width: Math.min(parent.width * 0.7, 900)
-                height: Math.min(parent.height * 0.75, 640)
+                width: Math.min(parent.width * 0.78, 960)
+                height: Math.min(parent.height * 0.80, 680)
                 cardRadius: Appearance.radiusLarge
                 surfaceOpacity: Appearance.panelOpacity
-                shadowRadius: Appearance.shadowRadiusMedium
-                shadowOffset: Appearance.shadowOffsetMedium
+                shadowRadius: Appearance.shadowRadiusLarge
+                shadowOffset: Appearance.shadowOffsetLarge
 
                 opacity: root.open ? 1 : 0
                 transformOrigin: Item.Center
-                scale: root.open ? 1 : 0.9
+                scale: root.open ? 1 : 0.92
 
                 Behavior on scale {
                     NumberAnimation {
@@ -126,61 +121,127 @@ Scope {
                     }
                 }
                 Behavior on opacity {
-                    NumberAnimation {
-                        duration: 200
-                    }
+                    NumberAnimation { duration: 200 }
                 }
 
                 MouseArea {
                     anchors.fill: parent
-                } // eat clicks so the card doesn't close itself
+                }
 
                 ColumnLayout {
                     anchors.fill: parent
-                    anchors.margins: 20
-                    spacing: 14
+                    anchors.margins: 22
+                    spacing: 16
 
+                    // Header row
                     RowLayout {
                         Layout.fillWidth: true
+                        spacing: 14
+
                         Text {
-                            text: "🖼  Choose Wallpaper"
+                            text: "󰸉  Wallpaper Gallery"
                             color: Colors.foreground
                             font.family: Appearance.fontFamily
                             font.pixelSize: 18
-                            font.bold: true
-                            Layout.fillWidth: true
                             font.weight: Font.Bold
                         }
-                        Button {
-                            text: "✕"
-                            flat: true
-                            onClicked: root.hide()
+
+                        Item { Layout.fillWidth: true }
+
+                        // Search box
+                        Rectangle {
+                            Layout.preferredWidth: 220
+                            Layout.preferredHeight: 34
+                            radius: 17
+                            color: Qt.rgba(1, 1, 1, 0.08)
+                            border.width: 1
+                            border.color: searchInput.activeFocus ? Colors.color(4) : Qt.rgba(1, 1, 1, 0.12)
+
+                            RowLayout {
+                                anchors.fill: parent
+                                anchors.leftMargin: 12
+                                anchors.rightMargin: 12
+                                spacing: 8
+
+                                Text {
+                                    text: "󰍉"
+                                    color: Colors.color(7)
+                                    font.family: Appearance.iconFont
+                                    font.pixelSize: 13
+                                }
+
+                                TextInput {
+                                    id: searchInput
+                                    Layout.fillWidth: true
+                                    font.family: Appearance.fontFamily
+                                    font.pixelSize: 12
+                                    color: Colors.foreground
+                                    clip: true
+                                    onTextChanged: root.searchQuery = text
+
+                                    Text {
+                                        visible: !searchInput.text && !searchInput.activeFocus
+                                        text: "Filter wallpapers..."
+                                        color: Qt.rgba(1, 1, 1, 0.40)
+                                        font.family: Appearance.fontFamily
+                                        font.pixelSize: 12
+                                    }
+                                }
+                            }
+                        }
+
+                        // Close button
+                        Rectangle {
+                            Layout.preferredWidth: 32
+                            Layout.preferredHeight: 32
+                            radius: 16
+                            color: closeMouse.containsMouse ? Qt.rgba(1, 1, 1, 0.16) : Qt.rgba(1, 1, 1, 0.08)
+                            border.width: 1
+                            border.color: Qt.rgba(1, 1, 1, 0.14)
+
+                            Text {
+                                anchors.centerIn: parent
+                                text: "✕"
+                                color: Colors.foreground
+                                font.family: Appearance.fontFamily
+                                font.pixelSize: 13
+                                font.bold: true
+                            }
+
+                            MouseArea {
+                                id: closeMouse
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: root.hide()
+                            }
                         }
                     }
 
+                    // Grid
                     GridView {
                         id: grid
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         clip: true
-                        cellWidth: 210
-                        cellHeight: 130
-                        model: root.wallpapers
+                        cellWidth: 280
+                        cellHeight: 180
+                        model: root.filteredWallpapers
 
                         delegate: Item {
                             id: cell
                             required property var modelData
-                            width: grid.cellWidth - 10
-                            height: grid.cellHeight - 10
+                            width: grid.cellWidth - 14
+                            height: grid.cellHeight - 14
                             property bool hovered: hoverArea.containsMouse
 
                             Rectangle {
                                 anchors.fill: parent
-                                radius: 12
+                                radius: 14
                                 color: "transparent"
                                 clip: true
                                 border.width: cell.hovered ? 2 : 1
-                                border.color: cell.hovered ? Colors.color(4) : Colors.color(8)
+                                border.color: cell.hovered ? Colors.color(4) : Qt.rgba(1, 1, 1, 0.12)
                                 scale: cell.hovered ? 1.03 : 1.0
 
                                 Behavior on scale {
@@ -190,36 +251,40 @@ Scope {
                                     }
                                 }
                                 Behavior on border.color {
-                                    ColorAnimation {
-                                        duration: Appearance.animFast
-                                    }
+                                    ColorAnimation { duration: Appearance.animFast }
                                 }
 
                                 Image {
                                     anchors.fill: parent
-                                    anchors.margins: 2
                                     source: "file://" + cell.modelData.path
                                     fillMode: Image.PreserveAspectCrop
                                     asynchronous: true
                                     smooth: true
                                 }
 
+                                // Floating frosted glass label pill
                                 Rectangle {
+                                    anchors.horizontalCenter: parent.horizontalCenter
                                     anchors.bottom: parent.bottom
-                                    anchors.left: parent.left
-                                    anchors.right: parent.right
+                                    anchors.bottomMargin: 8
+                                    width: Math.min(parent.width - 24, nameText.implicitWidth + 24)
                                     height: 26
+                                    radius: 13
                                     color: Qt.rgba(0, 0, 0, 0.55)
+                                    border.width: 1
+                                    border.color: Qt.rgba(1, 1, 1, 0.18)
+
                                     Text {
+                                        id: nameText
                                         anchors.centerIn: parent
                                         text: cell.modelData.name
                                         color: "#ffffff"
                                         font.family: Appearance.fontFamily
                                         font.pixelSize: 11
+                                        font.weight: Font.DemiBold
                                         elide: Text.ElideRight
-                                        width: parent.width - 12
+                                        width: parent.width - 16
                                         horizontalAlignment: Text.AlignHCenter
-                                        font.weight: Font.Bold
                                     }
                                 }
                             }

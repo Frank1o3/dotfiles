@@ -67,8 +67,8 @@ Item {
             visible: root.icon.length > 0
             text: root.icon
             color: root.accent ? Colors.background : Colors.foreground
-            font.family: Appearance.fontFamily
-            font.pixelSize: Appearance.fontSize
+            font.family: Appearance.iconFont
+            font.pixelSize: Appearance.fontSize + 1
             font.weight: Font.Bold
         }
         Text {
@@ -76,9 +76,8 @@ Item {
             text: root.text
             color: root.accent ? Colors.background : Colors.foreground
             font.family: Appearance.fontFamily
-            font.pixelSize: Appearance.fontSize
-            font.bold: root.accent
-            font.weight: Font.Bold
+            font.pixelSize: Appearance.fontSizeSmall + 1
+            font.weight: Font.DemiBold
         }
     }
 

@@ -43,12 +43,12 @@ Item {
         color: Appearance.shadowColorAmbient
     }
 
-    // Base dark backing at low opacity to ensure text legibility while letting blur bleed through
+    // Base dark backing at dynamic opacity to ensure text legibility while letting blur bleed through
     Rectangle {
         id: bgDarkBacking
         anchors.fill: parent
-        color: "#0a0a12"
-        opacity: 0.35
+        color: "#0c0d16"
+        opacity: root.surfaceOpacity
 
         topLeftRadius: root.topLeftRadius
         topRightRadius: root.topRightRadius
@@ -60,7 +60,7 @@ Item {
     Rectangle {
         id: bgSheen
         anchors.fill: parent
-        color: Qt.rgba(1, 1, 1, 0.08)
+        color: Qt.rgba(1, 1, 1, 0.05)
 
         topLeftRadius: root.topLeftRadius
         topRightRadius: root.topRightRadius

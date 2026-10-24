@@ -430,25 +430,43 @@ ColumnLayout {
                 Layout.fillWidth: true
                 spacing: 12
 
-                // Album art placeholder (could be extended later)
+                // Album art
                 Rectangle {
-                    width: 60
-                    height: 60
-                    radius: 8
-                    color: Qt.rgba(1,1,1,0.06)
-                    visible: false
+                    width: 64
+                    height: 64
+                    radius: 12
+                    color: Qt.rgba(1, 1, 1, 0.08)
+                    border.width: 1
+                    border.color: Qt.rgba(1, 1, 1, 0.12)
+                    clip: true
+
+                    Image {
+                        anchors.fill: parent
+                        source: mediaCol.player?.trackArtUrl ?? ""
+                        fillMode: Image.PreserveAspectCrop
+                        visible: status === Image.Ready
+                    }
+
+                    Text {
+                        anchors.centerIn: parent
+                        text: "󰎈"
+                        color: Colors.color(4)
+                        font.family: Appearance.iconFont
+                        font.pixelSize: 24
+                        visible: parent.children[0].status !== Image.Ready
+                    }
                 }
 
                 ColumnLayout {
                     Layout.fillWidth: true
-                    spacing: 4
+                    spacing: 3
 
                     Text {
                         text: mediaCol.player ? mediaCol.player.trackTitle : ""
                         color: Colors.foreground
                         font.family: Appearance.fontFamily
                         font.pixelSize: 15
-                        font.bold: true
+                        font.weight: Font.DemiBold
                         Layout.fillWidth: true
                         elide: Text.ElideRight
                     }
@@ -463,8 +481,9 @@ ColumnLayout {
                     }
 
                     RowLayout {
+                        Layout.fillWidth: true
+                        Layout.topMargin: 4
                         spacing: 8
-                        Layout.topMargin: 6
 
                         GlassButton {
                             icon: "󰒮"
@@ -478,6 +497,16 @@ ColumnLayout {
                         GlassButton {
                             icon: "󰒭"
                             onClicked: mediaCol.player?.next()
+                        }
+
+                        Item { Layout.fillWidth: true }
+
+                        CavaVisualizer {
+                            barCount: 8
+                            maxHeight: 18
+                            barWidth: 3
+                            barColor: Colors.color(4)
+                            Layout.alignment: Qt.AlignVCenter
                         }
                     }
                 }

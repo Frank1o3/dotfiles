@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 import qs.config
 
 Item {
@@ -11,17 +12,18 @@ Item {
     property bool interactive: true
     signal clicked
 
-    implicitHeight: 60
+    implicitHeight: 56
     readonly property color accentColor: Colors.color(4)
 
+    // Glass backdrop
     Rectangle {
         anchors.fill: parent
         radius: Appearance.cardRadius
         color: root.active
-            ? Qt.rgba(root.accentColor.r, root.accentColor.g, root.accentColor.b, 0.20)
-            : Qt.rgba(1, 1, 1, (mouse.containsMouse && root.interactive) ? 0.08 : 0.045)
+            ? Qt.rgba(root.accentColor.r, root.accentColor.g, root.accentColor.b, 0.22)
+            : Qt.rgba(1, 1, 1, (mouse.containsMouse && root.interactive) ? 0.09 : 0.05)
         border.width: 1
-        border.color: root.active ? root.accentColor : Qt.rgba(1, 1, 1, 0.07)
+        border.color: root.active ? Qt.rgba(root.accentColor.r, root.accentColor.g, root.accentColor.b, 0.5) : Qt.rgba(1, 1, 1, 0.08)
 
         Behavior on color {
             ColorAnimation { duration: Appearance.animFast }
@@ -31,31 +33,53 @@ Item {
         }
     }
 
-    Column {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.leftMargin: 14
-        anchors.rightMargin: 14
-        spacing: 2
+    RowLayout {
+        anchors.fill: parent
+        anchors.leftMargin: 12
+        anchors.rightMargin: 12
+        spacing: 10
 
-        Text {
-            text: root.icon + "  " + root.label
-            color: root.active ? root.accentColor : Colors.foreground
-            font.family: Appearance.fontFamily
-            font.pixelSize: Appearance.fontSize
-            font.bold: true
-            elide: Text.ElideRight
-            width: parent.width
+        // Round icon container
+        Rectangle {
+            Layout.preferredWidth: 34
+            Layout.preferredHeight: 34
+            radius: 17
+            color: root.active ? root.accentColor : Qt.rgba(1, 1, 1, 0.10)
+
+            Text {
+                anchors.centerIn: parent
+                text: root.icon
+                color: root.active ? Colors.background : Colors.foreground
+                font.family: Appearance.iconFont
+                font.pixelSize: 15
+            }
         }
-        Text {
-            visible: root.subLabel.length > 0
-            text: root.subLabel
-            color: Colors.color(7)
-            font.family: Appearance.fontFamily
-            font.pixelSize: 10
-            elide: Text.ElideRight
-            width: parent.width
+
+        // Title and Subtitle
+        ColumnLayout {
+            Layout.fillWidth: true
+            spacing: 2
+
+            Text {
+                text: root.label
+                color: root.active ? Colors.foreground : Colors.textMain
+                font.family: Appearance.fontFamily
+                font.pixelSize: Appearance.fontSizeSmall + 1
+                font.weight: Font.DemiBold
+                elide: Text.ElideRight
+                Layout.fillWidth: true
+            }
+
+            Text {
+                visible: root.subLabel.length > 0
+                text: root.subLabel
+                color: root.active ? root.accentColor : Colors.color(7)
+                font.family: Appearance.fontFamily
+                font.pixelSize: 11
+                elide: Text.ElideRight
+                Layout.fillWidth: true
+                opacity: 0.85
+            }
         }
     }
 

@@ -30,3 +30,6 @@ nodejs
 npm
 python
 rsync
+cava
+inter-font
+
