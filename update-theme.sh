@@ -18,7 +18,18 @@ SYNC_SCRIPT_DEST="/usr/local/bin/sddm-theme-sync.py"
 SYNC_SERVICE_DEST="/etc/systemd/system/sddm-theme-sync.service"
 SYNC_PATH_DEST="/etc/systemd/system/sddm-theme-sync.path"
 
-echo "Updating SDDM theme: $SDDM_THEME_NAME"
+THEME_USER="${1:-${USER:-$(id -un)}}"
+THEME_HOME=$(getent passwd "$THEME_USER" | cut -d: -f6)
+if [ -z "$THEME_HOME" ]; then
+    THEME_HOME="$HOME"
+fi
+
+SUDO=""
+if [ "$(id -u)" -ne 0 ]; then
+    SUDO="sudo"
+fi
+
+echo "Updating SDDM theme: $SDDM_THEME_NAME for user $THEME_USER"
 
 # ---------------------------------------------------------------------------
 # Validate repository
@@ -44,17 +55,17 @@ done
 # ---------------------------------------------------------------------------
 
 echo "Installing theme files..."
-sudo rm -rf "$SDDM_THEME_DEST"
+$SUDO rm -rf "$SDDM_THEME_DEST"
 
-sudo mkdir -p "$SDDM_THEME_DEST/backgrounds"
+$SUDO mkdir -p "$SDDM_THEME_DEST/backgrounds"
 
-sudo cp -r "$THEME_SRC/." "$SDDM_THEME_DEST/"
+$SUDO cp -r "$THEME_SRC/." "$SDDM_THEME_DEST/"
 
 # Keep the currently configured wallpaper as SDDM's default background
 # when available. This avoids destroying a working background on update.
-if [ -f "$HOME/wallpapers/wallpaper.jpg" ]; then
+if [ -f "$THEME_HOME/wallpapers/wallpaper.jpg" ]; then
     echo "Updating default SDDM background..."
-    sudo cp "$HOME/wallpapers/wallpaper.jpg" \
+    $SUDO cp "$THEME_HOME/wallpapers/wallpaper.jpg" \
         "$SDDM_THEME_DEST/backgrounds/default.jpg"
 fi
 
@@ -64,9 +75,9 @@ fi
 
 echo "Setting SDDM theme as active theme..."
 
-sudo mkdir -p /etc/sddm.conf.d
+$SUDO mkdir -p /etc/sddm.conf.d
 
-sudo tee /etc/sddm.conf.d/theme.conf >/dev/null <<EOF
+$SUDO tee /etc/sddm.conf.d/theme.conf >/dev/null <<EOF
 [Theme]
 
 Current=$SDDM_THEME_NAME
@@ -78,7 +89,7 @@ EOF
 
 echo "Installing theme synchronization script..."
 
-sudo install -Dm755 \
+$SUDO install -Dm755 \
     "$SYNC_SCRIPT_SRC" \
     "$SYNC_SCRIPT_DEST"
 
@@ -89,37 +100,35 @@ sudo install -Dm755 \
 echo "Installing systemd synchronization units..."
 
 sed \
-    -e "s|{USERNAME}|$USER|g" \
+    -e "s|{USERNAME}|$THEME_USER|g" \
     "$SYNC_SERVICE_SRC" |
-    sudo tee "$SYNC_SERVICE_DEST" >/dev/null
+    $SUDO tee "$SYNC_SERVICE_DEST" >/dev/null
 
 sed \
-    -e "s|{HOME}|$HOME|g" \
+    -e "s|{HOME}|$THEME_HOME|g" \
     "$SYNC_PATH_SRC" |
-    sudo tee "$SYNC_PATH_DEST" >/dev/null
+    $SUDO tee "$SYNC_PATH_DEST" >/dev/null
 
 # ---------------------------------------------------------------------------
 # Reload and enable synchronization
 # ---------------------------------------------------------------------------
 
-echo "Reloading systemd..."
+if systemctl is-system-running >/dev/null 2>&1; then
+    echo "Reloading systemd..."
+    $SUDO systemctl daemon-reload
 
-sudo systemctl daemon-reload
+    echo "Enabling SDDM theme synchronization..."
+    $SUDO systemctl enable --now sddm-theme-sync.path
 
-echo "Enabling SDDM theme synchronization..."
-
-sudo systemctl enable --now sddm-theme-sync.path
-
-# ---------------------------------------------------------------------------
-# Apply theme immediately
-# ---------------------------------------------------------------------------
-
-echo "Applying current theme..."
-
-if sudo /usr/local/bin/sddm-theme-sync.py "$USER"; then
-    echo "Theme synchronization completed."
+    echo "Applying current theme..."
+    if $SUDO /usr/local/bin/sddm-theme-sync.py "$THEME_USER"; then
+        echo "Theme synchronization completed."
+    else
+        echo "Warning: theme synchronization failed."
+    fi
 else
-    echo "Warning: theme synchronization failed."
+    echo "Enabling SDDM theme synchronization (offline)..."
+    $SUDO systemctl enable sddm-theme-sync.path 2>/dev/null || true
 fi
 
 # ---------------------------------------------------------------------------

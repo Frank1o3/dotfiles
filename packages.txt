@@ -28,3 +28,5 @@ aur/wallust-git
 unzip
 nodejs
 npm
+python
+rsync
