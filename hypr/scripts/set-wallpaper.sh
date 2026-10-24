@@ -32,6 +32,10 @@ awww img "$SELECTED_PATH" \
     --transition-fps 60 \
     --transition-bezier .43,1.19,1,.4
 
-wallust run "$SELECTED_PATH"
+if command -v wallust >/dev/null 2>&1; then
+    wallust run "$SELECTED_PATH"
+else
+    printf 'wallust is not installed; wallpaper changed without regenerating the color palette.\n' >&2
+fi
 
 notify-send "🎨 Applied" "$SELECTED_NAME"

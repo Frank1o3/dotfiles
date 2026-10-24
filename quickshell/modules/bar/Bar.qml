@@ -74,14 +74,14 @@ Scope {
                 GlassCard {
                     id: leftPill
                     anchors.left: parent.left
-                    anchors.leftMargin: 10
+                    anchors.leftMargin: 12
                     anchors.verticalCenter: parent.verticalCenter
                     height: parent.height - 12
                     width: workspacesContent.implicitWidth + 24
-                    cardRadius: Appearance.radius
+                    cardRadius: Math.round(height / 2)
                     surfaceOpacity: Appearance.glassOpacity
-                    shadowRadius: Appearance.shadowRadiusMedium
-                    shadowOffset: Appearance.shadowOffsetMedium
+                    shadowRadius: Appearance.shadowRadiusSmall
+                    shadowOffset: Appearance.shadowOffsetSmall
 
                     Workspaces {
                         id: workspacesContent
@@ -94,11 +94,11 @@ Scope {
                     id: centerPill
                     anchors.centerIn: parent
                     height: parent.height - 12
-                    width: Math.max(clockContent.implicitWidth + 24, 130)
-                    cardRadius: Appearance.radius
+                    width: Math.max(clockContent.implicitWidth + 28, 120)
+                    cardRadius: Math.round(height / 2)
                     surfaceOpacity: Appearance.glassOpacity
-                    shadowRadius: Appearance.shadowRadiusMedium
-                    shadowOffset: Appearance.shadowOffsetMedium
+                    shadowRadius: Appearance.shadowRadiusSmall
+                    shadowOffset: Appearance.shadowOffsetSmall
 
                     Clock {
                         id: clockContent
@@ -112,14 +112,14 @@ Scope {
                 GlassCard {
                     id: rightPill
                     anchors.right: parent.right
-                    anchors.rightMargin: 10
+                    anchors.rightMargin: 12
                     anchors.verticalCenter: parent.verticalCenter
                     height: parent.height - 12
                     width: rightContent.implicitWidth + 24
-                    cardRadius: Appearance.radius
+                    cardRadius: Math.round(height / 2)
                     surfaceOpacity: Appearance.glassOpacity
-                    shadowRadius: Appearance.shadowRadiusMedium
-                    shadowOffset: Appearance.shadowOffsetMedium
+                    shadowRadius: Appearance.shadowRadiusSmall
+                    shadowOffset: Appearance.shadowOffsetSmall
 
                     RowLayout {
                         id: rightContent
@@ -131,9 +131,8 @@ Scope {
 
                         Rectangle {
                             Layout.preferredWidth: 1
-                            Layout.preferredHeight: 16
-                            color: Colors.foreground
-                            opacity: 0.15
+                            Layout.preferredHeight: 14
+                            color: Qt.rgba(1, 1, 1, 0.20)
                         }
 
                         Volume {}
@@ -142,9 +141,8 @@ Scope {
 
                         Rectangle {
                             Layout.preferredWidth: 1
-                            Layout.preferredHeight: 16
-                            color: Colors.foreground
-                            opacity: 0.15
+                            Layout.preferredHeight: 14
+                            color: Qt.rgba(1, 1, 1, 0.20)
                         }
 
                         NotificationBell {

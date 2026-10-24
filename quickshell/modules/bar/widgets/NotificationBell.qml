@@ -14,7 +14,7 @@ Item {
     Text {
         id: icon
         anchors.centerIn: parent
-        color: root.panelOpen ? Colors.color(4) : Colors.foreground
+        color: root.panelOpen ? Colors.color(4) : Colors.textMain
         font.family: Appearance.fontFamily
         font.pixelSize: Appearance.fontSize
         font.weight: Font.Bold

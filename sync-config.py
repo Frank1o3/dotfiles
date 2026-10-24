@@ -21,6 +21,7 @@ EXCLUDES = [
     "--exclude=colors.lua",
     "--exclude=colors.conf",
     "--exclude=colors.json",
+    "--exclude=*-colors.conf",  # wallust-generated (e.g. hyprlock-colors.conf)
     "--exclude=*.cache",
 ]
 

@@ -322,18 +322,18 @@ hl.window_rule({
 hl.window_rule({
 	name = "glass-terminals",
 	match = { class = "^(kitty|Alacritty|foot)$" },
-	opacity = { 0.85, 0.78 },
+	opacity = "0.85 0.78",
 })
 
 hl.window_rule({
 	name = "glass-file-manager",
 	match = { class = "^(thunar|nemo|org.gnome.Nautilus)$" },
-	opacity = { 0.92, 0.85 },
+	opacity = "0.92 0.85",
 })
 
 hl.window_rule({
 	name = "opaque-media-browsers",
 	match = { class = "^(firefox|chromium|brave-browser|Opera|mpv|vlc)$" },
-	opacity = { 1.0, 1.0 },
+	opacity = "1.0 1.0",
 })
 

@@ -9,7 +9,7 @@ Text {
     readonly property bool charging: bat?.state === UPowerDeviceState.Charging
 
     visible: bat?.isLaptopBattery ?? false
-    color: charging ? Colors.color(4) : (percent <= 15 ? "#f38ba8" : (percent <= 30 ? "#f9e2af" : Colors.color(8)))
+    color: charging ? Colors.color(4) : (percent <= 15 ? "#f38ba8" : (percent <= 30 ? "#f9e2af" : Colors.textMain))
     font.family: Appearance.fontFamily
     font.pixelSize: Appearance.fontSize
     font.weight: Font.Bold

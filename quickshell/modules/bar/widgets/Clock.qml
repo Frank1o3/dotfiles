@@ -4,11 +4,10 @@ import qs.config
 
 Text {
     id: root
-    color: Colors.foreground
+    color: Colors.textMain
     font.family: Appearance.fontFamily
     font.pixelSize: Appearance.fontSize + 1
-    font.bold: true
-    font.weight: Font.Bold
+    font.weight: Font.DemiBold
     horizontalAlignment: Text.AlignHCenter
     verticalAlignment: Text.AlignVCenter
     elide: Text.ElideNone

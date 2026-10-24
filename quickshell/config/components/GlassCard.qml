@@ -2,17 +2,6 @@ import QtQuick
 import Qt5Compat.GraphicalEffects
 import qs.config
 
-// Shared "glass" surface used by the bar pill, control center, power
-// menu, wallpaper picker, launcher, and toasts — one place to tune the
-// depth/translucency language instead of every surface re-deriving it.
-//
-// Layer order (back to front):
-//   1. Ambient shadow  — wide, soft, low opacity — floating feel
-//   2. Contact shadow   — tighter, darker — anchors it to the desktop
-//   3. Base glass fill  — Colors.background at panelOpacity/glassOpacity
-//   4. Accent tint      — very faint color(4) wash for depth
-//   5. Top highlight    — gradient streak, light catching the "glass"
-//   6. content          — default alias, whatever you put inside
 Item {
     id: root
 
@@ -20,7 +9,7 @@ Item {
 
     property int cardRadius: Appearance.radius
     property real surfaceOpacity: Appearance.glassOpacity
-    property color borderColor: Colors.color(1)
+    property color borderColor: Qt.rgba(1, 1, 1, 0.22)
     property real borderWidth: 1
 
     property int shadowRadius: Appearance.shadowRadiusMedium
@@ -28,22 +17,23 @@ Item {
     property bool showHighlight: true
     property bool showTint: true
 
-    // Independent corner control for panels that only round the bottom
-    // (e.g. the control-center dropdown growing out of the bar pill).
     property int topLeftRadius: cardRadius
     property int topRightRadius: cardRadius
     property int bottomLeftRadius: cardRadius
     property int bottomRightRadius: cardRadius
 
+    // Subtle soft shadow - floating glass feel without heavy dark halos
     Rectangle {
         id: shadowSource
         anchors.fill: parent
-        radius: root.cardRadius
+        topLeftRadius: root.topLeftRadius
+        topRightRadius: root.topRightRadius
+        bottomLeftRadius: root.bottomLeftRadius
+        bottomRightRadius: root.bottomRightRadius
         color: "black"
         visible: false
     }
 
-    // Ambient — wide + soft
     DropShadow {
         anchors.fill: shadowSource
         source: shadowSource
@@ -53,21 +43,35 @@ Item {
         color: Appearance.shadowColorAmbient
     }
 
-    // Contact — tight + dark, sits closer to the surface
-    DropShadow {
-        anchors.fill: shadowSource
-        source: shadowSource
-        radius: Math.round(root.shadowRadius * 0.35)
-        samples: Math.round(root.shadowRadius * 0.35) * 2 + 1
-        verticalOffset: Math.max(2, Math.round(root.shadowOffset * 0.35))
-        color: Appearance.shadowColorContact
+    // Base dark backing at low opacity to ensure text legibility while letting blur bleed through
+    Rectangle {
+        id: bgDarkBacking
+        anchors.fill: parent
+        color: "#0a0a12"
+        opacity: 0.35
+
+        topLeftRadius: root.topLeftRadius
+        topRightRadius: root.topRightRadius
+        bottomLeftRadius: root.bottomLeftRadius
+        bottomRightRadius: root.bottomRightRadius
     }
 
+    // Frosted glass surface sheen
     Rectangle {
-        id: bg
+        id: bgSheen
         anchors.fill: parent
-        color: Colors.background
-        opacity: root.surfaceOpacity
+        color: Qt.rgba(1, 1, 1, 0.08)
+
+        topLeftRadius: root.topLeftRadius
+        topRightRadius: root.topRightRadius
+        bottomLeftRadius: root.bottomLeftRadius
+        bottomRightRadius: root.bottomRightRadius
+    }
+
+    // Outer border (specular light edge)
+    Rectangle {
+        anchors.fill: parent
+        color: "transparent"
         border.width: root.borderWidth
         border.color: root.borderColor
 
@@ -77,7 +81,7 @@ Item {
         bottomRightRadius: root.bottomRightRadius
     }
 
-    // Faint accent wash for color depth rather than flat neutral glass.
+    // Faint accent wash from wallpaper palette for subtle depth
     Rectangle {
         visible: root.showTint
         anchors.fill: parent
@@ -90,25 +94,25 @@ Item {
         bottomRightRadius: root.bottomRightRadius
     }
 
-    // Top-edge highlight streak
+    // Top-edge specular highlight streak (light catching glass curvature)
     Rectangle {
         visible: root.showHighlight
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.margins: root.borderWidth
-        height: parent.height * Appearance.glassHighlightHeightRatio
-        topLeftRadius: root.topLeftRadius
-        topRightRadius: root.topRightRadius
+        height: Math.max(10, parent.height * Appearance.glassHighlightHeightRatio)
+        topLeftRadius: Math.max(0, root.topLeftRadius - root.borderWidth)
+        topRightRadius: Math.max(0, root.topRightRadius - root.borderWidth)
 
         gradient: Gradient {
             GradientStop { position: 0.0; color: Qt.rgba(1, 1, 1, Appearance.glassHighlightOpacity) }
-            GradientStop { position: 0.35; color: Qt.rgba(1, 1, 1, Appearance.glassHighlightOpacity * 0.4) }
-            GradientStop { position: 1.0; color: Qt.rgba(1, 1, 1, 0) }
+            GradientStop { position: 0.35; color: Qt.rgba(1, 1, 1, Appearance.glassHighlightOpacity * 0.35) }
+            GradientStop { position: 1.0; color: Qt.rgba(1, 1, 1, 0.0) }
         }
     }
 
-    // Top rim specular bead (sharp crisp 1px light catch on upper glass curve)
+    // Top rim specular bead (sharp crisp 1px light catch on upper glass edge)
     Rectangle {
         visible: root.showHighlight
         anchors.top: parent.top
@@ -116,12 +120,12 @@ Item {
         anchors.right: parent.right
         anchors.margins: root.borderWidth
         height: 1
-        topLeftRadius: root.topLeftRadius
-        topRightRadius: root.topRightRadius
-        color: Qt.rgba(1, 1, 1, Math.min(1.0, Appearance.glassHighlightOpacity * 2.0))
+        topLeftRadius: Math.max(0, root.topLeftRadius - root.borderWidth)
+        topRightRadius: Math.max(0, root.topRightRadius - root.borderWidth)
+        color: Qt.rgba(1, 1, 1, 0.60)
     }
 
-    // Subtle inner border for extra edge definition on top of the glass.
+    // Subtle inner border for extra edge definition on top of the glass
     Rectangle {
         anchors.fill: parent
         anchors.margins: root.borderWidth
