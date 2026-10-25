@@ -32,4 +32,3 @@ python
 rsync
 cava
 inter-font
-
