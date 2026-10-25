@@ -160,9 +160,9 @@ def sync(cfg):
     for kind, relpath in changes:
         name = Path(relpath).name
 
-        if name in protected:
+        if name in protected and (dest / relpath).exists():
             if VERBOSE:
-                log(f"Skipping protected file: {relpath}")
+                log(f"Keeping existing protected file: {relpath}")
             continue
 
         src_file = src / relpath

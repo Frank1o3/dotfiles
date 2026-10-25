@@ -1,2 +1,2 @@
 [DEFAULT]
-protected = monitors.lua
+protected = monitors.lua, input.lua
