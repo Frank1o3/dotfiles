@@ -16,3 +16,13 @@ require("modules.window_rules")
 require("modules.input")
 require("modules.keybinds")
 require("modules.autostart")(WALLPAPER_DIR)
+
+-- Patch
+hl.config({
+    quirks = {
+        skip_non_kms_dmabuf_formats = false,
+    },
+    debug = {
+        invalidate_buffers = 0,
+    },
+})

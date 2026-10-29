@@ -7,7 +7,7 @@ CONFIG="/tmp/quickshell-cava-${USER:-default}.conf"
 cat > "$CONFIG" << 'EOF'
 [general]
 bars = 8
-framerate = 30
+framerate = 60
 
 [input]
 method = pulse
