@@ -1,6 +1,7 @@
 import QtQuick
 import Qt5Compat.GraphicalEffects
 import qs.config
+import qs.services
 
 Item {
     id: root
@@ -41,6 +42,7 @@ Item {
         samples: root.shadowRadius * 2 + 1
         verticalOffset: root.shadowOffset
         color: Appearance.shadowColorAmbient
+        visible: !GameMode.active
     }
 
     // Base dark backing at dynamic opacity to ensure text legibility while letting blur bleed through
@@ -48,7 +50,7 @@ Item {
         id: bgDarkBacking
         anchors.fill: parent
         color: "#0c0d16"
-        opacity: root.surfaceOpacity
+        opacity: GameMode.active ? 0.96 : root.surfaceOpacity
 
         topLeftRadius: root.topLeftRadius
         topRightRadius: root.topRightRadius
@@ -61,6 +63,7 @@ Item {
         id: bgSheen
         anchors.fill: parent
         color: Qt.rgba(1, 1, 1, 0.05)
+        visible: !GameMode.active
 
         topLeftRadius: root.topLeftRadius
         topRightRadius: root.topRightRadius
@@ -83,7 +86,7 @@ Item {
 
     // Faint accent wash from wallpaper palette for subtle depth
     Rectangle {
-        visible: root.showTint
+        visible: root.showTint && !GameMode.active
         anchors.fill: parent
         color: Colors.color(4)
         opacity: Appearance.glassTintOpacity
@@ -96,7 +99,7 @@ Item {
 
     // Top-edge specular highlight streak (light catching glass curvature)
     Rectangle {
-        visible: root.showHighlight
+        visible: root.showHighlight && !GameMode.active
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
@@ -114,7 +117,7 @@ Item {
 
     // Top rim specular bead (sharp crisp 1px light catch on upper glass edge)
     Rectangle {
-        visible: root.showHighlight
+        visible: root.showHighlight && !GameMode.active
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right

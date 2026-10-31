@@ -16,7 +16,7 @@ QtObject {
     readonly property color muted: Qt.rgba(fg.r, fg.g, fg.b, 0.62)
     readonly property color error: "#f38ba8"
 
-    readonly property string fontFamily: config.fontFamily || "SpaceMono Nerd Font"
+    readonly property string fontFamily: config.fontFamily || "Inter"
 
     readonly property int radius: 12
     readonly property int cardRadius: 22

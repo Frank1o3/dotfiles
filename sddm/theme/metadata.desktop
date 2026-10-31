@@ -9,5 +9,5 @@ Version=1.1
 MainScript=Main.qml
 ConfigFile=theme.conf
 TranslationsDirectory=translations
-Font=SpaceMono Nerd Font
-QtVersion=5
+Font=Inter
+QtVersion=6

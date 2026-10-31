@@ -12,6 +12,16 @@ Singleton {
 
     property bool gamemodeActive: false
     property bool windowMatch: false
+    property bool effectsApplied: false
+
+    function updateEffects() {
+        if (root.effectsApplied === root.active)
+            return;
+        root.effectsApplied = root.active;
+        Quickshell.execDetached([`${Quickshell.env("HOME")}/.config/hypr/scripts/game-mode-effects.sh`, root.active ? "on" : "off"]);
+    }
+
+    onActiveChanged: updateEffects()
 
     readonly property var gamePatterns: [/^steam_app_\d+$/i, /^bloodstrike\.exe$/i, /^org\.vinegarhq\.Sober$/i, /^Minecraft.*/i,]
 
@@ -53,4 +63,6 @@ Singleton {
             clientsProc.running = true;
         }
     }
+
+    Component.onCompleted: updateEffects()
 }

@@ -6,11 +6,12 @@ import qs.services
 
 Text {
     id: root
+    property bool compact: false
     color: Colors.color(7)
     font.family: Appearance.fontFamily
     font.pixelSize: Appearance.fontSize
     font.weight: Font.Bold
-    text: "󰃟 " + percent + "%"
+    text: compact ? "󰃟" : "󰃟 " + percent + "%"
 
     property int percent: 0
 

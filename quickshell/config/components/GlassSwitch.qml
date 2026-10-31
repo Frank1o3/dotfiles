@@ -4,7 +4,12 @@ import qs.config
 Item {
     id: root
     property bool checked: false
-    signal toggled
+    signal toggled(bool checked)
+    activeFocusOnTab: true
+
+    Keys.onReturnPressed: root.toggled(!root.checked)
+    Keys.onEnterPressed: root.toggled(!root.checked)
+    Keys.onSpacePressed: root.toggled(!root.checked)
 
     implicitWidth: 44
     implicitHeight: 24
@@ -14,7 +19,7 @@ Item {
         radius: height / 2
         color: root.checked ? Colors.color(4) : Qt.rgba(1, 1, 1, 0.12)
         border.width: 1
-        border.color: Qt.rgba(1, 1, 1, 0.1)
+        border.color: root.activeFocus ? Colors.color(4) : Qt.rgba(1, 1, 1, 0.1)
         Behavior on color {
             ColorAnimation {
                 duration: Appearance.animFast
@@ -41,8 +46,7 @@ Item {
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
         onClicked: {
-            root.checked = !root.checked;
-            root.toggled();
+            root.toggled(!root.checked);
         }
     }
 }

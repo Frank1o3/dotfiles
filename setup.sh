@@ -86,6 +86,15 @@ echo
 
 AUTO=1 HOME="$TARGET_HOME" XDG_CONFIG_HOME="$TARGET_HOME/.config" python3 -u "$SRC_DIR/sync-config.py"
 
+echo "Preparing theme palette files..."
+mkdir -p "$TARGET_HOME/.config/gtk-4.0" "$TARGET_HOME/.config/qt6ct/colors"
+if [ ! -f "$TARGET_HOME/.config/gtk-4.0/gtk-palette.css" ] && [ -f "$SRC_DIR/gtk-4.0/gtk-palette.css" ]; then
+    cp "$SRC_DIR/gtk-4.0/gtk-palette.css" "$TARGET_HOME/.config/gtk-4.0/gtk-palette.css"
+fi
+if [ ! -f "$TARGET_HOME/.config/qt6ct/colors/wallust.conf" ] && [ -f "$SRC_DIR/qt6ct/colors/wallust.conf" ]; then
+    cp "$SRC_DIR/qt6ct/colors/wallust.conf" "$TARGET_HOME/.config/qt6ct/colors/wallust.conf"
+fi
+
 echo
 echo "==> Configuration synchronization complete."
 
@@ -96,6 +105,36 @@ if [ -d "$SRC_DIR/wallpapers" ]; then
     if [ ! -f "$TARGET_HOME/wallpapers/wallpaper.jpg" ] && [ -f "$TARGET_HOME/wallpapers/night-sky.jpg" ]; then
         cp "$TARGET_HOME/wallpapers/night-sky.jpg" "$TARGET_HOME/wallpapers/wallpaper.jpg"
     fi
+fi
+
+echo "Setting dark GTK preferences..."
+TARGET_UID=$(id -u "$TARGET_USER")
+USER_BUS="/run/user/$TARGET_UID/bus"
+if command -v gsettings >/dev/null 2>&1 && [ -S "$USER_BUS" ]; then
+    set_user_gsetting() {
+        if [ "$(id -un)" = "$TARGET_USER" ]; then
+            gsettings set org.gnome.desktop.interface "$1" "$2" || true
+        elif [ "$(id -u)" -eq 0 ]; then
+            runuser -u "$TARGET_USER" -- env \
+                HOME="$TARGET_HOME" \
+                XDG_RUNTIME_DIR="/run/user/$TARGET_UID" \
+                DBUS_SESSION_BUS_ADDRESS="unix:path=$USER_BUS" \
+                gsettings set org.gnome.desktop.interface "$1" "$2" || true
+        fi
+    }
+    set_user_gsetting color-scheme "'prefer-dark'"
+    set_user_gsetting font-name "'Inter 10'"
+    set_user_gsetting icon-theme "'Papirus-Dark'"
+else
+    echo "No target-user D-Bus session is active; GTK preferences will apply from the Hyprland environment."
+fi
+
+echo "Generating the initial wallpaper palette..."
+if command -v wallust >/dev/null 2>&1 && [ -f "$TARGET_HOME/wallpapers/wallpaper.jpg" ]; then
+    HOME="$TARGET_HOME" XDG_CONFIG_HOME="$TARGET_HOME/.config" \
+        wallust run "$TARGET_HOME/wallpapers/wallpaper.jpg"
+else
+    echo "Wallust or the default wallpaper is unavailable; palette files will be generated after setup."
 fi
 
 echo "Setting up SDDM theme..."

@@ -4,6 +4,7 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Controls
 import qs.config
 import qs.config.components
 import qs.modules.bar.widgets
@@ -62,7 +63,7 @@ Scope {
                 onCleared: PanelState.setOpen(win.modelData.name, false)
             }
 
-            // ---------------- Three pills ----------------
+            // ---------------- Floating status capsule ----------------
             Item {
                 id: pillRow
                 anchors.top: parent.top
@@ -70,104 +71,83 @@ Scope {
                 anchors.right: parent.right
                 height: Appearance.barHeight
 
-                // Left pill: Workspaces
                 GlassCard {
-                    id: leftPill
-                    anchors.left: parent.left
-                    anchors.leftMargin: 12
+                    id: barCapsule
+                    anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    height: parent.height - 12
-                    width: workspacesContent.implicitWidth + 24
-                    cardRadius: Math.round(height / 2)
-                    surfaceOpacity: Appearance.glassOpacity
-                    shadowRadius: Appearance.shadowRadiusSmall
+                    height: parent.height - 10
+                    width: barContent.implicitWidth + 30
+                    cardRadius: height / 2
+                    surfaceOpacity: 0.86
+                    borderColor: Qt.rgba(1, 1, 1, 0.20)
+                    shadowRadius: Appearance.shadowRadiusMedium
                     shadowOffset: Appearance.shadowOffsetSmall
-
-                    Workspaces {
-                        id: workspacesContent
-                        anchors.centerIn: parent
-                    }
-                }
-
-                // Center pill: Media + Clock
-                GlassCard {
-                    id: centerPill
-                    anchors.centerIn: parent
-                    height: parent.height - 12
-                    width: centerRow.implicitWidth + 28
-                    cardRadius: Math.round(height / 2)
-                    surfaceOpacity: Appearance.glassOpacity
-                    shadowRadius: Appearance.shadowRadiusSmall
-                    shadowOffset: Appearance.shadowOffsetSmall
+                    showHighlight: false
+                    showTint: true
 
                     RowLayout {
-                        id: centerRow
-                        anchors.centerIn: parent
+                        id: barContent
+                        anchors.fill: parent
+                        anchors.leftMargin: 13
+                        anchors.rightMargin: 13
                         spacing: 12
 
-                        MediaPill {
-                            id: mediaWidget
+                        Workspaces {
+                            id: workspacesContent
                         }
 
                         Rectangle {
-                            visible: mediaWidget.visible
                             Layout.preferredWidth: 1
-                            Layout.preferredHeight: 14
-                            color: Qt.rgba(1, 1, 1, 0.20)
+                            Layout.preferredHeight: 20
+                            color: Qt.rgba(1, 1, 1, 0.18)
                         }
 
-                        Clock {
-                            id: clockContent
-                            Layout.alignment: Qt.AlignVCenter
+                        RowLayout {
+                            id: centerContent
+                            spacing: 10
+
+                            MediaPill { id: mediaWidget }
+
+                            Rectangle {
+                                visible: mediaWidget.visible
+                                Layout.preferredWidth: 1
+                                Layout.preferredHeight: 14
+                                color: Qt.rgba(1, 1, 1, 0.18)
+                            }
+
+                            Clock { id: clockContent }
+                        }
+
+                        Rectangle {
+                            Layout.preferredWidth: 1
+                            Layout.preferredHeight: 20
+                            color: Qt.rgba(1, 1, 1, 0.18)
+                        }
+
+                        RowLayout {
+                            id: statusContent
+                            spacing: 10
+
+                            Volume { compact: true }
+                            Backlight { compact: true }
+                            Battery { compact: true }
+                            Network { compact: true }
+
+                            Rectangle {
+                                Layout.preferredWidth: 1
+                                Layout.preferredHeight: 14
+                                color: Qt.rgba(1, 1, 1, 0.18)
+                            }
+
+                            NotificationBell {
+                                panelOpen: win.panelOpen
+                                onTogglePanel: PanelState.toggle(win.modelData.name)
+                            }
+                            Tray {}
                         }
                     }
                 }
 
-                // Right pill: System status
-                GlassCard {
-                    id: rightPill
-                    anchors.right: parent.right
-                    anchors.rightMargin: 12
-                    anchors.verticalCenter: parent.verticalCenter
-                    height: parent.height - 12
-                    width: rightContent.implicitWidth + 24
-                    cardRadius: Math.round(height / 2)
-                    surfaceOpacity: Appearance.glassOpacity
-                    shadowRadius: Appearance.shadowRadiusSmall
-                    shadowOffset: Appearance.shadowOffsetSmall
-
-                    RowLayout {
-                        id: rightContent
-                        anchors.centerIn: parent
-                        spacing: 10
-
-                        Cpu {}
-                        Memory {}
-
-                        Rectangle {
-                            Layout.preferredWidth: 1
-                            Layout.preferredHeight: 14
-                            color: Qt.rgba(1, 1, 1, 0.20)
-                        }
-
-                        Volume {}
-                        Backlight {}
-                        Battery {}
-                        Network {}
-
-                        Rectangle {
-                            Layout.preferredWidth: 1
-                            Layout.preferredHeight: 14
-                            color: Qt.rgba(1, 1, 1, 0.20)
-                        }
-
-                        NotificationBell {
-                            panelOpen: win.panelOpen
-                            onTogglePanel: PanelState.toggle(win.modelData.name)
-                        }
-                        Tray {}
-                    }
-                }
             }
 
             // ---------------- Control Center dropdown ----------------
@@ -191,7 +171,7 @@ Scope {
                 GlassCard {
                     id: bg
                     width: parent.width
-                    implicitHeight: content.implicitHeight + 36
+                    implicitHeight: Math.min(content.implicitHeight + 36, Math.max(320, win.screen.height - Appearance.barHeight - 28))
                     height: implicitHeight
 
                     cardRadius: Appearance.radiusLarge
@@ -229,17 +209,21 @@ Scope {
                     }
 
                     // Content with staggered fade‑in
-                    ControlCenterContent {
-                        id: content
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.top: parent.top
+                    ScrollView {
+                        id: panelScroll
+                        anchors.fill: parent
                         anchors.margins: 18
-                        opacity: win.panelOpen ? 1 : 0
+                        clip: true
+                        contentWidth: availableWidth
 
-                        Behavior on opacity {
-                            NumberAnimation {
-                                duration: 200
+                        ControlCenterContent {
+                            id: content
+                            width: panelScroll.availableWidth
+                            panelOpen: win.panelOpen
+                            opacity: win.panelOpen ? 1 : 0
+
+                            Behavior on opacity {
+                                NumberAnimation { duration: 200 }
                             }
                         }
                     }

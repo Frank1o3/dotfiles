@@ -1,5 +1,5 @@
 import QtQuick 2.15
-import QtGraphicalEffects 1.15
+import Qt5Compat.GraphicalEffects
 
 import ".."
 
@@ -20,8 +20,7 @@ Item {
         visible: false
     }
 
-    // Qt5 replacement for MultiEffect's blur — QtQuick.Effects doesn't exist
-    // on Qt5, so QtGraphicalEffects' FastBlur takes over the wallpaper blur.
+    // Qt5Compat supplies FastBlur through the Qt 6 theme runtime.
     FastBlur {
         anchors.fill: wallpaper
         source: wallpaper

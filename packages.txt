@@ -11,6 +11,9 @@ hypridle
 hyprshutdown
 hyprpolkitagent
 quickshell
+qt6ct
+qt6-wayland
+qt6-5compat
 gnome-keyring
 nm-connection-editor
 network-manager-applet
@@ -20,8 +23,6 @@ ttf-nerd-fonts-symbols-common
 adw-gtk-theme
 papirus-icon-theme
 adwaita-cursors
-qt5-graphicaleffects
-qt5-quickcontrols2
 aur/catppuccin-cursors-mocha
 rustup
 aur/wallust-git

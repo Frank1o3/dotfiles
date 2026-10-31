@@ -5,11 +5,12 @@ import qs.services
 
 Text {
     id: root
+    property bool compact: false
     color: connected ? Colors.color(5) : Colors.color(1)
     font.family: Appearance.fontFamily
     font.pixelSize: Appearance.fontSize
     font.weight: Font.Bold
-    text: connected ? (isWifi ? "󰖩" : "󰈀") : "󰖪 Offline"
+    text: compact ? (connected ? (isWifi ? "󰖩" : "󰈀") : "󰖪") : (connected ? (isWifi ? "󰖩" : "󰈀") : "󰖪 Offline")
 
     property bool connected: false
     property bool isWifi: false

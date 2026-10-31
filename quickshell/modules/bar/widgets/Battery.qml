@@ -4,6 +4,7 @@ import qs.config
 
 Text {
     id: root
+    property bool compact: false
     readonly property UPowerDevice bat: UPower.displayDevice
     readonly property int percent: Math.round((bat?.percentage ?? 0) * 100)
     readonly property bool charging: bat?.state === UPowerDeviceState.Charging
@@ -13,7 +14,7 @@ Text {
     font.family: Appearance.fontFamily
     font.pixelSize: Appearance.fontSize
     font.weight: Font.Bold
-    text: (charging ? "󰂄 " : "󰁹 ") + percent + "%"
+    text: compact ? (charging ? "󰂄" : "󰁹") : (charging ? "󰂄 " : "󰁹 ") + percent + "%"
 
     Behavior on color {
         ColorAnimation {

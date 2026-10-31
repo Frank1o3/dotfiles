@@ -8,6 +8,11 @@ Item {
     property string text: ""
     property string icon: ""
     property bool accent: false
+    activeFocusOnTab: true
+
+    Keys.onReturnPressed: root.clicked()
+    Keys.onEnterPressed: root.clicked()
+    Keys.onSpacePressed: root.clicked()
 
     implicitWidth: label.implicitWidth + (root.icon.length > 0 ? 28 : 20) + 20
     implicitHeight: 32
@@ -39,8 +44,8 @@ Item {
         anchors.fill: parent
         radius: 10
         color: root.accent ? Colors.color(4) : (mouse.containsMouse ? Qt.rgba(1, 1, 1, 0.10) : Qt.rgba(1, 1, 1, 0.05))
-        border.width: root.accent ? 0 : 1
-        border.color: Qt.rgba(1, 1, 1, 0.08)
+        border.width: root.accent ? 0 : (root.activeFocus ? 2 : 1)
+        border.color: root.activeFocus ? Colors.color(4) : Qt.rgba(1, 1, 1, 0.08)
         Behavior on color {
             ColorAnimation {
                 duration: Appearance.animFast

@@ -6,7 +6,7 @@ Singleton {
     readonly property int radius: 16
     readonly property int radiusLarge: 22
     readonly property int spacing: 8
-    readonly property int barHeight: 44
+    readonly property int barHeight: 52
     readonly property int cardRadius: 16
     readonly property int cardPadding: 16
     readonly property int sectionSpacing: 18

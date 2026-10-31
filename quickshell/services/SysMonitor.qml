@@ -1,6 +1,7 @@
 pragma Singleton
 import Quickshell
 import Quickshell.Io
+import qs.services
 
 Singleton {
     id: root
@@ -11,7 +12,7 @@ Singleton {
     Process {
         id: proc
         command: [`${Quickshell.env("HOME")}/.config/quickshell/scripts/sysmon.sh`]
-        running: true
+        running: !GameMode.active
 
         stdout: SplitParser {
             splitMarker: "\n"

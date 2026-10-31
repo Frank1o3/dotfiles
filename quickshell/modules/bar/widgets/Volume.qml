@@ -5,6 +5,7 @@ import qs.config
 
 Text {
     id: root
+    property bool compact: false
     readonly property PwNode sink: Pipewire.defaultAudioSink
     readonly property bool muted: sink?.audio?.muted ?? true
     readonly property real volume: sink?.audio?.volume ?? 0
@@ -13,7 +14,7 @@ Text {
     font.family: Appearance.fontFamily
     font.pixelSize: Appearance.fontSize
     font.weight: Font.Bold
-    text: (muted ? "󰝟" : "󰕾") + " " + Math.round(volume * 100) + "%"
+    text: compact ? (muted ? "󰝟" : "󰕾") : ((muted ? "󰝟" : "󰕾") + " " + Math.round(volume * 100) + "%")
 
     PwObjectTracker {
         objects: [root.sink]

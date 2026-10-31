@@ -51,6 +51,7 @@ colorBackground={data.get("background", "#1e1e2e")}
 colorForeground={data.get("foreground", "#cdd6f4")}
 colorAccent={accent}
 colorBorder={border}
+fontFamily=Inter
 """
     conf_dest.write_text(conf)
     conf_dest.chmod(0o644)

@@ -16,6 +16,7 @@ shell than a utility panel.
 - Hyprland window manager configuration with modular Lua files
 - Quickshell-based top bar and desktop widgets
 - Dynamic palette generation with `wallust`
+- Wallpaper-synced palettes for Quickshell, Hyprlock, GTK 4, Qt 6, Kitty, and SDDM
 - Wallpaper picker and wallpaper-driven recoloring
 - Launcher, notification surface, power menu, and control center
 - Modular setup for status widgets, keybinds, layouts, animations,
@@ -26,6 +27,11 @@ shell than a utility panel.
 This setup is intentionally tuned for a glassy,
 low-visual-noise aesthetic while keeping the workflow practical and
 keyboard-driven.
+
+The wallpaper picker uses a keyboard-operable coverflow. Its selected wallpaper
+drives the Quickshell, lock screen, GTK, Qt, terminal, and SDDM colors through
+Wallust. On first install, `setup.sh` generates the palette from the default
+wallpaper when Wallust is available.
 
 ---
 

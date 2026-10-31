@@ -11,6 +11,11 @@ Item {
     property bool active: false
     property bool interactive: true
     signal clicked
+    activeFocusOnTab: root.interactive
+
+    Keys.onReturnPressed: if (root.interactive) root.clicked()
+    Keys.onEnterPressed: if (root.interactive) root.clicked()
+    Keys.onSpacePressed: if (root.interactive) root.clicked()
 
     implicitHeight: 56
     readonly property color accentColor: Colors.color(4)
