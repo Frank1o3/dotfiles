@@ -44,10 +44,5 @@ return function(WALLPAPER_DIR)
 		hl.exec_cmd(
 			"sh -c 'pgrep -x hypridle >/dev/null || hypridle >/dev/null 2>&1 &'"
 		)
-
-		-- NetworkManager tray applet
-		hl.exec_cmd(
-			"sh -c 'pgrep -x nm-applet >/dev/null || nm-applet --indicator >/dev/null 2>&1 &'"
-		)
 	end)
 end
