@@ -5,6 +5,13 @@ kitty
 neovim
 tree-sitter-cli
 ripgrep
+lazygit
+base-devel
+cmake
+meson
+ninja
+uv
+qt6-declarative
 hyprland
 hyprlock
 hypridle

@@ -18,6 +18,12 @@ local function run(cmd, cwd, on_success)
     })
 end
 
+local function run_in_terminal(command)
+    vim.cmd("botright 15split")
+    vim.fn.termopen(command, { cwd = vim.fn.getcwd() })
+    vim.cmd("startinsert")
+end
+
 function M.init_project()
     local cwd = vim.fn.getcwd()
     if vim.fn.filereadable(cwd .. "/pyproject.toml") == 1 then
@@ -49,10 +55,14 @@ function M.add(dev)
 end
 
 function M.sync() run({ "uv", "sync" }, vim.fn.getcwd()) end
+function M.outdated() run_in_terminal({ "uv", "tree", "--outdated" }) end
+function M.upgrade() run_in_terminal("uv lock --upgrade && uv sync") end
 
 vim.api.nvim_create_user_command("UvInit", M.init_project, {})
 vim.api.nvim_create_user_command("UvAdd", function() M.add(false) end, {})
 vim.api.nvim_create_user_command("UvAddDev", function() M.add(true) end, {})
 vim.api.nvim_create_user_command("UvSync", M.sync, {})
+vim.api.nvim_create_user_command("UvOutdated", M.outdated, { desc = "Show outdated project dependencies" })
+vim.api.nvim_create_user_command("UvUpgrade", M.upgrade, { desc = "Upgrade compatible Python dependencies" })
 
 return M

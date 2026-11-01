@@ -14,11 +14,13 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 
+require("config.workspace").setup()
 require("config.options")
 require("config.keymaps")
 require("config.lsp")
 require("config.autocmds")
 require("config.uv")
+require("config.projects")
 
 require("lazy").setup({
     spec = {

@@ -65,6 +65,13 @@ if [ "$CONFIG_ONLY" -eq 0 ]; then
         grep -v '^$'
     )
 
+    if command -v rustup >/dev/null 2>&1; then
+        rustup toolchain install stable --component clippy --component rustfmt
+        if ! rustup show active-toolchain >/dev/null 2>&1; then
+            rustup default stable
+        fi
+    fi
+
     if systemctl is-system-running >/dev/null 2>&1; then
         echo "Enabling user services..."
         systemctl --user enable --now gnome-keyring-daemon.service || true

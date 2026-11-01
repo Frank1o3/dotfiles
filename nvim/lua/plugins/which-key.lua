@@ -6,7 +6,7 @@ return {
             { "<leader>c", group = "Code" },
             { "<leader>d", group = "Debug" },
             { "<leader>g", group = "Git" },
-            { "<leader>p", group = "Project (uv)" },
+            { "<leader>p", group = "Project" },
             { "<leader>q", group = "Session" },
             { "<leader>s", group = "Search" },
             { "<leader>t", group = "Terminal" },

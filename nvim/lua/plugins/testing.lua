@@ -1,5 +1,6 @@
 return {
     "nvim-neotest/neotest",
+    cond = function() return require("config.workspace").has("Python") end,
     dependencies = {
         "nvim-neotest/nvim-nio",
         "nvim-lua/plenary.nvim",

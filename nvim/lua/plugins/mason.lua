@@ -17,23 +17,7 @@ return {
         dependencies = { "mason-org/mason.nvim" },
         event = "VeryLazy",
         opts = {
-            ensure_installed = {
-                -- LSP servers (match the names used in plugins/lsp.lua)
-                "lua-language-server",  -- lua_ls
-                "json-lsp",             -- jsonls
-                "yaml-language-server", -- yamlls
-                "taplo",                -- taplo
-                "ruff",                 -- ruff
-                "ty",                   -- ty
-
-                -- DAP
-                "debugpy",
-
-                -- Formatters (consumed by conform.nvim)
-                "stylua",
-                "shfmt",
-                "prettier",
-            },
+            ensure_installed = require("config.workspace").mason_tools(),
             auto_update = false,
             run_on_start = true,
             start_delay = 3000,

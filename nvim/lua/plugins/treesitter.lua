@@ -6,21 +6,30 @@ return {
     config = function()
         require("nvim-treesitter").setup()
 
-        require("nvim-treesitter").install({
-            "python", "lua", "c", "cpp", "rust",
-            "javascript", "typescript", "tsx",
-            "json", "yaml", "toml", "markdown", "markdown_inline",
-            "bash", "query", "vim", "vimdoc",
-        })
+        local parsers = require("config.workspace").treesitter_languages()
+        local filetypes_by_parser = {
+            python = { "python" }, lua = { "lua" }, c = { "c" }, cpp = { "cpp" }, rust = { "rust" },
+            javascript = { "javascript", "javascriptreact" }, typescript = { "typescript", "typescriptreact" },
+            qmljs = { "qml", "qmljs" }, cmake = { "cmake" }, gitignore = { "gitignore" },
+            json = { "json" }, yaml = { "yaml" }, toml = { "toml" },
+            markdown = { "markdown" }, markdown_inline = { "markdown" }, bash = { "sh", "bash" },
+        }
+        local filetypes, seen = { "help" }, { help = true }
+        for _, parser in ipairs(parsers) do
+            for _, filetype in ipairs(filetypes_by_parser[parser] or {}) do
+                if not seen[filetype] then
+                    seen[filetype] = true
+                    table.insert(filetypes, filetype)
+                end
+            end
+        end
 
-        -- Highlighting is now enabled per-buffer via autocmd, not a config table
+        if #parsers > 0 then
+            require("nvim-treesitter").install(parsers)
+        end
+
         vim.api.nvim_create_autocmd("FileType", {
-            pattern = {
-                "python", "lua", "c", "cpp", "rust",
-                "javascript", "typescript", "tsx",
-                "json", "yaml", "toml", "markdown",
-                "bash", "query", "vim", "help",
-            },
+            pattern = filetypes,
             callback = function()
                 pcall(vim.treesitter.start)
             end,

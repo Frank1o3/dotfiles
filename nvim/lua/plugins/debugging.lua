@@ -1,5 +1,6 @@
 return {
     "mfussenegger/nvim-dap",
+    cond = function() return require("config.workspace").has("Python") end,
     dependencies = {
         "mfussenegger/nvim-dap-python",
         "rcarriga/nvim-dap-ui",
