@@ -29,8 +29,7 @@ ColumnLayout {
     }
     Timer { interval: 3000; running: !GameMode.active; repeat: true; onTriggered: if (!statsProc.running) statsProc.running = true }
 
-    Text { text: "System Monitor"; color: Colors.foreground; font.family: Appearance.fontFamily; font.pixelSize: 20; font.bold: true }
-    Text { text: GameMode.active ? "Game Mode · background sampling paused" : "Live hardware overview"; color: Colors.color(7); font.family: Appearance.fontFamily; font.pixelSize: Appearance.fontSizeSmall; Layout.topMargin: -9 }
+    Text { text: GameMode.active ? "Game Mode · background sampling paused" : "Live hardware overview"; color: Colors.color(7); font.family: Appearance.fontFamily; font.pixelSize: Appearance.fontSizeSmall }
     GridLayout {
         Layout.fillWidth: true
         columns: 2

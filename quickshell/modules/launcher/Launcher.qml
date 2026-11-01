@@ -161,20 +161,23 @@ Scope {
 
         const name = app.name
         const exec = app.exec || ""
+        const comment = app.comment || ""
 
         const nameScore = fuzzyScore(query, name)
 
-        if (nameScore < 0)
-            return -1
-
-        // Normally the visible application name should dominate.
+        // Keep name matches strongest while still allowing useful searches
+        // such as "browser" to match an app whose description says browser.
         let score = nameScore
 
         // Allow searching executable names as a secondary signal.
         const execScore = fuzzyScore(query, exec)
 
         if (execScore >= 0)
-            score += Math.min(execScore * 0.15, 500)
+            score = Math.max(score, Math.min(execScore * 0.15, 500))
+
+        const commentScore = fuzzyScore(query, comment)
+        if (commentScore >= 0)
+            score = Math.max(score, Math.min(commentScore * 0.12, 350))
 
         return score
     }
@@ -385,13 +388,15 @@ Scope {
 
                 anchors.centerIn: parent
 
-                width: 480
-                height: 460
+                width: Math.min(760, win.width - 48)
+                height: Math.min(660, win.height - 64)
 
                 cardRadius: Appearance.radiusLarge
                 surfaceOpacity: Appearance.panelOpacity
                 shadowRadius: Appearance.shadowRadiusMedium
                 shadowOffset: Appearance.shadowOffsetMedium
+                showHighlight: false
+                borderColor: Qt.rgba(1, 1, 1, 0.16)
 
                 MouseArea {
                     anchors.fill: parent
@@ -399,8 +404,8 @@ Scope {
 
                 ColumnLayout {
                     anchors.fill: parent
-                    anchors.margins: 18
-                    spacing: 10
+                    anchors.margins: 20
+                    spacing: 12
 
                     // -------------------------------------------------
                     // SEARCH FIELD
@@ -410,8 +415,9 @@ Scope {
                         id: searchField
 
                         Layout.fillWidth: true
+                        Layout.preferredHeight: 50
 
-                        placeholderText: "Search apps..."
+                        placeholderText: "Search applications..."
 
                         color: Colors.foreground
 
@@ -505,77 +511,107 @@ Scope {
 
                         delegate: Rectangle {
                             width: listView.width
-                            height: 44
+                            height: 62
 
                             radius: 8
 
                             color:
                                 ListView.isCurrentItem
-                                ? Colors.color(4)
-                                : "transparent"
+                                ? Qt.rgba(Colors.color(4).r, Colors.color(4).g, Colors.color(4).b, 0.18)
+                                : rowMouse.containsMouse ? Qt.rgba(1, 1, 1, 0.045) : "transparent"
+                            
+                            border.width: ListView.isCurrentItem ? 1 : 0
+                            border.color: Qt.rgba(Colors.color(4).r, Colors.color(4).g, Colors.color(4).b, 0.5)
 
                             RowLayout {
                                 anchors.fill: parent
 
-                                anchors.leftMargin: 12
-                                anchors.rightMargin: 12
+                                anchors.leftMargin: 14
+                                anchors.rightMargin: 14
 
-                                spacing: 12
+                                spacing: 13
 
-                                Image {
-                                    Layout.preferredWidth: 28
-                                    Layout.preferredHeight: 28
+                                Rectangle {
+                                    Layout.preferredWidth: 36
+                                    Layout.preferredHeight: 36
+                                    radius: 10
+                                    color: Qt.rgba(1, 1, 1, 0.06)
 
-                                    sourceSize.width: 28
-                                    sourceSize.height: 28
+                                    Text {
+                                        anchors.centerIn: parent
+                                        text: (modelData.name || "?").slice(0, 1).toUpperCase()
+                                        color: Colors.color(4)
+                                        font.family: Appearance.fontFamily
+                                        font.pixelSize: 15
+                                        font.weight: Font.Bold
+                                    }
 
-                                    fillMode: Image.PreserveAspectFit
-                                    asynchronous: true
+                                    Image {
+                                        anchors.fill: parent
+                                        anchors.margins: 3
 
-                                    source: {
-                                        if (!modelData.icon)
-                                            return ""
+                                        sourceSize.width: 30
+                                        sourceSize.height: 30
 
-                                        return modelData.icon.startsWith("/")
-                                            ? "file://" + modelData.icon
-                                            : Quickshell.iconPath(
-                                                modelData.icon,
-                                                "application-x-executable"
-                                            )
+                                        fillMode: Image.PreserveAspectFit
+                                        asynchronous: true
+
+                                        source: {
+                                            if (!modelData.icon)
+                                                return ""
+
+                                            return modelData.icon.startsWith("/")
+                                                ? "file://" + modelData.icon
+                                                : Quickshell.iconPath(
+                                                    modelData.icon,
+                                                    "application-x-executable"
+                                                )
+                                        }
+                                    }
+                                }
+
+                                ColumnLayout {
+                                    Layout.fillWidth: true
+                                    spacing: 2
+
+                                    Text {
+                                        text: root.highlight(modelData.name, searchField.text)
+                                        textFormat: Text.RichText
+                                        color: Colors.foreground
+                                        font.family: Appearance.fontFamily
+                                        font.pixelSize: Appearance.fontSize + 1
+                                        font.weight: Font.Bold
+                                        Layout.fillWidth: true
+                                        elide: Text.ElideRight
+                                    }
+
+                                    Text {
+                                        visible: (modelData.comment || "").length > 0
+                                        text: modelData.comment || ""
+                                        color: Colors.color(7)
+                                        font.family: Appearance.fontFamily
+                                        font.pixelSize: Appearance.fontSizeSmall
+                                        Layout.fillWidth: true
+                                        elide: Text.ElideRight
                                     }
                                 }
 
                                 Text {
-                                    text: root.highlight(
-                                        modelData.name,
-                                        searchField.text
-                                    )
-
-                                    textFormat: Text.RichText
-
-                                    color:
-                                        ListView.isCurrentItem
-                                        ? Colors.background
-                                        : Colors.foreground
-
-                                    font.family:
-                                        Appearance.fontFamily
-
-                                    font.pixelSize:
-                                        Appearance.fontSize + 1
-
+                                    visible: searchField.text.length === 0 && index < 5
+                                    text: index + 1
+                                    color: ListView.isCurrentItem ? Colors.color(4) : Colors.textDim
+                                    font.family: Appearance.monoFont
+                                    font.pixelSize: 11
                                     font.weight: Font.Bold
-
-                                    Layout.fillWidth: true
-
-                                    elide: Text.ElideRight
                                 }
                             }
 
                             MouseArea {
+                                id: rowMouse
                                 anchors.fill: parent
 
                                 hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
 
                                 onEntered: {
                                     listView.currentIndex = index
@@ -613,7 +649,7 @@ Scope {
                         spacing: 14
 
                         Text {
-                            text: "↵ Launch"
+                            text: "↵  Launch"
                             color: Colors.color(8)
 
                             font.pixelSize: 10
@@ -621,7 +657,7 @@ Scope {
                         }
 
                         Text {
-                            text: "↑↓ Navigate"
+                            text: "↑ ↓  Navigate"
                             color: Colors.color(8)
 
                             font.pixelSize: 10
@@ -629,7 +665,7 @@ Scope {
                         }
 
                         Text {
-                            text: "Esc Close"
+                            text: "Esc  Close"
                             color: Colors.color(8)
 
                             font.pixelSize: 10
@@ -638,6 +674,13 @@ Scope {
 
                         Item {
                             Layout.fillWidth: true
+                        }
+
+                        Text {
+                            text: `${filteredApps.length} results`
+                            color: Colors.color(7)
+                            font.pixelSize: 10
+                            font.family: Appearance.fontFamily
                         }
                     }
                 }

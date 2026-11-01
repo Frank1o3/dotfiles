@@ -6,20 +6,19 @@ import qs.services
 Row {
     id: root
     spacing: 3
+    height: root.maxHeight
     property int barCount: 8
     property int maxHeight: 18
     property int barWidth: 3
     property color barColor: Colors.color(4)
-    property bool active: Cava.isPlaying
+    property bool active: Cava.isPlaying && !GameMode.active
 
     Repeater {
         model: root.barCount
-        Rectangle {
+        Item {
             required property int index
             width: root.barWidth
-            radius: root.barWidth / 2
-            color: root.barColor
-            opacity: root.active ? 0.9 : 0.35
+            height: root.maxHeight
 
             readonly property real targetHeight: {
                 if (!root.active) return 3;
@@ -27,12 +26,19 @@ Row {
                 return Math.max(3, (val / 100) * root.maxHeight);
             }
 
-            height: targetHeight
+            Rectangle {
+                anchors.bottom: parent.bottom
+                width: parent.width
+                height: parent.targetHeight
+                radius: root.barWidth / 2
+                color: root.barColor
+                opacity: root.active ? 0.9 : 0.35
 
-            Behavior on height {
-                NumberAnimation {
-                    duration: 80
-                    easing.type: Easing.OutCubic
+                Behavior on height {
+                    NumberAnimation {
+                        duration: Appearance.animFast
+                        easing.type: Easing.OutCubic
+                    }
                 }
             }
         }

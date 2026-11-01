@@ -1,7 +1,8 @@
 pragma Singleton
 import Quickshell
+import qs.services
 
-// Static design tokens for Fluid Glass
+// Design tokens and Game Mode-aware motion settings for Fluid Glass.
 Singleton {
     readonly property int radius: 16
     readonly property int radiusLarge: 22
@@ -21,15 +22,16 @@ Singleton {
 
     readonly property real glassOpacity: 0.20
     readonly property real hoverOpacity: 0.15
-    readonly property real panelOpacity: 0.72
+    readonly property real panelOpacity: 0.86
 
     readonly property real panelSurfaceOpacity: 0.15
     readonly property real panelBorderOpacity: 0.20
     readonly property real accentStrength: 0.92
 
-    readonly property int animFast: 160
-    readonly property int animNormal: 260
-    readonly property int animSlow: 380
+    // Keep shell motion coordinated with Hyprland and remove it in Game Mode.
+    readonly property int animFast: GameMode.active ? 0 : 150
+    readonly property int animNormal: GameMode.active ? 0 : 240
+    readonly property int animSlow: GameMode.active ? 0 : 360
 
     // ---------------------------------------------------------------
     // Glass depth tokens

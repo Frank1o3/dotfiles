@@ -167,7 +167,8 @@ Main tools used by this setup:
 | `SUPER + N` | Toggle notifications panel |
 | `SUPER + SHIFT + E` | Open power menu |
 | `SUPER + SHIFT + R` | Reload Hyprland config |
-| `SUPER + SHIFT + L` | Lock session |
+| `SUPER + CTRL + L` | Lock session |
+| `SUPER + /` | Open the searchable keyboard cheatsheet |
 
 ### Window management
 
@@ -178,17 +179,15 @@ Main tools used by this setup:
 | `SUPER + SHIFT + F` | Toggle floating mode |
 | `SUPER + P` | Toggle pseudo mode |
 | `SUPER + J` | Toggle split layout |
-| `ALT + TAB` | Focus next window |
-| `ALT + SHIFT + TAB` | Focus previous window |
 
 ### Navigation
 
 | Keybind | Action |
 | --- | --- |
 | `SUPER + H` | Focus left |
-| `SUPER + J` | Focus down |
 | `SUPER + K` | Focus up |
 | `SUPER + L` | Focus right |
+| `SUPER + ARROWS` | Focus in the arrow direction |
 | `SUPER + SHIFT + H` | Move window left |
 | `SUPER + SHIFT + J` | Move window down |
 | `SUPER + SHIFT + K` | Move window up |

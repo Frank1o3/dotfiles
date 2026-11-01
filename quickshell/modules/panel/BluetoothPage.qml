@@ -8,13 +8,13 @@ ColumnLayout {
     id: root
     spacing: 12
     readonly property BluetoothAdapter adapter: Bluetooth.defaultAdapter
+    readonly property var devices: root.adapter?.devices?.values ?? []
 
     RowLayout {
         Layout.fillWidth: true
         ColumnLayout {
             Layout.fillWidth: true
-            spacing: 2
-            Text { text: "Bluetooth"; color: Colors.foreground; font.family: Appearance.fontFamily; font.pixelSize: 20; font.bold: true }
+            spacing: 1
             Text { text: root.adapter?.name ?? "No Bluetooth adapter"; color: Colors.color(7); font.family: Appearance.fontFamily; font.pixelSize: Appearance.fontSizeSmall }
         }
         GlassSwitch { checked: root.adapter?.enabled ?? false; onToggled: value => { if (root.adapter) root.adapter.enabled = value } }
@@ -29,10 +29,10 @@ ColumnLayout {
     ListView {
         Layout.fillWidth: true
         Layout.preferredHeight: Math.min(contentHeight, 250)
-        visible: root.adapter?.enabled && (root.adapter?.devices.values.length ?? 0) > 0
+        visible: !!root.adapter && root.adapter.enabled && root.devices.length > 0
         clip: true
         spacing: 6
-        model: visible ? root.adapter.devices.values : []
+        model: visible ? root.devices : []
         delegate: Rectangle {
             required property var modelData
             width: ListView.view.width
@@ -68,7 +68,7 @@ ColumnLayout {
         color: Colors.color(7)
         font.family: Appearance.fontFamily
         font.pixelSize: Appearance.fontSize
-        visible: !root.adapter || !root.adapter.enabled || (root.adapter.devices.values.length === 0)
+        visible: !root.adapter || !root.adapter.enabled || root.devices.length === 0
         text: !root.adapter
             ? "No Bluetooth adapter is available. Check that BlueZ and its D-Bus service are running."
             : !root.adapter.enabled

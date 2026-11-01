@@ -9,7 +9,7 @@ hyprland
 hyprlock
 hypridle
 hyprshutdown
-hyprpolkitagent
+polkit
 quickshell
 qt6ct
 qt6-wayland

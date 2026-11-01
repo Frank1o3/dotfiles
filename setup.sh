@@ -68,7 +68,8 @@ if [ "$CONFIG_ONLY" -eq 0 ]; then
     if systemctl is-system-running >/dev/null 2>&1; then
         echo "Enabling user services..."
         systemctl --user enable --now gnome-keyring-daemon.service || true
-        systemctl --user enable --now hyprpolkitagent.service || true
+        # Quickshell owns the desktop polkit agent; avoid a competing prompt.
+        systemctl --user disable --now hyprpolkitagent.service || true
     fi
 else
     echo "Running in config-only mode..."

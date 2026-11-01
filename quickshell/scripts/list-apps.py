@@ -13,7 +13,7 @@ FIELD_CODES = ("%f", "%F", "%u", "%U", "%d", "%D", "%n", "%N", "%i", "%c", "%k",
 
 
 def parse_desktop(path):
-    name = exec_ = icon = None
+    name = exec_ = icon = comment = generic_name = None
     nodisplay = False
     terminal = False
 
@@ -37,6 +37,10 @@ def parse_desktop(path):
                     exec_ = line.split("=", 1)[1]
                 elif line.startswith("Icon=") and icon is None:
                     icon = line.split("=", 1)[1]
+                elif line.startswith("Comment=") and comment is None:
+                    comment = line.split("=", 1)[1]
+                elif line.startswith("GenericName=") and generic_name is None:
+                    generic_name = line.split("=", 1)[1]
                 elif line.startswith("NoDisplay="):
                     nodisplay = line.split("=", 1)[1].strip().lower() == "true"
                 elif line.startswith("Terminal="):
@@ -54,7 +58,12 @@ def parse_desktop(path):
     if terminal:
         exec_ = f"kitty -e {exec_}"
 
-    return {"name": name, "exec": exec_, "icon": icon or ""}
+    return {
+        "name": name,
+        "exec": exec_,
+        "icon": icon or "",
+        "comment": comment or generic_name or "",
+    }
 
 
 def main():

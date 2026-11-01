@@ -9,6 +9,8 @@ import qs.modules.notifications
 import qs.modules.wallpaper
 import qs.modules.powermenu
 import qs.modules.panel
+import qs.modules.cheatsheet
+import qs.modules.polkit
 
 ShellRoot {
     Bar {}
@@ -16,4 +18,6 @@ ShellRoot {
     Toasts {}
     WallpaperPicker {}
     PowerMenu {}
+    Cheatsheet {}
+    PolkitDialog {}
 }

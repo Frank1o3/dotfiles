@@ -115,14 +115,15 @@ The earlier plan stages have been implemented across the dotfiles: wallpaper-der
 
 ### Resume here
 
-1. Recheck the control-center composition: the latest live screenshot still shows the header and Quick Settings label crowded/overlapping. Fix the layout, then inspect the panel at the active display scale.
-2. Exercise each Settings destination (Wi-Fi, Bluetooth, System Monitor), the back button, and closing/reopening the panel. The recent change passes `qmllint`, but a mouse-driven page-switch check has not yet been completed.
-3. Review the grid and shelf modes against the cloned reference repository and the user's images. The shelf was visually inspected after the recent changes; the grid still needs a visual inspection.
-4. Review startup/runtime logs after the latest reload. An earlier run reported an undefined PathView delegate `index` and unset path attributes; the delegate now declares `index` and provides fallback values, but those fixes still need a fresh runtime log check.
-5. Review and tune the new unified top-bar capsule in a live session, especially its width on smaller displays and compact status icon legibility.
-6. Continue any remaining plan items based on the reference code, then update this status before moving to Veyra OS integration.
+1. Inspect the rebuilt control center in a live session at the active display scale; verify the anchored title/date header stays clear of the Home cards and check wallpaper-derived contrast.
+2. Exercise each dashboard destination (Home, Wi-Fi, Bluetooth, System Monitor), the page transitions, and closing/reopening the panel.
+3. Check launcher search, result descriptions, recent apps, keyboard navigation, launch, and close behavior.
+4. Review the wallpaper shelf and grid; confirm the active card, Apply button, and selection path work with the existing wallpaper script.
+5. Confirm the Cava visualizer bars rise from a shared bottom baseline and inspect Quickshell startup logs for the Bluetooth null-device warning and any new QML errors.
+6. Review and tune the unified top-bar capsule in a live session, especially on smaller displays.
+7. Close the remaining review items, then update this status before moving to Veyra OS integration.
 
-The top bar now uses one dark, high-contrast capsule with workspace navigation on the left, media and clock in the middle, and compact device/tray controls on the right. CPU and memory readouts no longer crowd the bar; live system statistics remain available in the control center. This is an initial visual adaptation and still needs live-session review.
+The top bar now uses one dark, high-contrast capsule with workspace navigation on the left, media and clock in the middle, and compact device/tray controls on the right. CPU and memory readouts no longer crowd the bar; live system statistics remain available in the control center. The control center now follows a wide dashboard pattern with a persistent navigation rail, overview cards, and dedicated Wi-Fi, Bluetooth, and system pages. The launcher now has a wider result list with application descriptions and improved keyboard cues. The wallpaper picker uses a larger active preview with a clear Apply action and dimmed backdrop. Cava bars are bottom-aligned so they grow upward, and Bluetooth's unavailable-adapter path no longer reads `devices` from null. These changes still need live-session review before calling the rice complete.
 
 ### Validation already recorded
 

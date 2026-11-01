@@ -3,6 +3,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Mpris
+import qs.services
 
 Singleton {
     id: root
@@ -13,7 +14,7 @@ Singleton {
     Process {
         id: proc
         command: ["sh", `${Quickshell.env("HOME")}/.config/quickshell/scripts/cava.sh`]
-        running: true
+        running: !GameMode.active
 
         stdout: SplitParser {
             splitMarker: "\n"

@@ -1,6 +1,7 @@
 import QtQuick
 import Qt5Compat.GraphicalEffects
 import qs.config
+import qs.services
 
 Item {
     id: root
@@ -31,7 +32,7 @@ Item {
     Glow {
         anchors.fill: glowSource
         source: glowSource
-        visible: root.accent
+        visible: root.accent && !GameMode.active
         radius: 14
         samples: 29
         color: Colors.color(4)

@@ -35,6 +35,7 @@ Scope {
             id: win
             required property var modelData
             screen: modelData
+            visible: !OverlayState.barHidden
             WlrLayershell.namespace: "quickshell:bar"
 
             readonly property bool panelOpen: PanelState.isOpen(modelData.name)
@@ -45,7 +46,7 @@ Scope {
                 right: true
             }
 
-            exclusiveZone: Appearance.barHeight
+            exclusiveZone: OverlayState.barHidden ? 0 : Appearance.barHeight
 
             implicitHeight: Appearance.barHeight + bg.implicitHeight
             color: "transparent"
@@ -155,15 +156,14 @@ Scope {
                 id: dropdownHost
                 anchors.top: pillRow.bottom
                 anchors.topMargin: 8
-                anchors.right: parent.right
-                anchors.rightMargin: 12
-                width: 440
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: Math.min(960, parent.width - 24)
                 height: win.panelOpen ? bg.implicitHeight : 0
                 clip: true
 
                 Behavior on height {
                     NumberAnimation {
-                        duration: 320
+                        duration: Appearance.animSlow
                         easing.type: Easing.OutExpo
                     }
                 }
@@ -184,7 +184,7 @@ Scope {
                     // Pop‑out scaling & fade
                     transform: Scale {
                         id: popScale
-                        origin.x: bg.width
+                        origin.x: bg.width / 2
                         origin.y: 0
                         xScale: win.panelOpen ? 1 : 0.85
                         yScale: win.panelOpen ? 1 : 0.85
@@ -193,13 +193,13 @@ Scope {
 
                     Behavior on opacity {
                         NumberAnimation {
-                            duration: 200
+                            duration: Appearance.animFast
                             easing.type: Easing.OutCubic
                         }
                     }
                     Behavior on transform {
                         NumberAnimation {
-                            duration: 280
+                            duration: Appearance.animNormal
                             easing.type: Easing.OutExpo
                         }
                     }
@@ -223,7 +223,7 @@ Scope {
                             opacity: win.panelOpen ? 1 : 0
 
                             Behavior on opacity {
-                                NumberAnimation { duration: 200 }
+                                NumberAnimation { duration: Appearance.animFast }
                             }
                         }
                     }

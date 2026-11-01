@@ -30,6 +30,7 @@ local script_launcher      = "qs ipc call launcher toggle"
 local script_wallpaper     = "qs ipc call wallpaper toggle"
 local script_notifications = "qs ipc call notifications toggle"
 local script_powermenu     = "qs ipc call powermenu toggle"
+local script_cheatsheet   = "qs ipc call cheatsheet toggle"
 
 -- =========================================================
 -- APPLICATIONS
@@ -169,6 +170,12 @@ hl.bind(
 	hl.dsp.exec_cmd(script_powermenu)
 )
 
+-- Searchable guide to the desktop shortcuts.
+hl.bind(
+	mainMod .. " + slash",
+	hl.dsp.exec_cmd(script_cheatsheet)
+)
+
 -- Reload Hyprland
 hl.bind(
 	mainMod .. " + SHIFT + R",
@@ -177,7 +184,7 @@ hl.bind(
 
 -- Lock session
 hl.bind(
-	mainMod .. " + SHIFT + L",
+	mainMod .. " + CTRL + L",
 	hl.dsp.exec_cmd("loginctl lock-session")
 )
 

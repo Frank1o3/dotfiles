@@ -15,7 +15,7 @@ ColumnLayout {
 
     RowLayout {
         Layout.fillWidth: true
-        Text { text: "Wi-Fi"; color: Colors.foreground; font.family: Appearance.fontFamily; font.pixelSize: 20; font.bold: true; Layout.fillWidth: true }
+        Text { text: "Wireless access"; color: Colors.foreground; font.family: Appearance.fontFamily; font.pixelSize: Appearance.fontSize; font.bold: true; Layout.fillWidth: true }
         GlassSwitch { checked: Networking.wifiEnabled; onToggled: value => Networking.wifiEnabled = value }
     }
     Rectangle {
