@@ -5,6 +5,7 @@ import qs.services
 // Design tokens and Game Mode-aware motion settings for Fluid Glass.
 Singleton {
     readonly property int radius: 16
+    readonly property int radiusMedium: 14
     readonly property int radiusLarge: 22
     readonly property int spacing: 8
     readonly property int barHeight: 52

@@ -11,8 +11,13 @@ Leader is **Space**. Press `Space` and pause to see available shortcuts through 
 | `v` / `V` | Select characters / lines |
 | `d` / `y` / `p` | Delete (cut) / yank (copy) / paste |
 | `u` / `Ctrl-r` | Undo / redo |
-| `:w` / `:q` / `:wq` | Save / quit / save and quit |
-| `Space w` / `Space q` | Save / quit |
+| `:w` / `:wq` | Save / save and quit |
+| `:q` | Smart close (closes split or buffer; exits on last file) |
+| `:qa` | Quit all files and exit Neovim |
+| `Space w` | Save current file |
+| `Space bd` / `Space c` | Close current buffer/file without closing window |
+| `Space qw` / `Ctrl-w c` | Close current window or buffer safely |
+| `Space qq` | Quit Neovim (all windows) |
 | `/text` then `n` / `N` | Search forward, then next / previous match |
 | `:%s/old/new/g` | Replace throughout the current file |
 

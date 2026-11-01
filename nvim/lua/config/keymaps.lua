@@ -1,7 +1,50 @@
 vim.g.mapleader = " "
 
-vim.keymap.set("n", "<leader>w", "<cmd>write<cr>")
-vim.keymap.set("n", "<leader>q", "<cmd>quit<cr>")
+vim.keymap.set("n", "<leader>w", "<cmd>write<cr>", { desc = "Save file" })
+
+-- =========================================================
+-- Smart Close: close split if splits exist; otherwise close buffer.
+-- Prevents closing Neovim entirely when you only want to stop editing a file.
+-- =========================================================
+local function smart_close()
+    local wins = vim.tbl_filter(function(w)
+        local config = vim.api.nvim_win_get_config(w)
+        if config.relative ~= "" then return false end -- ignore floating windows
+        local buf = vim.api.nvim_win_get_buf(w)
+        local ft = vim.bo[buf].filetype
+        return ft ~= "neo-tree" and ft ~= "Outline" and ft ~= "trouble" and ft ~= "toggleterm"
+    end, vim.api.nvim_list_wins())
+
+    if #wins > 1 then
+        -- There are multiple splits open: close current split
+        vim.cmd("close")
+    else
+        local listed = vim.tbl_filter(function(b)
+            return vim.bo[b].buflisted and vim.api.nvim_buf_get_name(b) ~= ""
+        end, vim.api.nvim_list_bufs())
+
+        if #listed > 1 then
+            Snacks.bufdelete()
+        else
+            vim.cmd("quit")
+        end
+    end
+end
+
+vim.api.nvim_create_user_command("SmartClose", smart_close, { desc = "Close window or buffer safely" })
+
+-- Window / buffer close mappings
+vim.keymap.set("n", "<leader>bd", function() Snacks.bufdelete() end, { desc = "Close buffer" })
+vim.keymap.set("n", "<leader>qw", smart_close, { desc = "Close window / buffer" })
+vim.keymap.set("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit Neovim" })
+vim.keymap.set("n", "<C-w>c", smart_close, { desc = "Close window / buffer" })
+vim.keymap.set("n", "<C-w>q", smart_close, { desc = "Close window / buffer" })
+
+-- Expand :q to :SmartClose so closing a file in a single window switches buffers
+-- instead of abruptly killing Neovim. (:qa, :q!, :close work unchanged).
+vim.cmd([[
+  cnoreabbrev <expr> q (getcmdtype() ==# ':' && getcmdline() ==# 'q') ? 'SmartClose' : 'q'
+]])
 vim.keymap.set("n", "<leader>f", function()
     require("conform").format({
         async = true,

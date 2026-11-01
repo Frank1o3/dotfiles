@@ -10,9 +10,10 @@ ColumnLayout {
     signal navigate(string page)
     spacing: 12
 
+    // Behavior Card
     Rectangle {
         Layout.fillWidth: true
-        Layout.preferredHeight: 178
+        Layout.preferredHeight: 184
         radius: Appearance.radiusLarge
         color: Qt.rgba(1, 1, 1, 0.035)
         border.width: 1
@@ -22,12 +23,12 @@ ColumnLayout {
             anchors.fill: parent
             anchors.margins: 15
             spacing: 10
-            Text { text: "Behavior"; color: Colors.foreground; font.family: Appearance.fontFamily; font.pixelSize: Appearance.fontSize + 2; font.bold: true }
+            Text { text: "Behavior & Energy"; color: Colors.foreground; font.family: Appearance.fontFamily; font.pixelSize: Appearance.fontSize + 2; font.bold: true }
             Text {
                 Layout.fillWidth: true
                 text: GameMode.active
-                    ? "Game Mode is active. Shell transitions, wallpaper blur, shadows, and background sampling are reduced."
-                    : "Motion and visual effects are lightweight by default and automatically turn off while Game Mode is active."
+                    ? "Game Mode is active. Shell transitions, wallpaper blur, shadows, and background sampling are paused."
+                    : "Desktop motion and effects are lightweight. Caffeine mode prevents system display sleeping."
                 color: Colors.textMuted
                 font.family: Appearance.fontFamily
                 font.pixelSize: Appearance.fontSizeSmall
@@ -40,15 +41,23 @@ ColumnLayout {
                     Layout.fillWidth: true
                     icon: "󰂛"
                     label: "Do Not Disturb"
-                    subLabel: Notifications.dnd ? "Notifications muted" : "Notifications enabled"
+                    subLabel: Notifications.dnd ? "Alerts muted" : "Alerts enabled"
                     active: Notifications.dnd
                     onClicked: Notifications.toggleDnd()
                 }
                 QuickToggle {
                     Layout.fillWidth: true
+                    icon: Caffeine.active ? "󰅶" : "󰾪"
+                    label: "Caffeine"
+                    subLabel: Caffeine.active ? "Screen awake" : "Normal sleep"
+                    active: Caffeine.active
+                    onClicked: Caffeine.toggle()
+                }
+                QuickToggle {
+                    Layout.fillWidth: true
                     icon: "󰊴"
                     label: "Game Mode"
-                    subLabel: GameMode.active ? "Performance profile active" : "Automatic"
+                    subLabel: GameMode.active ? "Performance" : "Automatic"
                     active: GameMode.active
                     interactive: false
                 }
@@ -56,6 +65,7 @@ ColumnLayout {
         }
     }
 
+    // Desktop Settings Grid
     Rectangle {
         Layout.fillWidth: true
         Layout.fillHeight: true
@@ -68,8 +78,8 @@ ColumnLayout {
             anchors.fill: parent
             anchors.margins: 15
             spacing: 10
-            Text { text: "Desktop settings"; color: Colors.foreground; font.family: Appearance.fontFamily; font.pixelSize: Appearance.fontSize + 2; font.bold: true }
-            Text { text: "Open a focused page or a system settings tool."; color: Colors.textMuted; font.family: Appearance.fontFamily; font.pixelSize: Appearance.fontSizeSmall }
+            Text { text: "Desktop Settings & Controls"; color: Colors.foreground; font.family: Appearance.fontFamily; font.pixelSize: Appearance.fontSize + 2; font.bold: true }
+            Text { text: "Open system configuration tools or shell utilities."; color: Colors.textMuted; font.family: Appearance.fontFamily; font.pixelSize: Appearance.fontSizeSmall }
 
             GridLayout {
                 Layout.fillWidth: true
@@ -116,9 +126,9 @@ ColumnLayout {
                 GlassButton {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    icon: "󰑓"
-                    text: "Reload Hyprland"
-                    onClicked: Quickshell.execDetached(["hyprctl", "reload"])
+                    icon: "󰌾"
+                    text: "Lock session"
+                    onClicked: Quickshell.execDetached(["qs", "ipc", "call", "lockscreen", "lock"])
                 }
             }
         }

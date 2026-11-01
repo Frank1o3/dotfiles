@@ -1,7 +1,7 @@
 # ~/.config/fish/config.fish  --  Veyra
 # Standalone: does NOT source cachyos-fish-config.
 # Optional tools (everything degrades gracefully without them):
-#   eza fzf fd bat zoxide starship
+#   eza fzf fd bat rg zoxide starship wl-copy paru
 
 set -g fish_greeting
 
@@ -22,9 +22,10 @@ if type -q bat
     set -gx MANPAGER "sh -c 'col -bx | bat -l man -p'"
 end
 
+# Nothing below is needed for non-interactive shells
 if not status is-interactive
-    # nothing below is needed for scripts / non-interactive shells
-else
+    return
+end
 
 # ------------------------------------------------- syntax highlighting colors
 # Catppuccin Mocha. fish highlights as you type (red = unknown command,
@@ -79,11 +80,23 @@ if type -q starship
 else
     set -g __fish_git_prompt_showdirtystate 1
     set -g __fish_git_prompt_showuntrackedfiles 1
+    set -g __fish_git_prompt_showcolorhints 1
+    set -g __fish_git_prompt_color_branch cba6f7
+    set -g __fish_git_prompt_color_dirtystate fab387
+    set -g __fish_git_prompt_color_stagedstate a6e3a1
+    set -g __fish_git_prompt_color_untrackedfiles f38ba8
+
     function fish_prompt
         set -l last_status $status
+
+        # Python virtualenv indicator
+        if set -q VIRTUAL_ENV
+            set_color 89b4fa
+            echo -n "("(basename $VIRTUAL_ENV)") "
+        end
+
         set_color $fish_color_cwd --bold
         echo -n (prompt_pwd --full-length-dirs 2)
-        set_color 6c7086
         echo -n (fish_vcs_prompt ' (%s)')
         if test $CMD_DURATION -gt 2000
             set_color f9e2af
@@ -108,14 +121,6 @@ end
 # Abbreviations expand on Space/Enter so you see (and learn) the real command.
 #   no suffix = show everything (ignores .gitignore)
 #   g suffix  = hide what .gitignore hides
-#
-#   l    list            lg    list, gitignore applied
-#   ll   long            llg   long, gitignore applied
-#   la   list + hidden   lag   list + hidden, gitignore applied
-#   lla  long + hidden   llag  long + hidden, gitignore applied
-#   lt   tree            ltg   tree, gitignore applied
-#   lta  tree + hidden   ltag  tree + hidden, gitignore applied
-# Limit tree depth by appending -L 2, e.g.  lt -L 2
 if type -q eza
     set -l e 'eza --group-directories-first --icons=auto'
     set -l ignore "-I '.git|node_modules'"
@@ -131,6 +136,7 @@ if type -q eza
     abbr -a lta  "$e -aT $ignore"
     abbr -a ltg  "$e -T --git-ignore"
     abbr -a ltag "$e -aT --git-ignore $ignore"
+    abbr -a tree "$e -T"
 else
     abbr -a l    'ls'
     abbr -a ll   'ls -lh'
@@ -144,19 +150,53 @@ else
     end
 end
 
-# ---------------------------------------------------------- other abbreviations
+# ---------------------------------------------------------- git abbreviations
+abbr -a gs   'git status -sb'
+abbr -a ga   'git add'
+abbr -a gaa  'git add -A'
+abbr -a gc   'git commit'
+abbr -a gcm  'git commit -m'
+abbr -a gp   'git push'
+abbr -a gpl  'git pull'
+abbr -a gd   'git diff'
+abbr -a gds  'git diff --staged'
+abbr -a gb   'git branch'
+abbr -a gsw  'git switch'
+abbr -a gco  'git checkout'
+abbr -a gst  'git stash'
+abbr -a gstp 'git stash pop'
+abbr -a gl   'git log --oneline --graph --decorate -20'
+abbr -a glog 'git log --oneline --graph --decorate'
+
+# ------------------------------------------------------- package manager & tools
+if type -q paru
+    abbr -a p      'paru'
+    abbr -a psyu   'paru -Syu'
+    abbr -a pin    'paru -S'
+    abbr -a prem   'paru -Rns'
+    abbr -a pss    'paru -Ss'
+    abbr -a psi    'paru -Si'
+    abbr -a pclean 'paru -Sc'
+else if type -q pacman
+    abbr -a p      'sudo pacman'
+    abbr -a psyu   'sudo pacman -Syu'
+    abbr -a pin    'sudo pacman -S'
+    abbr -a prem   'sudo pacman -Rns'
+    abbr -a pss    'pacman -Ss'
+    abbr -a psi    'pacman -Si'
+    abbr -a pclean 'sudo pacman -Sc'
+end
+
+# Systemd
+abbr -a sc  'systemctl'
+abbr -a scu 'systemctl --user'
+abbr -a jc  'journalctl -xe'
+abbr -a jcu 'journalctl --user -xe'
+
+# General
 abbr -a v      $EDITOR
 abbr -a reload 'exec fish'
-abbr -a gs     'git status -sb'
-abbr -a ga     'git add'
-abbr -a gaa    'git add -A'
-abbr -a gc     'git commit'
-abbr -a gcm    'git commit -m'
-abbr -a gp     'git push'
-abbr -a gpl    'git pull'
-abbr -a gd     'git diff'
-abbr -a gsw    'git switch'
-abbr -a gl     'git log --oneline --graph --decorate -20'
+abbr -a md     'mkdir -p'
 
 # ..  ...  ....  ->  cd ../  cd ../../  cd ../../../
 function __veyra_multicd
@@ -189,17 +229,100 @@ function hclear-session --description 'Forget commands typed in this session'
     history clear-session
 end
 
+function venv --description 'Activate Python virtual environment in .venv or venv'
+    if test -f .venv/bin/activate.fish
+        source .venv/bin/activate.fish
+    else if test -f venv/bin/activate.fish
+        source venv/bin/activate.fish
+    else
+        echo "No .venv/bin/activate.fish or venv/bin/activate.fish found"
+    end
+end
+
+function path --description 'Print each PATH entry on a separate line'
+    string join \n $PATH
+end
+
+# Wayland clipboard helper
+if type -q wl-copy
+    function clip --description 'Copy input or file to Wayland clipboard'
+        if test (count $argv) -eq 0
+            wl-copy
+        else if test -f $argv[1]
+            wl-copy < $argv[1]
+        else
+            echo -n (string join ' ' $argv) | wl-copy
+        end
+    end
+end
+
+# Interactive fuzzy search inside files using ripgrep and fzf
+if type -q rg; and type -q fzf
+    function fif --description 'Fuzzy search inside files with ripgrep and fzf'
+        set -l query (test (count $argv) -gt 0; and echo "$argv"; or echo "")
+        rg --color=always --line-number --no-heading --smart-case "$query" 2>/dev/null | \
+            fzf --ansi \
+                --delimiter : \
+                --preview 'bat --color=always --style=numbers --highlight-line {2} {1}' \
+                --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
+                --bind 'enter:become('$EDITOR' +{2} {1})'
+    end
+end
+
+# Universal archive extractor
+function extract --description 'Extract any archive automatically'
+    for file in $argv
+        if test -f $file
+            switch $file
+                case '*.tar.bz2' '*.tbz2'
+                    tar xjf $file
+                case '*.tar.gz' '*.tgz'
+                    tar xzf $file
+                case '*.tar.xz' '*.txz'
+                    tar xJf $file
+                case '*.tar.zst'
+                    tar --zstd -xf $file
+                case '*.bz2'
+                    bunzip2 $file
+                case '*.rar'
+                    unrar x $file
+                case '*.gz'
+                    gunzip $file
+                case '*.tar'
+                    tar xf $file
+                case '*.zip'
+                    unzip $file
+                case '*.Z'
+                    uncompress $file
+                case '*.7z'
+                    7z x $file
+                case '*.zst'
+                    zstd -d $file
+                case '*'
+                    echo "'$file' cannot be extracted via extract"
+            end
+        else
+            echo "'$file' is not a valid file"
+        end
+    end
+end
+
 function fhelp --description 'Show Veyra shell shortcuts'
     echo 'Keys'
-    echo '  Ctrl+L        clear screen'
-    echo '  Alt+L         clear screen + scrollback'
+    echo '  Ctrl+L          clear screen'
+    echo '  Alt+L           clear screen + scrollback'
     echo '  Right / Ctrl+F  accept autosuggestion     Alt+Right  accept one word'
-    echo '  Tab           completion pager            Shift+Tab  search completions'
-    echo '  Ctrl+R        fuzzy history (fzf)         Ctrl+T  insert file   Alt+C  cd to dir'
-    echo '  Alt+E         edit command line in $EDITOR'
-    echo 'Commands'
-    echo '  cls  hclear  hclear-session  mkcd DIR  z DIR (zoxide)'
-    echo '  l ll la lla  lg llg lag llag  lt lta ltg ltag   (g = apply .gitignore)'
+    echo '  Tab             completion pager          Shift+Tab  search completions'
+    echo '  Ctrl+R          fuzzy history (fzf)       Ctrl+T     insert file   Alt+C  cd to dir'
+    echo '  Alt+E           edit command line in $EDITOR'
+    echo 'Commands & Functions'
+    echo '  cls    hclear    hclear-session    mkcd DIR    venv    path'
+    echo '  fif [QUERY]    fuzzy search in files with preview and jump to $EDITOR'
+    echo '  clip [FILE]    copy stdin or file to clipboard (Wayland)'
+    echo '  extract FILE   extract any archive (.tar.*, .zip, .7z, .zst, etc.)'
+    echo '  p / psyu / pin / prem / pss         paru / pacman package shortcuts'
+    echo '  gs / ga / gc / gp / gpl / gd / gb   git shortcuts'
+    echo '  l ll la lla    lg llg lag llag      lt lta ltg ltag   (g = apply .gitignore)'
     echo 'Enter on a lone path: directory -> cd, text file -> $EDITOR, other file -> xdg-open'
 end
 
@@ -254,6 +377,4 @@ if test $__veyra_fish_major -ge 4
 else
     bind \r __veyra_enter
     bind \el __veyra_clear_all
-end
-
 end

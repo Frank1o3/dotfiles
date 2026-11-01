@@ -12,7 +12,7 @@ return {
         { "<leader>ge", "<cmd>Neotree float git_status<cr>", desc = "Git status explorer" },
     },
     opts = {
-        close_if_last_window = true,
+        close_if_last_window = false,
         window = {
             width = 32,
         },

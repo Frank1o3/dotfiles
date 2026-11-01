@@ -9,6 +9,7 @@ import qs.config
 import qs.config.components
 import qs.modules.bar.widgets
 import qs.modules.panel
+import qs.services
 
 Scope {
     id: root
@@ -37,6 +38,11 @@ Scope {
             screen: modelData
             visible: !OverlayState.barHidden
             WlrLayershell.namespace: "quickshell:bar"
+
+            IdleInhibitor {
+                window: win
+                enabled: Caffeine.active
+            }
 
             readonly property bool panelOpen: PanelState.isOpen(modelData.name)
 

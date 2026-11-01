@@ -11,6 +11,7 @@ import qs.modules.powermenu
 import qs.modules.panel
 import qs.modules.cheatsheet
 import qs.modules.polkit
+import qs.modules.lockscreen
 
 ShellRoot {
     Bar {}
@@ -20,4 +21,5 @@ ShellRoot {
     PowerMenu {}
     Cheatsheet {}
     PolkitDialog {}
+    LockScreen {}
 }

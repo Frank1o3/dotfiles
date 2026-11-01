@@ -81,7 +81,7 @@ Scope {
 
     function activateSelected() {
         switch (selected) {
-        case 0: runAction("hyprlock || swaylock || loginctl lock-session", "Locking", "Screen locked", false); break;
+        case 0: runAction("qs ipc call lockscreen lock || hyprlock || swaylock || loginctl lock-session", "Locking", "Screen locked", false); break;
         case 1: runAction("systemctl suspend", "Sleeping", "System suspending", false); break;
         case 2: runAction("systemctl hibernate", "Hibernating", "System hibernating", true); break;
         case 3: runAction("systemctl reboot", "Rebooting", "System restarting", true); break;

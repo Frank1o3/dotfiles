@@ -18,23 +18,36 @@ RowLayout {
 
     property bool panelOpen: false
     property bool brightnessAvailable: false
-    property string page: "home"
+    property string page: PanelState.targetPage || "home"
+
+    Connections {
+        target: PanelState
+        function onTargetPageChanged() {
+            root.page = PanelState.targetPage;
+        }
+    }
+    onPageChanged: PanelState.targetPage = root.page
+    onPanelOpenChanged: if (!panelOpen) PanelState.targetPage = "home"
+
     readonly property var wifiDevice: Networking.devices.values.find(d => d.type === DeviceType.Wifi) ?? null
-    readonly property string pageTitle: page === "wifi" ? "Wi-Fi"
+    readonly property string pageTitle: page === "notifications" ? "Notifications"
+        : page === "audio" ? "Audio & Media"
+        : page === "wifi" ? "Wi-Fi"
         : page === "bluetooth" ? "Bluetooth"
         : page === "system" ? "System Monitor"
         : page === "settings" ? "Settings" : "Overview"
+
     readonly property var destinations: [
         { key: "home", title: "Home", icon: "󰋜" },
+        { key: "notifications", title: "Alerts", icon: "󰂚", badge: Notifications.count },
+        { key: "audio", title: "Audio", icon: "󰕾" },
         { key: "wifi", title: "Wi-Fi", icon: "󰖩" },
         { key: "bluetooth", title: "Bluetooth", icon: "󰂯" },
         { key: "system", title: "System", icon: "󰍛" },
         { key: "settings", title: "Settings", icon: "󰒓" }
     ]
 
-    onPanelOpenChanged: if (!panelOpen) page = "home"
-
-    // Persistent navigation keeps destinations visible while the page changes.
+    // Persistent navigation rail
     Rectangle {
         id: rail
         Layout.preferredWidth: 104
@@ -46,29 +59,29 @@ RowLayout {
 
         ColumnLayout {
             anchors.fill: parent
-            anchors.margins: 9
-            spacing: 6
+            anchors.margins: 8
+            spacing: 4
 
             Rectangle {
                 Layout.alignment: Qt.AlignHCenter
-                Layout.preferredWidth: 42
-                Layout.preferredHeight: 42
-                radius: 15
+                Layout.preferredWidth: 38
+                Layout.preferredHeight: 38
+                radius: 14
                 color: Qt.rgba(Colors.color(4).r, Colors.color(4).g, Colors.color(4).b, 0.18)
                 Text {
                     anchors.centerIn: parent
                     text: "󰀻"
                     color: Colors.color(4)
                     font.family: Appearance.iconFont
-                    font.pixelSize: 21
+                    font.pixelSize: 20
                 }
             }
 
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 1
-                Layout.topMargin: 5
-                Layout.bottomMargin: 3
+                Layout.topMargin: 3
+                Layout.bottomMargin: 2
                 color: Qt.rgba(1, 1, 1, 0.10)
             }
 
@@ -79,11 +92,11 @@ RowLayout {
                     required property var modelData
                     readonly property bool selected: root.page === modelData.key
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 62
+                    Layout.preferredHeight: 54
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: 15
+                        radius: 13
                         color: navItem.selected
                             ? Qt.rgba(Colors.color(4).r, Colors.color(4).g, Colors.color(4).b, 0.22)
                             : navMouse.containsMouse ? Qt.rgba(1, 1, 1, 0.07) : "transparent"
@@ -91,15 +104,35 @@ RowLayout {
                         border.color: Qt.rgba(Colors.color(4).r, Colors.color(4).g, Colors.color(4).b, 0.42)
                         Behavior on color { ColorAnimation { duration: Appearance.animFast } }
 
+                        // Notification count badge
+                        Rectangle {
+                            visible: !!navItem.modelData.badge && navItem.modelData.badge > 0
+                            anchors.top: parent.top
+                            anchors.right: parent.right
+                            anchors.topMargin: 4
+                            anchors.rightMargin: 6
+                            width: 14
+                            height: 14
+                            radius: 7
+                            color: Colors.color(1)
+                            Text {
+                                anchors.centerIn: parent
+                                text: (navItem.modelData.badge ?? 0) > 9 ? "9+" : String(navItem.modelData.badge ?? "")
+                                color: Colors.background
+                                font.pixelSize: 8
+                                font.bold: true
+                            }
+                        }
+
                         Column {
                             anchors.centerIn: parent
-                            spacing: 4
+                            spacing: 3
                             Text {
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 text: navItem.modelData.icon
                                 color: navItem.selected ? Colors.color(4) : Colors.textMuted
                                 font.family: Appearance.iconFont
-                                font.pixelSize: 19
+                                font.pixelSize: 18
                             }
                             Text {
                                 anchors.horizontalCenter: parent.horizontalCenter
@@ -155,7 +188,7 @@ RowLayout {
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 4
                 Text {
-                    text: root.page === "home" ? "Control Center" : "Settings"
+                    text: root.page === "home" ? "Control Center" : root.pageTitle
                     color: Colors.foreground
                     font.family: Appearance.fontFamily
                     font.pixelSize: 21
@@ -164,7 +197,7 @@ RowLayout {
                 Text {
                     text: root.page === "home"
                         ? Qt.formatDateTime(new Date(), "dddd, MMM d · hh:mm AP")
-                        : root.pageTitle
+                        : (root.page === "notifications" ? `${Notifications.count} unread notifications` : "Quick configuration & controls")
                     color: Colors.color(7)
                     font.family: Appearance.fontFamily
                     font.pixelSize: Appearance.fontSizeSmall
@@ -201,7 +234,9 @@ RowLayout {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-            sourceComponent: root.page === "wifi" ? wifiPage
+            sourceComponent: root.page === "notifications" ? notificationsPage
+                : root.page === "audio" ? audioPage
+                : root.page === "wifi" ? wifiPage
                 : root.page === "bluetooth" ? bluetoothPage
                 : root.page === "system" ? systemPage
                 : root.page === "settings" ? settingsPage : overview
@@ -264,14 +299,29 @@ RowLayout {
                             }
                             QuickToggle {
                                 Layout.fillWidth: true
-                                icon: "󰂛"; label: "Do Not Disturb"; active: Notifications.dnd
-                                subLabel: Notifications.dnd ? "On" : "Off"
-                                onClicked: Notifications.toggleDnd()
+                                icon: Notifications.dnd ? "󰂛" : "󰂚"; label: "Notifications"
+                                active: !Notifications.dnd
+                                subLabel: Notifications.dnd ? "Muted (DND)" : (Notifications.count > 0 ? `${Notifications.count} unread` : "Alerts On")
+                                onClicked: root.page = "notifications"
+                            }
+                            QuickToggle {
+                                Layout.fillWidth: true
+                                icon: Caffeine.active ? "󰅶" : "󰾪"; label: "Caffeine"
+                                active: Caffeine.active
+                                subLabel: Caffeine.active ? "Screen Awake" : "Normal Sleep"
+                                onClicked: Caffeine.toggle()
                             }
                             QuickToggle {
                                 Layout.fillWidth: true
                                 icon: "󰊴"; label: "Game Mode"; active: GameMode.active; interactive: false
                                 subLabel: GameMode.active ? "Active" : "Idle"
+                            }
+                            QuickToggle {
+                                Layout.fillWidth: true
+                                icon: "󰓅"; label: "Power Profile"
+                                active: GameMode.active
+                                subLabel: GameMode.active ? "Performance" : "Balanced"
+                                onClicked: root.page = "system"
                             }
                         }
                     }
@@ -292,7 +342,18 @@ RowLayout {
                         anchors.margins: 13
                         spacing: 11
 
-                        SectionLabel { icon: "󰕾"; text: "Quick Controls" }
+                        RowLayout {
+                            Layout.fillWidth: true
+                            SectionLabel { icon: "󰕾"; text: "Quick Controls"; Layout.fillWidth: true }
+                            Text {
+                                text: "Audio & Media ›"
+                                color: Colors.color(4)
+                                font.family: Appearance.fontFamily
+                                font.pixelSize: Appearance.fontSizeSmall
+                                MouseArea { anchors.fill: parent; cursorShape: Qt.PointingHandCursor; onClicked: root.page = "audio" }
+                            }
+                        }
+
                         readonly property PwNode sink: Pipewire.defaultAudioSink
                         PwObjectTracker { objects: [controlContent.sink] }
 
@@ -354,23 +415,47 @@ RowLayout {
 
                 Rectangle {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 146
+                    implicitHeight: devicesContent.implicitHeight + 28
                     radius: Appearance.radiusLarge
                     color: Qt.rgba(1, 1, 1, 0.035)
                     border.width: 1
                     border.color: Qt.rgba(1, 1, 1, 0.07)
                     ColumnLayout {
+                        id: devicesContent
                         anchors.fill: parent
-                        anchors.margins: 15
+                        anchors.margins: 14
                         spacing: 8
-                        Text { text: "YOUR DEVICES"; color: Colors.color(7); font.family: Appearance.fontFamily; font.pixelSize: 10; font.bold: true; font.letterSpacing: 1 }
+                        Text { text: "YOUR DEVICES & ALERTS"; color: Colors.color(7); font.family: Appearance.fontFamily; font.pixelSize: 10; font.bold: true; font.letterSpacing: 1 }
+
+                        // Notifications row
                         RowLayout {
                             Layout.fillWidth: true
                             spacing: 10
                             Rectangle {
-                                Layout.preferredWidth: 36; Layout.preferredHeight: 36; radius: 13
+                                Layout.preferredWidth: 34; Layout.preferredHeight: 34; radius: 12
+                                color: Qt.rgba(Colors.color(1).r, Colors.color(1).g, Colors.color(1).b, 0.15)
+                                Text { anchors.centerIn: parent; text: Notifications.dnd ? "󰂛" : "󰂚"; color: Colors.color(1); font.family: Appearance.iconFont; font.pixelSize: 17 }
+                            }
+                            ColumnLayout {
+                                Layout.fillWidth: true
+                                spacing: 1
+                                Text { text: "Notifications"; color: Colors.foreground; font.family: Appearance.fontFamily; font.pixelSize: Appearance.fontSize; font.bold: true }
+                                Text { text: Notifications.dnd ? "Muted (Do Not Disturb)" : (Notifications.count > 0 ? `${Notifications.count} active alerts` : "All caught up"); color: Colors.color(7); font.family: Appearance.fontFamily; font.pixelSize: Appearance.fontSizeSmall }
+                            }
+                            Text { text: "›"; color: Colors.color(7); font.pixelSize: 20 }
+                            TapHandler { onTapped: root.page = "notifications" }
+                        }
+
+                        Rectangle { Layout.fillWidth: true; Layout.preferredHeight: 1; color: Qt.rgba(1, 1, 1, 0.08) }
+
+                        // Network row
+                        RowLayout {
+                            Layout.fillWidth: true
+                            spacing: 10
+                            Rectangle {
+                                Layout.preferredWidth: 34; Layout.preferredHeight: 34; radius: 12
                                 color: Qt.rgba(Colors.color(4).r, Colors.color(4).g, Colors.color(4).b, 0.15)
-                                Text { anchors.centerIn: parent; text: Networking.wifiEnabled ? "󰤨" : "󰤭"; color: Colors.color(4); font.family: Appearance.iconFont; font.pixelSize: 18 }
+                                Text { anchors.centerIn: parent; text: Networking.wifiEnabled ? "󰤨" : "󰤭"; color: Colors.color(4); font.family: Appearance.iconFont; font.pixelSize: 17 }
                             }
                             ColumnLayout {
                                 Layout.fillWidth: true
@@ -378,17 +463,20 @@ RowLayout {
                                 Text { text: "Network"; color: Colors.foreground; font.family: Appearance.fontFamily; font.pixelSize: Appearance.fontSize; font.bold: true }
                                 Text { text: Networking.wifiEnabled ? (root.wifiDevice?.networks.values.find(n => n.connected)?.name ?? "Wi-Fi enabled") : "Wi-Fi disabled"; color: Colors.color(7); font.family: Appearance.fontFamily; font.pixelSize: Appearance.fontSizeSmall; elide: Text.ElideRight; Layout.fillWidth: true }
                             }
-                            Text { text: "›"; color: Colors.color(7); font.pixelSize: 21 }
+                            Text { text: "›"; color: Colors.color(7); font.pixelSize: 20 }
                             TapHandler { onTapped: root.page = "wifi" }
                         }
+
                         Rectangle { Layout.fillWidth: true; Layout.preferredHeight: 1; color: Qt.rgba(1, 1, 1, 0.08) }
+
+                        // Bluetooth row
                         RowLayout {
                             Layout.fillWidth: true
                             spacing: 10
                             Rectangle {
-                                Layout.preferredWidth: 36; Layout.preferredHeight: 36; radius: 13
+                                Layout.preferredWidth: 34; Layout.preferredHeight: 34; radius: 12
                                 color: Qt.rgba(Colors.color(6).r, Colors.color(6).g, Colors.color(6).b, 0.13)
-                                Text { anchors.centerIn: parent; text: "󰂯"; color: Colors.color(6); font.family: Appearance.iconFont; font.pixelSize: 18 }
+                                Text { anchors.centerIn: parent; text: "󰂯"; color: Colors.color(6); font.family: Appearance.iconFont; font.pixelSize: 17 }
                             }
                             ColumnLayout {
                                 Layout.fillWidth: true
@@ -396,7 +484,7 @@ RowLayout {
                                 Text { text: "Bluetooth"; color: Colors.foreground; font.family: Appearance.fontFamily; font.pixelSize: Appearance.fontSize; font.bold: true }
                                 Text { text: Bluetooth.defaultAdapter ? (Bluetooth.defaultAdapter.enabled ? `${Bluetooth.defaultAdapter.devices.values.filter(d => d.connected).length} connected` : "Turned off") : "Adapter unavailable"; color: Colors.color(7); font.family: Appearance.fontFamily; font.pixelSize: Appearance.fontSizeSmall }
                             }
-                            Text { text: "›"; color: Colors.color(7); font.pixelSize: 21 }
+                            Text { text: "›"; color: Colors.color(7); font.pixelSize: 20 }
                             TapHandler { onTapped: root.page = "bluetooth" }
                         }
                     }
@@ -432,6 +520,8 @@ RowLayout {
         }
     }
 
+    Component { id: notificationsPage; NotificationsPage {} }
+    Component { id: audioPage; AudioPage {} }
     Component { id: wifiPage; WifiPage {} }
     Component { id: bluetoothPage; BluetoothPage {} }
     Component { id: systemPage; SystemPage {} }
