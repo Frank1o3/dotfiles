@@ -77,6 +77,20 @@ return {
 
         if Workspace.has("JavaScript") or Workspace.has("TypeScript") then
             vim.lsp.config("vtsls", { capabilities = caps })
+            vim.lsp.config("eslint", {
+                capabilities = caps,
+                settings = {
+                    workingDirectory = { mode = "auto" },
+                    codeActionOnSave = { enable = false },
+                },
+            })
+        end
+
+        if Workspace.has("HTML") then
+            vim.lsp.config("html", { capabilities = caps })
+        end
+        if Workspace.has("CSS") then
+            vim.lsp.config("cssls", { capabilities = caps })
         end
 
         if Workspace.has("QML") then vim.lsp.config("qmlls", {
@@ -110,16 +124,32 @@ return {
             vim.lsp.config("taplo", { capabilities = caps })
         end
 
-        if Workspace.has("Lua") then vim.lsp.config("lua_ls", {
-            capabilities = caps,
-            settings = {
+        if Workspace.has("Lua") then
+            local lua_settings = {
                 Lua = {
                     diagnostics = { globals = { "vim" } },
                     workspace = { checkThirdParty = false },
                     telemetry = { enable = false },
                 },
-            },
-        }) end
+            }
+            if Workspace.is_neovim_config() then
+                lua_settings.Lua.runtime = { version = "LuaJIT" }
+                lua_settings.Lua.workspace.library = vim.api.nvim_get_runtime_file("", true)
+                lua_settings.Lua.completion = { callSnippet = "Replace" }
+            end
+            vim.lsp.config("lua_ls", {
+                capabilities = caps,
+                settings = lua_settings,
+                root_markers = { ".luarc.json", ".luarc.jsonc", ".luacheckrc", "stylua.toml", "init.lua", ".git" },
+            })
+        end
+
+        if Workspace.has("Markdown") then
+            vim.lsp.config("marksman", {
+                capabilities = caps,
+                root_markers = { ".marksman.toml", ".git" },
+            })
+        end
 
         require("config.language_servers").refresh()
     end,

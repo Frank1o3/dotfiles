@@ -6,17 +6,39 @@ local M = {
 
 M.threshold = 5
 
+local function absolute(path)
+    return vim.fs.normalize(vim.fn.fnamemodify(path, ":p"))
+end
+
+function M.is_neovim_config(root)
+    local directory = absolute(root or M.root or vim.fn.getcwd())
+    for _ = 1, 6 do
+        if vim.fn.filereadable(directory .. "/init.lua") == 1
+            and vim.fn.isdirectory(directory .. "/lua") == 1 then
+            return true
+        end
+        local nvim = directory .. "/nvim"
+        if vim.fn.filereadable(nvim .. "/init.lua") == 1 and vim.fn.isdirectory(nvim .. "/lua") == 1 then
+            return true
+        end
+        local parent = vim.fs.dirname(directory)
+        if parent == directory then break end
+        directory = parent
+    end
+    return false
+end
+
 local code_extensions = {
     py = "Python", pyw = "Python", pyi = "Python",
     rs = "Rust",
     c = "C", h = "Header",
     cc = "C++", cpp = "C++", cxx = "C++", hh = "C++", hpp = "C++", hxx = "C++", mm = "C++",
-    js = "JavaScript", jsx = "JavaScript",
-    ts = "TypeScript", tsx = "TypeScript",
+    js = "JavaScript", jsx = "JavaScript", mjs = "JavaScript", cjs = "JavaScript",
+    ts = "TypeScript", tsx = "TypeScript", mts = "TypeScript", cts = "TypeScript",
     lua = "Lua", go = "Go", java = "Java", kt = "Kotlin", kts = "Kotlin",
     cs = "C#", rb = "Ruby", php = "PHP", swift = "Swift",
     sh = "Shell", bash = "Shell", zsh = "Shell", fish = "Shell",
-    html = "HTML", css = "CSS", scss = "CSS", sql = "SQL", qml = "QML",
+    html = "HTML", css = "CSS", scss = "CSS", sass = "CSS", less = "CSS", sql = "SQL", qml = "QML",
     zig = "Zig", hs = "Haskell", ex = "Elixir", exs = "Elixir", cmake = "CMake",
 }
 
@@ -25,10 +47,6 @@ local config_extensions = {
     yaml = "YAML", yml = "YAML",
     toml = "TOML",
 }
-
-local function absolute(path)
-    return vim.fs.normalize(vim.fn.fnamemodify(path, ":p"))
-end
 
 local function find_root()
     local args = vim.fn.argv()
@@ -90,11 +108,14 @@ local function scan_files(root)
 end
 
 local function count_languages(root)
-    local code, configs, ambiguous_headers = {}, {}, 0
+    local code, configs, ambiguous_headers, markdown_files = {}, {}, 0, 0
     for _, file in ipairs(scan_files(root)) do
         local relative_path = file.path
         local basename = relative_path:match("([^/]+)$")
         local extension = relative_path:match("%.([^./]+)$")
+        if extension and extension:lower() == "md" then
+            markdown_files = markdown_files + 1
+        end
         if basename == "CMakeLists.txt" then
             code.CMake = (code.CMake or 0) + file.lines
         end
@@ -125,7 +146,7 @@ local function count_languages(root)
 
     local total = 0
     for _, count in pairs(code) do total = total + count end
-    return { code_lines = total, code = code, configs = configs, enabled = {} }
+    return { code_lines = total, code = code, configs = configs, markdown_files = markdown_files, enabled = {} }
 end
 
 local function selected(profile, language)
@@ -141,6 +162,13 @@ local function configure_profile(profile)
         end
     end
     if (profile.code.CMake or 0) > 0 then enabled.CMake = true end
+    -- Small HTML/CSS portions are still essential in front-end projects.
+    if (profile.code.HTML or 0) > 0 then enabled.HTML = true end
+    if (profile.code.CSS or 0) > 0 then enabled.CSS = true end
+    if (profile.markdown_files or 0) > 0 then enabled.Markdown = true end
+    -- Keep the editor self-hosting: LuaLS, StyLua, and Tree-sitter remain
+    -- available when this workspace contains the Neovim config itself.
+    if M.is_neovim_config(M.root) then enabled.Lua = true end
     profile.enabled = enabled
 
     -- Config-file language servers are inexpensive and useful even when a
@@ -187,6 +215,9 @@ function M.summary()
             table.insert(parts, string.format("%s (%d files)", language, count))
         end
     end
+    if (M.profile.markdown_files or 0) > 0 then
+        table.insert(parts, string.format("Markdown (%d files)", M.profile.markdown_files))
+    end
 
     if #parts == 0 then return "No recognized source files" end
     return table.concat(parts, " · ")
@@ -203,7 +234,11 @@ function M.mason_tools()
     if M.has("C") or M.has("C++") then add("clangd", "clang-format") end
     if M.has("CMake") then add("cmake-language-server") end
     if M.has("JavaScript") or M.has("TypeScript") then add("vtsls", "prettier") end
+    if M.has("JavaScript") or M.has("TypeScript") then add("eslint-lsp") end
+    if M.has("HTML") then add("html-lsp", "prettier") end
+    if M.has("CSS") then add("css-lsp", "prettier") end
     if M.has("Lua") then add("lua-language-server", "stylua") end
+    if M.has("Markdown") then add("marksman", "prettier") end
     if M.has("JSON") then add("json-lsp", "prettier") end
     if M.has("YAML") then add("yaml-language-server", "prettier") end
     if M.has("TOML") then add("taplo") end
@@ -234,6 +269,7 @@ function M.treesitter_languages()
     add_if("C++", "cpp")
     add_if("JavaScript", "javascript")
     add_if("TypeScript", "typescript")
+    add_if("TypeScript", "tsx")
     add_if("QML", "qmljs")
     add_if("CMake", "cmake")
     add_if("Lua", "lua")
@@ -241,6 +277,8 @@ function M.treesitter_languages()
     add_if("YAML", "yaml")
     add_if("TOML", "toml")
     add_if("Shell", "bash")
+    add_if("HTML", "html")
+    add_if("CSS", "css")
 
     local result, seen = {}, {}
     for _, parser in ipairs(parsers) do

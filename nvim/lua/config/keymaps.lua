@@ -42,6 +42,7 @@ vim.keymap.set("n", "<leader>pO", "<cmd>ProjectOutdated<cr>", { desc = "Project:
 vim.keymap.set("n", "<leader>pU", "<cmd>ProjectUpgrade<cr>", { desc = "Project: update dependencies" })
 vim.keymap.set("n", "<leader>cb", "<cmd>ProjectBuild<cr>", { desc = "Build active project" })
 vim.keymap.set("n", "<leader>ct", "<cmd>ProjectTest<cr>", { desc = "Test active project" })
+vim.keymap.set("n", "<leader>cr", "<cmd>ProjectRun<cr>", { desc = "Run frontend dev server" })
 vim.keymap.set("n", "<leader>cf", function()
     vim.lsp.buf.code_action({
         context = {

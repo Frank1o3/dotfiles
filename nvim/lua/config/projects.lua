@@ -82,10 +82,12 @@ local function javascript_commands(root, action)
     local package_json = root .. "/package.json"
     if vim.fn.filereadable(package_json) ~= 1 then return nil end
     local ok, manifest = pcall(vim.json.decode, table.concat(vim.fn.readfile(package_json), "\n"))
-    local script = action == "build" and "build" or "test"
-    if not ok or not manifest.scripts or not manifest.scripts[script] then
-        return nil
+    if not ok or not manifest.scripts then return nil end
+    local script = action
+    if action == "dev" then
+        script = manifest.scripts.dev and "dev" or (manifest.scripts.start and "start" or nil)
     end
+    if not script or not manifest.scripts[script] then return nil end
 
     local manager = vim.fn.filereadable(root .. "/pnpm-lock.yaml") == 1 and "pnpm"
         or (vim.fn.filereadable(root .. "/yarn.lock") == 1 and "yarn" or "npm")
@@ -154,6 +156,20 @@ function M.run(action)
         return
     end
 
+    launch(root, commands)
+end
+
+function M.run_dev()
+    local root = Workspace.root or root_for(0)
+    if not root or not (Workspace.has("JavaScript") or Workspace.has("TypeScript")) then
+        vim.notify("No JavaScript or TypeScript workspace is active", vim.log.levels.WARN, { title = "Project" })
+        return
+    end
+    local commands = javascript_commands(root, "dev")
+    if not commands then
+        vim.notify("No dev or start script is defined in package.json", vim.log.levels.WARN, { title = "Project" })
+        return
+    end
     launch(root, commands)
 end
 
@@ -276,6 +292,9 @@ vim.api.nvim_create_user_command("ProjectBuild", function() M.run("build") end, 
 })
 vim.api.nvim_create_user_command("ProjectTest", function() M.run("test") end, {
     desc = "Test the active language project",
+})
+vim.api.nvim_create_user_command("ProjectRun", M.run_dev, {
+    desc = "Run the JavaScript project's dev or start script",
 })
 vim.api.nvim_create_user_command("ProjectDependencies", function()
     local root, filetype = root_for(0)

@@ -9,7 +9,8 @@ return {
         local parsers = require("config.workspace").treesitter_languages()
         local filetypes_by_parser = {
             python = { "python" }, lua = { "lua" }, c = { "c" }, cpp = { "cpp" }, rust = { "rust" },
-            javascript = { "javascript", "javascriptreact" }, typescript = { "typescript", "typescriptreact" },
+            javascript = { "javascript", "javascriptreact" }, typescript = { "typescript" },
+            tsx = { "typescriptreact" }, html = { "html" }, css = { "css", "scss", "less" },
             qmljs = { "qml", "qmljs" }, cmake = { "cmake" }, gitignore = { "gitignore" },
             json = { "json" }, yaml = { "yaml" }, toml = { "toml" },
             markdown = { "markdown" }, markdown_inline = { "markdown" }, bash = { "sh", "bash" },

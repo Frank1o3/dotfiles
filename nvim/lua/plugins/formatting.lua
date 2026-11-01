@@ -15,11 +15,17 @@ if Workspace.has("TypeScript") then
     formatters.typescript = { "prettier" }
     formatters.typescriptreact = { "prettier" }
 end
+if Workspace.has("HTML") then formatters.html = { "prettier" } end
+if Workspace.has("CSS") then
+    formatters.css = { "prettier" }
+    formatters.scss = { "prettier" }
+    formatters.less = { "prettier" }
+    formatters.sass = { "prettier" }
+end
 if Workspace.has("JSON") then formatters.json = { "prettier" } end
 if Workspace.has("YAML") then formatters.yaml = { "prettier" } end
 if Workspace.has("TOML") then formatters.toml = { "taplo" } end
-if Workspace.has("Python") or Workspace.has("JavaScript") or Workspace.has("TypeScript")
-    or Workspace.has("JSON") or Workspace.has("YAML") then
+if Workspace.has("Markdown") then
     formatters.markdown = { "prettier" }
 end
 if Workspace.has("Shell") then formatters.sh = { "shfmt" } end

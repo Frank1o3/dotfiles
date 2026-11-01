@@ -15,6 +15,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
         vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
         vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
 
+        if client and client.name == "eslint" then
+            vim.keymap.set("n", "<leader>ce", "<cmd>LspEslintFixAll<cr>", {
+                buffer = event.buf,
+                desc = "ESLint: fix all problems",
+            })
+        end
+
         vim.keymap.set("n", "<leader>ci", function()
             vim.lsp.buf.code_action({
                 context = {
