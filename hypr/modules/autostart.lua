@@ -37,7 +37,7 @@ return function(WALLPAPER_DIR)
 
 		-- QuickShell
 		hl.exec_cmd(
-			"sh -c 'systemctl --user disable --now hyprpolkitagent.service >/dev/null 2>&1 || true; pgrep -x quickshell >/dev/null || quickshell >/dev/null 2>&1 &'"
+			"sh -c 'pgrep -x quickshell >/dev/null || quickshell >/dev/null 2>&1 &'"
 		)
 
 		-- Idle management (lock / dpms off / suspend on timers)
