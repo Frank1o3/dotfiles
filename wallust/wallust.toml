@@ -51,11 +51,13 @@ check_contrast=true
     # ¡ If either one is a directory, then both SHOULD be one. !
     # zathura = { template = 'zathura', target = '~/.config/zathura/zathurarc' }
 
+    gtk={template='gtk-palette.css', target='~/.config/gtk-4.0/gtk-palette.css'}
     hypr={template='hyprland-colors.lua', target='~/.config/hypr/colors.lua'}
     hyprlock={template='hyprlock-colors.conf', target='~/.config/hypr/hyprlock-colors.conf'}
     kitty={template='kitty.conf', target='~/.config/kitty/colors.conf'}
-    quickshell={template='quickshell.json', target='~/.config/quickshell/colors.json'}
-    gtk={template='gtk-palette.css', target='~/.config/gtk-4.0/gtk-palette.css'}
     qt6ct={template='qt6ct-colors.conf', target='~/.config/qt6ct/colors/wallust.conf'}
+    quickshell={template='quickshell.json', target='~/.config/quickshell/colors.json'}
+    # qt5ct uses the same ColorScheme palette format as qt6ct.
+    qt5ct={template='qt6ct-colors.conf', target='~/.config/qt5ct/colors/wallust.conf'}
 
 [hooks]
