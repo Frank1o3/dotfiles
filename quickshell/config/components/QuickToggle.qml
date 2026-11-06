@@ -17,7 +17,7 @@ Item {
     Keys.onEnterPressed: if (root.interactive) root.clicked()
     Keys.onSpacePressed: if (root.interactive) root.clicked()
 
-    implicitHeight: 56
+    implicitHeight: 50
     readonly property color accentColor: Colors.color(4)
 
     // Glass backdrop
@@ -44,11 +44,11 @@ Item {
         anchors.rightMargin: 12
         spacing: 10
 
-        // Round icon container
+        // Squared icon tile gives dense desktop controls a clear anchor.
         Rectangle {
-            Layout.preferredWidth: 34
-            Layout.preferredHeight: 34
-            radius: 17
+            Layout.preferredWidth: 30
+            Layout.preferredHeight: 30
+            radius: Appearance.radiusMedium
             color: root.active ? root.accentColor : Colors.surfaceRaised
 
             Text {

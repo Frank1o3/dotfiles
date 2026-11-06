@@ -373,6 +373,8 @@ Scope {
             top: true
             bottom: true
             left: true
+            // Physical mode is a left-edge panel with a reserved work area;
+            // widget mode uses the full-screen surface for its centered card.
             right: !root.physicalMode
         }
 
@@ -401,16 +403,17 @@ Scope {
                     top: root.physicalMode ? parent.top : undefined
                     bottom: root.physicalMode ? parent.bottom : undefined
                     centerIn: root.physicalMode ? undefined : parent
-                    margins: root.physicalMode ? 12 : 0
+                    margins: 0
                 }
 
-                width: root.physicalMode ? parent.width - 24 : Math.min(760, win.width - 48) * root.menuScale
-                height: root.physicalMode ? parent.height - 24 : Math.min(660, win.height - 64) * root.menuScale
+                width: root.physicalMode ? parent.width : Math.min(760, win.width - 48) * root.menuScale
+                height: root.physicalMode ? parent.height : Math.min(660, win.height - 64) * root.menuScale
 
-                cardRadius: root.physicalMode ? Appearance.radiusMedium : Appearance.radiusLarge
-                surfaceOpacity: Appearance.panelOpacity
-                shadowRadius: Appearance.shadowRadiusMedium
-                shadowOffset: Appearance.shadowOffsetMedium
+                cardRadius: root.physicalMode ? 0 : Appearance.radiusLarge
+                surfaceOpacity: root.physicalMode ? 1 : Appearance.panelOpacity
+                borderWidth: root.physicalMode ? 0 : 1
+                shadowRadius: root.physicalMode ? 0 : Appearance.shadowRadiusMedium
+                shadowOffset: root.physicalMode ? 0 : Appearance.shadowOffsetMedium
                 borderColor: Colors.outlineStrong
 
                 MouseArea {
@@ -698,6 +701,15 @@ Scope {
                             font.family: Appearance.fontFamily
                         }
                     }
+                }
+
+                Rectangle {
+                    visible: root.physicalMode
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    width: 1
+                    color: Colors.outline
                 }
 
                 Rectangle {

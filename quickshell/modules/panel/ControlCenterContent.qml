@@ -50,7 +50,7 @@ RowLayout {
     // Persistent navigation rail
     Rectangle {
         id: rail
-        Layout.preferredWidth: 104
+        Layout.preferredWidth: 164
         Layout.fillHeight: true
         radius: Appearance.radiusLarge
         color: Colors.surfaceSubtle
@@ -59,21 +59,46 @@ RowLayout {
 
         ColumnLayout {
             anchors.fill: parent
-            anchors.margins: 8
-            spacing: 4
+            anchors.margins: 10
+            spacing: 3
 
-            Rectangle {
-                Layout.alignment: Qt.AlignHCenter
-                Layout.preferredWidth: 38
-                Layout.preferredHeight: 38
-                radius: 14
-                color: Colors.accentSurface
-                Text {
-                    anchors.centerIn: parent
-                    text: "󰀻"
-                    color: Colors.color(4)
-                    font.family: Appearance.iconFont
-                    font.pixelSize: 20
+            RowLayout {
+                Layout.fillWidth: true
+                Layout.preferredHeight: 42
+                spacing: 10
+
+                Rectangle {
+                    Layout.preferredWidth: 30
+                    Layout.preferredHeight: 30
+                    radius: Appearance.radiusMedium
+                    color: Colors.accentSurface
+                    Text {
+                        anchors.centerIn: parent
+                        text: "󰀻"
+                        color: Colors.color(4)
+                        font.family: Appearance.iconFont
+                        font.pixelSize: 17
+                    }
+                }
+
+                ColumnLayout {
+                    Layout.fillWidth: true
+                    spacing: 1
+                    Text {
+                        text: "DESKTOP"
+                        color: Colors.textDim
+                        font.family: Appearance.fontFamily
+                        font.pixelSize: 9
+                        font.weight: Font.Bold
+                        font.letterSpacing: 1.1
+                    }
+                    Text {
+                        text: "Control center"
+                        color: Colors.foreground
+                        font.family: Appearance.fontFamily
+                        font.pixelSize: 12
+                        font.weight: Font.DemiBold
+                    }
                 }
             }
 
@@ -92,11 +117,11 @@ RowLayout {
                     required property var modelData
                     readonly property bool selected: root.page === modelData.key
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 54
+                    Layout.preferredHeight: 40
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: 13
+                        radius: Appearance.radiusMedium
                         color: navItem.selected
                             ? Colors.accentSurface
                             : navMouse.containsMouse ? Colors.surfaceHover : "transparent"
@@ -104,43 +129,54 @@ RowLayout {
                         border.color: Colors.accentOutline
                         Behavior on color { ColorAnimation { duration: Appearance.animFast } }
 
+                        Rectangle {
+                            visible: navItem.selected
+                            width: 3
+                            height: 20
+                            radius: 1
+                            anchors.left: parent.left
+                            anchors.leftMargin: 1
+                            anchors.verticalCenter: parent.verticalCenter
+                            color: Colors.accentColor
+                        }
+
                         // Notification count badge
                         Rectangle {
                             visible: !!navItem.modelData.badge && navItem.modelData.badge > 0
-                            anchors.top: parent.top
                             anchors.right: parent.right
-                            anchors.topMargin: 4
-                            anchors.rightMargin: 6
-                            width: 14
-                            height: 14
-                            radius: 7
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.rightMargin: 10
+                            width: 18
+                            height: 18
+                            radius: 6
                             color: Colors.color(1)
                             Text {
                                 anchors.centerIn: parent
                                 text: (navItem.modelData.badge ?? 0) > 9 ? "9+" : String(navItem.modelData.badge ?? "")
                                 color: Colors.background
-                                font.pixelSize: 8
+                                font.pixelSize: 9
                                 font.bold: true
                             }
                         }
 
-                        Column {
-                            anchors.centerIn: parent
-                            spacing: 3
+                        RowLayout {
+                            anchors.fill: parent
+                            anchors.leftMargin: 12
+                            anchors.rightMargin: 28
+                            spacing: 10
                             Text {
-                                anchors.horizontalCenter: parent.horizontalCenter
                                 text: navItem.modelData.icon
                                 color: navItem.selected ? Colors.color(4) : Colors.textMuted
                                 font.family: Appearance.iconFont
-                                font.pixelSize: 18
+                                font.pixelSize: 16
                             }
                             Text {
-                                anchors.horizontalCenter: parent.horizontalCenter
                                 text: navItem.modelData.title
                                 color: navItem.selected ? Colors.foreground : Colors.textMuted
                                 font.family: Appearance.fontFamily
-                                font.pixelSize: 10
+                                font.pixelSize: 12
                                 font.weight: navItem.selected ? Font.DemiBold : Font.Medium
+                                Layout.fillWidth: true
                             }
                         }
 
@@ -159,7 +195,7 @@ RowLayout {
 
             Text {
                 Layout.alignment: Qt.AlignHCenter
-                text: "FLUID"
+                text: "QUICKSHELL"
                 color: Colors.textDim
                 font.family: Appearance.fontFamily
                 font.pixelSize: 9

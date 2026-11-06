@@ -61,7 +61,10 @@ Scope {
             readonly property bool panelOpen: PanelState.isOpen(modelData.name)
             onPanelOpenChanged: if (panelOpen) autoHideTimer.stop()
 
-            anchors { top: true; bottom: true; left: true; right: true }
+            // Keep the layer surface top/left/right anchored. A fourth
+            // (bottom) anchor disables the exclusive-zone reservation, so
+            // tiled windows would start underneath the physical bar.
+            anchors { top: true; left: true; right: true }
 
             exclusiveZone: !win.widgetMode && win.barShown
                 ? win.barHeight * win.barScale
@@ -104,7 +107,7 @@ Scope {
                 }
             }
 
-            // ---------------- Floating status capsule ----------------
+            // ---------------- Physical bar / floating widget ----------------
             Item {
                 id: pillRow
                 anchors.top: parent.top
@@ -131,10 +134,11 @@ Scope {
                         yScale: win.barScale
                     }
                     cardRadius: win.widgetMode ? height / 2 : 0
-                    surfaceOpacity: win.widgetMode ? Appearance.surfaceOpacity : 0.72
+                    surfaceOpacity: win.widgetMode ? Appearance.surfaceOpacity : 1
                     borderColor: Colors.outline
-                    shadowRadius: Appearance.shadowRadiusMedium
-                    shadowOffset: Appearance.shadowOffsetSmall
+                    borderWidth: win.widgetMode ? 1 : 0
+                    shadowRadius: win.widgetMode ? Appearance.shadowRadiusMedium : 0
+                    shadowOffset: win.widgetMode ? Appearance.shadowOffsetSmall : 0
 
                     HoverHandler {
                         enabled: win.autoHide
@@ -226,7 +230,7 @@ Scope {
 
                         RowLayout {
                             id: statusContent
-                            spacing: 10
+                            spacing: 8
 
                             Volume { id: volumeWidget; compact: true }
                             Backlight { id: backlightWidget; compact: true }
@@ -245,21 +249,43 @@ Scope {
                                 onTogglePanel: PanelState.toggle(win.modelData.name)
                             }
                             Tray { id: trayWidget }
-                            Text {
+                            Rectangle {
                                 id: expandButton
-                                text: win.panelOpen ? "󰅁" : "󰅀"
-                                color: Colors.textMuted
-                                font.family: Appearance.iconFont
-                                font.pixelSize: 18
+                                Layout.preferredWidth: 30
+                                Layout.preferredHeight: 28
+                                radius: Appearance.radiusMedium
+                                color: win.panelOpen
+                                    ? Colors.accentSurface
+                                    : expandClickArea.containsMouse ? Colors.surfaceHover : "transparent"
+                                border.width: win.panelOpen ? 1 : 0
+                                border.color: Colors.accentOutline
+
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: win.panelOpen ? "󰅁" : "󰅀"
+                                    color: win.panelOpen ? Colors.color(4) : Colors.textMuted
+                                    font.family: Appearance.iconFont
+                                    font.pixelSize: 18
+                                }
+
                                 MouseArea {
                                     id: expandClickArea
                                     anchors.fill: parent
-                                    anchors.margins: -8
+                                    hoverEnabled: true
                                     cursorShape: Qt.PointingHandCursor
                                     onClicked: PanelState.toggle(win.modelData.name, "home")
                                 }
                             }
                         }
+                    }
+
+                    Rectangle {
+                        visible: !win.widgetMode
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.bottom: parent.bottom
+                        height: 1
+                        color: Colors.outline
                     }
                 }
 
