@@ -12,6 +12,7 @@ import qs.modules.panel
 import qs.modules.cheatsheet
 import qs.modules.polkit
 import qs.modules.lockscreen
+import qs.modules.desktop
 
 ShellRoot {
     Bar {}
@@ -22,4 +23,5 @@ ShellRoot {
     Cheatsheet {}
     PolkitDialog {}
     LockScreen {}
+    DesktopHud {}
 }

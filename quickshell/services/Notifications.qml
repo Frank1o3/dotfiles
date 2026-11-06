@@ -1,12 +1,13 @@
 pragma Singleton
 import Quickshell
 import Quickshell.Services.Notifications
+import qs.config
 import qs.services
 
 Singleton {
     id: root
 
-    property bool dnd: false
+    property bool dnd: UserSettings.dnd
     readonly property var list: server.trackedNotifications
     readonly property int count: list ? list.values.length : 0
 
@@ -44,5 +45,6 @@ Singleton {
 
     function toggleDnd() {
         root.dnd = !root.dnd;
+        UserSettings.dnd = root.dnd;
     }
 }

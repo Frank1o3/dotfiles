@@ -39,6 +39,8 @@ Text {
 
     MouseArea {
         anchors.fill: parent
+        anchors.topMargin: -10
+        anchors.bottomMargin: -10
         onClicked: Qt.callLater(() => Quickshell.execDetached(["nm-connection-editor"]))
     }
 }

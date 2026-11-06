@@ -94,6 +94,8 @@ RowLayout {
                 id: hoverArea
 
                 anchors.fill: parent
+                anchors.topMargin: -7
+                anchors.bottomMargin: -7
 
                 hoverEnabled: true
 

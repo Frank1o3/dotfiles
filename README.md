@@ -18,6 +18,7 @@ shell than a utility panel.
 - Dynamic palette generation with `wallust`
 - Wallpaper-synced palettes for Quickshell, Hyprlock, GTK 4, Qt 6, Kitty, and SDDM
 - Wallpaper picker and wallpaper-driven recoloring
+- Draggable desktop clock, system stats, and launcher widgets (Super+Shift+W)
 - Launcher, notification surface, power menu, and control center
 - Modular setup for status widgets, keybinds, layouts, animations,
   and rules
@@ -164,6 +165,7 @@ Main tools used by this setup:
 | Keybind | Action |
 | --- | --- |
 | `SUPER + W` | Open wallpaper selector |
+| `SUPER + SHIFT + W` | Toggle shell widget layout editing |
 | `SUPER + N` | Toggle notifications panel |
 | `SUPER + SHIFT + E` | Open power menu |
 | `SUPER + SHIFT + R` | Reload Hyprland config |

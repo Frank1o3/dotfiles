@@ -32,7 +32,7 @@ return function(WALLPAPER_DIR)
 
 		-- Give the daemon a moment to initialize before setting the wallpaper
 		hl.exec_cmd(
-			"sleep 0.5 && awww img " .. WALLPAPER_DIR .. "/wallpaper.jpg"
+			"sleep 0.5 && (command -v wallust >/dev/null 2>&1 && wallust run '" .. WALLPAPER_DIR .. "/Neon Arch Mountain Lakescape.png'; awww img '" .. WALLPAPER_DIR .. "/Neon Arch Mountain Lakescape.png')"
 		)
 
 		-- QuickShell

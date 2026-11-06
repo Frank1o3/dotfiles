@@ -22,6 +22,8 @@ Text {
 
     MouseArea {
         anchors.fill: parent
+        anchors.topMargin: -10
+        anchors.bottomMargin: -10
         acceptedButtons: Qt.LeftButton | Qt.RightButton
         onClicked: mouse => {
             if (mouse.button === Qt.RightButton && root.sink?.audio) {

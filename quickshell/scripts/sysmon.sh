@@ -26,6 +26,9 @@ while true; do
         igpu=-1
     fi
 
-    printf '{"cpu":%d,"igpu":%d}\n' "$cpu" "$igpu"
+    memory=$(awk '/MemTotal:/ { total=$2 } /MemAvailable:/ { available=$2 } END { if (total > 0) printf "%d", (total-available)*100/total; else print 0 }' /proc/meminfo)
+    disk=$(df -P / | awk 'NR==2 { gsub(/%/, "", $5); print $5+0 }')
+
+    printf '{"cpu":%d,"igpu":%d,"memory":%d,"disk":%d}\n' "$cpu" "$igpu" "$memory" "$disk"
     sleep 2
 done

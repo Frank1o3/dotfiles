@@ -38,6 +38,8 @@ Text {
 
     MouseArea {
         anchors.fill: parent
+        anchors.topMargin: -10
+        anchors.bottomMargin: -10
         onWheel: wheel => {
             const dir = wheel.angleDelta.y > 0 ? "5%+" : "5%-";
             Quickshell.execDetached(["brightnessctl", "set", dir]);

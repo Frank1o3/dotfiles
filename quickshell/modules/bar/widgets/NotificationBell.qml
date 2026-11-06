@@ -43,6 +43,8 @@ Item {
 
     MouseArea {
         anchors.fill: parent
+        anchors.topMargin: -10
+        anchors.bottomMargin: -10
         onClicked: root.togglePanel()
     }
 }

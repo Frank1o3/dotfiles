@@ -29,6 +29,7 @@ RowLayout {
         MouseArea {
             id: launcherMouse
             anchors.fill: parent
+            anchors.margins: -4
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
             onClicked: Quickshell.execDetached(["qs", "ipc", "call", "launcher", "toggle"])
@@ -77,6 +78,10 @@ RowLayout {
             MouseArea {
                 id: wsMouse
                 anchors.fill: parent
+                anchors.leftMargin: -3
+                anchors.rightMargin: -3
+                anchors.topMargin: -5
+                anchors.bottomMargin: -5
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
                 onClicked: Hyprland.dispatch("workspace " + ws.modelData.id)

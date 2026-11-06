@@ -38,6 +38,20 @@ Scope {
             screen: modelData
             visible: true
             WlrLayershell.namespace: "quickshell:bar"
+            WlrLayershell.layer: UserSettings.layout("bar", { layer: "top" }).layer === "under" ? WlrLayer.Bottom : WlrLayer.Top
+            property bool pointerInBar: false
+            readonly property bool widgetMode: UserSettings.barMode.startsWith("widget")
+            readonly property bool autoHide: UserSettings.barMode.endsWith("autohide")
+            readonly property bool barShown: !OverlayState.barHidden && (!autoHide || pointerInBar || panelOpen)
+            readonly property int barHeight: widgetMode ? Appearance.barHeight : 44
+            readonly property real barScale: UserSettings.layout("bar", { scale: 1 }).scale
+
+            Timer {
+                id: autoHideTimer
+                interval: 800
+                repeat: false
+                onTriggered: win.pointerInBar = false
+            }
 
             IdleInhibitor {
                 window: win
@@ -45,22 +59,34 @@ Scope {
             }
 
             readonly property bool panelOpen: PanelState.isOpen(modelData.name)
+            onPanelOpenChanged: if (panelOpen) autoHideTimer.stop()
 
-            anchors {
-                top: true
-                left: true
-                right: true
-            }
+            anchors { top: true; bottom: true; left: true; right: true }
 
-            exclusiveZone: OverlayState.barHidden ? 0 : Appearance.barHeight
+            exclusiveZone: !win.widgetMode && win.barShown
+                ? win.barHeight * win.barScale
+                : 0
 
-            implicitHeight: Appearance.barHeight + bg.implicitHeight
+            implicitHeight: modelData.height
             color: "transparent"
 
             mask: Region {
-                item: OverlayState.barHidden ? null : pillRow
-                Region {
-                    item: OverlayState.barHidden || !win.panelOpen ? null : dropdownHost
+                item: win.barShown ? barCapsule : null
+                Region { item: win.barShown && win.panelOpen ? dropdownHost : null }
+                Region { item: win.autoHide && !win.barShown ? revealZone : null }
+            }
+
+            Item {
+                id: revealZone
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: 3
+                visible: win.autoHide && !win.barShown && !OverlayState.barHidden
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onEntered: { win.pointerInBar = true; autoHideTimer.stop(); }
                 }
             }
 
@@ -84,8 +110,8 @@ Scope {
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
-                height: Appearance.barHeight
-                property real reveal: OverlayState.barHidden ? 0 : 1
+                height: win.barHeight
+                property real reveal: win.barShown ? 1 : 0
                 opacity: reveal
                 enabled: !OverlayState.barHidden
 
@@ -94,21 +120,73 @@ Scope {
 
                 GlassCard {
                     id: barCapsule
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    height: parent.height - 10
-                    width: barContent.implicitWidth + 30
-                    cardRadius: height / 2
-                    surfaceOpacity: Appearance.surfaceOpacity
+                    x: win.widgetMode ? UserSettings.position("bar", 0.5, 0.01).x * Math.max(0, win.width - width) : 0
+                    y: win.widgetMode ? UserSettings.position("bar", 0.5, 0.01).y * Math.max(0, win.height - height) : 0
+                    height: win.widgetMode ? parent.height - 10 : parent.height
+                    width: win.widgetMode ? barContent.implicitWidth + 30 : win.width
+                    transform: Scale {
+                        origin.x: win.widgetMode ? 0 : barCapsule.width / 2
+                        origin.y: 0
+                        xScale: win.widgetMode ? win.barScale : 1
+                        yScale: win.barScale
+                    }
+                    cardRadius: win.widgetMode ? height / 2 : 0
+                    surfaceOpacity: win.widgetMode ? Appearance.surfaceOpacity : 0.72
                     borderColor: Colors.outline
                     shadowRadius: Appearance.shadowRadiusMedium
                     shadowOffset: Appearance.shadowOffsetSmall
 
+                    HoverHandler {
+                        enabled: win.autoHide
+                        onHoveredChanged: {
+                            if (hovered) { win.pointerInBar = true; autoHideTimer.stop(); }
+                            else if (!win.panelOpen) autoHideTimer.restart();
+                        }
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        z: 10
+                        enabled: UserSettings.layoutEditMode
+                        visible: UserSettings.layoutEditMode
+                        cursorShape: UserSettings.layoutEditMode ? Qt.SizeAllCursor : Qt.ArrowCursor
+                        drag.target: barCapsule
+                        onReleased: UserSettings.savePosition("bar",
+                            barCapsule.x / Math.max(1, win.width - barCapsule.width),
+                            barCapsule.y / Math.max(1, win.height - barCapsule.height))
+                    }
+
+                    Rectangle {
+                        z: 11
+                        visible: UserSettings.layoutEditMode
+                        width: 18; height: 18; radius: 5
+                        anchors.right: parent.right; anchors.bottom: parent.bottom
+                        color: Colors.accentColor
+                        Text { anchors.centerIn: parent; text: "↘"; color: Colors.background; font.pixelSize: 12 }
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.SizeFDiagCursor
+                            property real initialScale: 1
+                            property real initialX: 0
+                            property real initialY: 0
+                            onPressed: function(mouse) {
+                                initialScale = UserSettings.layout("bar", { scale: 1 }).scale;
+                                initialX = mouse.x; initialY = mouse.y;
+                            }
+                            onPositionChanged: function(mouse) {
+                                if (pressed) UserSettings.setLayout("bar", {
+                                    scale: Math.max(0.65, Math.min(1.8, initialScale + ((mouse.x - initialX) + (mouse.y - initialY)) / 180)),
+                                    layer: UserSettings.layout("bar", { layer: "top" }).layer
+                                });
+                            }
+                        }
+                    }
+
                     RowLayout {
                         id: barContent
                         anchors.fill: parent
-                        anchors.leftMargin: 13
-                        anchors.rightMargin: 13
+                        anchors.leftMargin: win.widgetMode ? 13 : 28
+                        anchors.rightMargin: win.widgetMode ? 13 : 28
                         spacing: 12
 
                         Workspaces {
@@ -120,6 +198,8 @@ Scope {
                             Layout.preferredHeight: 20
                             color: Colors.divider
                         }
+
+                        Item { Layout.fillWidth: !win.widgetMode }
 
                         RowLayout {
                             id: centerContent
@@ -134,8 +214,9 @@ Scope {
                                 color: Colors.divider
                             }
 
-                            Clock { id: clockContent }
                         }
+
+                        Item { Layout.fillWidth: !win.widgetMode }
 
                         Rectangle {
                             Layout.preferredWidth: 1
@@ -147,10 +228,10 @@ Scope {
                             id: statusContent
                             spacing: 10
 
-                            Volume { compact: true }
-                            Backlight { compact: true }
-                            Battery { compact: true }
-                            Network { compact: true }
+                            Volume { id: volumeWidget; compact: true }
+                            Backlight { id: backlightWidget; compact: true }
+                            Battery { id: batteryWidget; compact: true }
+                            Network { id: networkWidget; compact: true }
 
                             Rectangle {
                                 Layout.preferredWidth: 1
@@ -159,10 +240,25 @@ Scope {
                             }
 
                             NotificationBell {
+                                id: notificationWidget
                                 panelOpen: win.panelOpen
                                 onTogglePanel: PanelState.toggle(win.modelData.name)
                             }
-                            Tray {}
+                            Tray { id: trayWidget }
+                            Text {
+                                id: expandButton
+                                text: win.panelOpen ? "󰅁" : "󰅀"
+                                color: Colors.textMuted
+                                font.family: Appearance.iconFont
+                                font.pixelSize: 18
+                                MouseArea {
+                                    id: expandClickArea
+                                    anchors.fill: parent
+                                    anchors.margins: -8
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: PanelState.toggle(win.modelData.name, "home")
+                                }
+                            }
                         }
                     }
                 }
@@ -173,9 +269,10 @@ Scope {
             Item {
                 id: dropdownHost
                 anchors.top: pillRow.bottom
-                anchors.topMargin: 8
-                anchors.horizontalCenter: parent.horizontalCenter
-                width: Math.min(960, parent.width - 24)
+                anchors.topMargin: win.widgetMode ? 8 : 0
+                anchors.left: win.widgetMode ? undefined : parent.left
+                anchors.horizontalCenter: win.widgetMode ? parent.horizontalCenter : undefined
+                width: win.widgetMode ? Math.min(960, parent.width - 24) : parent.width
                 height: win.panelOpen && !OverlayState.barHidden ? bg.implicitHeight : 0
                 clip: true
 

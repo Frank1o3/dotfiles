@@ -139,9 +139,9 @@ else
 fi
 
 echo "Generating the initial wallpaper palette..."
-if command -v wallust >/dev/null 2>&1 && [ -f "$TARGET_HOME/wallpapers/wallpaper.jpg" ]; then
+if command -v wallust >/dev/null 2>&1 && [ -f "$TARGET_HOME/wallpapers/Neon Arch Mountain Lakescape.png" ]; then
     HOME="$TARGET_HOME" XDG_CONFIG_HOME="$TARGET_HOME/.config" \
-        wallust run "$TARGET_HOME/wallpapers/wallpaper.jpg"
+        wallust run "$TARGET_HOME/wallpapers/Neon Arch Mountain Lakescape.png"
 else
     echo "Wallust or the default wallpaper is unavailable; palette files will be generated after setup."
 fi

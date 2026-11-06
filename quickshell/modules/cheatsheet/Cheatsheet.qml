@@ -46,6 +46,7 @@ Scope {
         ] },
         { name: "Desktop and session", binds: [
             { keys: ["Super", "W"], desc: "Choose wallpaper" },
+            { keys: ["Super", "Shift", "W"], desc: "Arrange and resize shell widgets" },
             { keys: ["Super", "N"], desc: "Toggle notifications" },
             { keys: ["Super", "Shift", "E"], desc: "Open power menu" },
             { keys: ["Arrows / 1–6"], desc: "Choose a power action; Enter runs it" },

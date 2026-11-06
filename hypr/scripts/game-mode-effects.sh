@@ -25,7 +25,7 @@ case "$state" in
         hyprctl keyword decoration:rounding 14 >/dev/null
         hyprctl keyword animations:enabled 1 >/dev/null
         pgrep -x awww-daemon >/dev/null || (awww-daemon >/dev/null 2>&1 &)
-        (sleep 0.7; awww img "$HOME/wallpapers/wallpaper.jpg" >/dev/null 2>&1) &
+        (sleep 0.7; awww img "$HOME/wallpapers/Neon Arch Mountain Lakescape.png" >/dev/null 2>&1) &
         ;;
     *) echo "Usage: $0 on|off" >&2; exit 2 ;;
 esac

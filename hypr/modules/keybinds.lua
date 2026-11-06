@@ -31,6 +31,7 @@ local script_wallpaper     = "qs ipc call wallpaper toggle"
 local script_notifications = "qs ipc call notifications toggle"
 local script_powermenu     = "qs ipc call powermenu toggle"
 local script_cheatsheet   = "qs ipc call cheatsheet toggle"
+local script_widgets      = "qs ipc call widgets edit"
 
 -- =========================================================
 -- APPLICATIONS
@@ -162,6 +163,12 @@ hl.bind(
 hl.bind(
 	mainMod .. " + W",
 	hl.dsp.exec_cmd(script_wallpaper)
+)
+
+-- Moveable desktop widgets
+hl.bind(
+	mainMod .. " + SHIFT + W",
+	hl.dsp.exec_cmd(script_widgets)
 )
 
 -- Power menu

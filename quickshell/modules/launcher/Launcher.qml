@@ -4,6 +4,7 @@ import QtQuick.Controls
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
+import Quickshell.Wayland
 import qs.config
 import qs.config.components
 
@@ -11,6 +12,8 @@ Scope {
     id: root
 
     property bool shown: false
+    readonly property bool physicalMode: UserSettings.launcherMode === "physical"
+    readonly property real menuScale: UserSettings.layout("appLauncher", { scale: 1, layer: "top" }).scale
     property var apps: []
     property var recents: []
 
@@ -358,13 +361,19 @@ Scope {
 
         visible: root.shown
         color: "transparent"
-        exclusiveZone: 0
+        WlrLayershell.namespace: "quickshell:launcher"
+        WlrLayershell.layer: UserSettings.layout("appLauncher", { layer: "top" }).layer === "under" ? WlrLayer.Bottom : WlrLayer.Top
+        width: root.physicalMode
+            ? Math.min(520, Math.max(280, (Quickshell.screens[0]?.width ?? 1280) * 0.4)) * root.menuScale
+            : (Quickshell.screens[0]?.width ?? 1280)
+        height: Quickshell.screens[0]?.height ?? 800
+        exclusiveZone: root.shown && root.physicalMode ? width : 0
 
         anchors {
             top: true
             bottom: true
             left: true
-            right: true
+            right: !root.physicalMode
         }
 
         HyprlandFocusGrab {
@@ -386,12 +395,19 @@ Scope {
             GlassCard {
                 id: card
 
-                anchors.centerIn: parent
+                anchors {
+                    left: root.physicalMode ? parent.left : undefined
+                    right: root.physicalMode ? parent.right : undefined
+                    top: root.physicalMode ? parent.top : undefined
+                    bottom: root.physicalMode ? parent.bottom : undefined
+                    centerIn: root.physicalMode ? undefined : parent
+                    margins: root.physicalMode ? 12 : 0
+                }
 
-                width: Math.min(760, win.width - 48)
-                height: Math.min(660, win.height - 64)
+                width: root.physicalMode ? parent.width - 24 : Math.min(760, win.width - 48) * root.menuScale
+                height: root.physicalMode ? parent.height - 24 : Math.min(660, win.height - 64) * root.menuScale
 
-                cardRadius: Appearance.radiusLarge
+                cardRadius: root.physicalMode ? Appearance.radiusMedium : Appearance.radiusLarge
                 surfaceOpacity: Appearance.panelOpacity
                 shadowRadius: Appearance.shadowRadiusMedium
                 shadowOffset: Appearance.shadowOffsetMedium
@@ -680,6 +696,37 @@ Scope {
                             color: Colors.color(7)
                             font.pixelSize: 10
                             font.family: Appearance.fontFamily
+                        }
+                    }
+                }
+
+                Rectangle {
+                    z: 20
+                    visible: UserSettings.layoutEditMode
+                    width: 20
+                    height: 20
+                    radius: 6
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    color: Colors.accentColor
+                    Text { anchors.centerIn: parent; text: "↘"; color: Colors.background; font.pixelSize: 12 }
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.SizeFDiagCursor
+                        property real startScale: 1
+                        property real startX: 0
+                        property real startY: 0
+                        onPressed: function(mouse) {
+                            startScale = root.menuScale;
+                            startX = mouse.x;
+                            startY = mouse.y;
+                        }
+                        onPositionChanged: function(mouse) {
+                            if (pressed) {
+                                const state = UserSettings.layout("appLauncher", { scale: 1, layer: "top" });
+                                state.scale = Math.max(0.65, Math.min(1.5, startScale + ((mouse.x - startX) + (mouse.y - startY)) / 220));
+                                UserSettings.setLayout("appLauncher", state);
+                            }
                         }
                     }
                 }
