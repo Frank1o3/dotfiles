@@ -138,8 +138,7 @@ Scope {
                 surfaceOpacity: Appearance.panelOpacity
                 shadowRadius: Appearance.shadowRadiusLarge
                 shadowOffset: Appearance.shadowOffsetLarge
-                showHighlight: false
-                borderColor: Qt.rgba(1, 1, 1, 0.18)
+                borderColor: Colors.outlineStrong
                 opacity: root.open ? 1 : 0
                 scale: root.open ? 1 : 0.97
                 Behavior on opacity { NumberAnimation { duration: Appearance.animNormal; easing.type: Easing.OutCubic } }

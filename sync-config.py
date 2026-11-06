@@ -17,13 +17,13 @@ AUTO = os.environ.get("AUTO", "0") == "1"  # accept every change without prompti
 EXCLUDES = [
     "--exclude=.git",
     "--exclude=.config-root",
-    "--exclude=colors.css",
-    "--exclude=colors.lua",
-    "--exclude=colors.conf",
-    "--exclude=colors.json",
-    "--exclude=gtk-palette.css",  # wallust-generated GTK palette
-    "--exclude=wallust.conf",  # wallust-generated qt6ct palette
-    "--exclude=*-colors.conf",  # wallust-generated (e.g. hyprlock-colors.conf)
+    "--exclude=/colors.css",
+    "--exclude=/colors.lua",
+    "--exclude=/colors.conf",
+    "--exclude=/colors.json",
+    "--exclude=/gtk-palette.css",  # generated at the root of gtk-4.0
+    "--exclude=/colors/wallust.conf",  # generated Qt palettes
+    "--exclude=/hyprlock-colors.conf",  # generated in the Hypr config directory
     "--exclude=*.cache",
 ]
 

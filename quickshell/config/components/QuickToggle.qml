@@ -25,10 +25,10 @@ Item {
         anchors.fill: parent
         radius: Appearance.cardRadius
         color: root.active
-            ? Qt.rgba(root.accentColor.r, root.accentColor.g, root.accentColor.b, 0.22)
-            : Qt.rgba(1, 1, 1, (mouse.containsMouse && root.interactive) ? 0.09 : 0.05)
+            ? Colors.accentSurface
+            : (mouse.containsMouse && root.interactive) ? Colors.surfaceHover : Colors.surfaceSubtle
         border.width: 1
-        border.color: root.active ? Qt.rgba(root.accentColor.r, root.accentColor.g, root.accentColor.b, 0.5) : Qt.rgba(1, 1, 1, 0.08)
+        border.color: root.active ? Colors.accentOutline : Colors.outline
 
         Behavior on color {
             ColorAnimation { duration: Appearance.animFast }
@@ -49,7 +49,7 @@ Item {
             Layout.preferredWidth: 34
             Layout.preferredHeight: 34
             radius: 17
-            color: root.active ? root.accentColor : Qt.rgba(1, 1, 1, 0.10)
+            color: root.active ? root.accentColor : Colors.surfaceRaised
 
             Text {
                 anchors.centerIn: parent

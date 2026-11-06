@@ -53,9 +53,9 @@ RowLayout {
         Layout.preferredWidth: 104
         Layout.fillHeight: true
         radius: Appearance.radiusLarge
-        color: Qt.rgba(0, 0, 0, 0.24)
+        color: Colors.surfaceSubtle
         border.width: 1
-        border.color: Qt.rgba(1, 1, 1, 0.07)
+        border.color: Colors.outline
 
         ColumnLayout {
             anchors.fill: parent
@@ -67,7 +67,7 @@ RowLayout {
                 Layout.preferredWidth: 38
                 Layout.preferredHeight: 38
                 radius: 14
-                color: Qt.rgba(Colors.color(4).r, Colors.color(4).g, Colors.color(4).b, 0.18)
+                color: Colors.accentSurface
                 Text {
                     anchors.centerIn: parent
                     text: "󰀻"
@@ -82,7 +82,7 @@ RowLayout {
                 Layout.preferredHeight: 1
                 Layout.topMargin: 3
                 Layout.bottomMargin: 2
-                color: Qt.rgba(1, 1, 1, 0.10)
+                color: Colors.divider
             }
 
             Repeater {
@@ -98,10 +98,10 @@ RowLayout {
                         anchors.fill: parent
                         radius: 13
                         color: navItem.selected
-                            ? Qt.rgba(Colors.color(4).r, Colors.color(4).g, Colors.color(4).b, 0.22)
-                            : navMouse.containsMouse ? Qt.rgba(1, 1, 1, 0.07) : "transparent"
+                            ? Colors.accentSurface
+                            : navMouse.containsMouse ? Colors.surfaceHover : "transparent"
                         border.width: navItem.selected ? 1 : 0
-                        border.color: Qt.rgba(Colors.color(4).r, Colors.color(4).g, Colors.color(4).b, 0.42)
+                        border.color: Colors.accentOutline
                         Behavior on color { ColorAnimation { duration: Appearance.animFast } }
 
                         // Notification count badge
@@ -210,7 +210,7 @@ RowLayout {
                 width: 92
                 height: 32
                 radius: 16
-                color: Qt.rgba(Colors.color(4).r, Colors.color(4).g, Colors.color(4).b, 0.12)
+                color: Colors.accentSurface
                 Row {
                     anchors.centerIn: parent
                     spacing: 6
@@ -270,9 +270,9 @@ RowLayout {
                     Layout.fillWidth: true
                     implicitHeight: quickContent.implicitHeight + 26
                     radius: Appearance.radiusLarge
-                    color: Qt.rgba(1, 1, 1, 0.035)
+                    color: Colors.surfaceSubtle
                     border.width: 1
-                    border.color: Qt.rgba(1, 1, 1, 0.07)
+                    border.color: Colors.outline
 
                     ColumnLayout {
                         id: quickContent
@@ -332,9 +332,9 @@ RowLayout {
                     Layout.fillHeight: true
                     Layout.minimumHeight: 142
                     radius: Appearance.radiusLarge
-                    color: Qt.rgba(1, 1, 1, 0.035)
+                    color: Colors.surfaceSubtle
                     border.width: 1
-                    border.color: Qt.rgba(1, 1, 1, 0.07)
+                    border.color: Colors.outline
 
                     ColumnLayout {
                         id: controlContent
@@ -417,9 +417,9 @@ RowLayout {
                     Layout.fillWidth: true
                     implicitHeight: devicesContent.implicitHeight + 28
                     radius: Appearance.radiusLarge
-                    color: Qt.rgba(1, 1, 1, 0.035)
+                    color: Colors.surfaceSubtle
                     border.width: 1
-                    border.color: Qt.rgba(1, 1, 1, 0.07)
+                    border.color: Colors.outline
                     ColumnLayout {
                         id: devicesContent
                         anchors.fill: parent
@@ -446,7 +446,7 @@ RowLayout {
                             TapHandler { onTapped: root.page = "notifications" }
                         }
 
-                        Rectangle { Layout.fillWidth: true; Layout.preferredHeight: 1; color: Qt.rgba(1, 1, 1, 0.08) }
+                        Rectangle { Layout.fillWidth: true; Layout.preferredHeight: 1; color: Colors.divider }
 
                         // Network row
                         RowLayout {
@@ -467,7 +467,7 @@ RowLayout {
                             TapHandler { onTapped: root.page = "wifi" }
                         }
 
-                        Rectangle { Layout.fillWidth: true; Layout.preferredHeight: 1; color: Qt.rgba(1, 1, 1, 0.08) }
+                        Rectangle { Layout.fillWidth: true; Layout.preferredHeight: 1; color: Colors.divider }
 
                         // Bluetooth row
                         RowLayout {
@@ -495,9 +495,9 @@ RowLayout {
                     Layout.fillHeight: true
                     Layout.minimumHeight: 174
                     radius: Appearance.radiusLarge
-                    color: Qt.rgba(1, 1, 1, 0.035)
+                    color: Colors.surfaceSubtle
                     border.width: 1
-                    border.color: Qt.rgba(1, 1, 1, 0.07)
+                    border.color: Colors.outline
                     ColumnLayout {
                         anchors.fill: parent
                         anchors.margins: 15

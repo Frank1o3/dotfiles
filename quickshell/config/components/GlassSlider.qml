@@ -18,9 +18,9 @@ Item {
         id: track
         anchors.fill: parent
         radius: height / 2
-        color: Qt.rgba(1, 1, 1, 0.08)
+        color: Colors.surfaceSubtle
         border.width: 1
-        border.color: Qt.rgba(1, 1, 1, 0.12)
+        border.color: Colors.outline
         clip: true
 
         // Filled active progress

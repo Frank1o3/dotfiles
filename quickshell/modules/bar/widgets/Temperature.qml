@@ -5,7 +5,7 @@ import qs.services
 
 Text {
     id: root
-    color: temp >= 85 ? "#f38ba8" : (temp >= 70 ? "#f9e2af" : Colors.color(2))
+    color: temp >= 85 ? Colors.danger : (temp >= 70 ? Colors.color(3) : Colors.color(2))
     font.family: Appearance.fontFamily
     font.pixelSize: Appearance.fontSize
     font.weight: Font.Bold

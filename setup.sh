@@ -93,12 +93,15 @@ echo
 AUTO=1 HOME="$TARGET_HOME" XDG_CONFIG_HOME="$TARGET_HOME/.config" python3 -u "$SRC_DIR/sync-config.py"
 
 echo "Preparing theme palette files..."
-mkdir -p "$TARGET_HOME/.config/gtk-4.0" "$TARGET_HOME/.config/qt6ct/colors"
+mkdir -p "$TARGET_HOME/.config/gtk-4.0" "$TARGET_HOME/.config/qt5ct/colors" "$TARGET_HOME/.config/qt6ct/colors"
 if [ ! -f "$TARGET_HOME/.config/gtk-4.0/gtk-palette.css" ] && [ -f "$SRC_DIR/gtk-4.0/gtk-palette.css" ]; then
     cp "$SRC_DIR/gtk-4.0/gtk-palette.css" "$TARGET_HOME/.config/gtk-4.0/gtk-palette.css"
 fi
 if [ ! -f "$TARGET_HOME/.config/qt6ct/colors/wallust.conf" ] && [ -f "$SRC_DIR/qt6ct/colors/wallust.conf" ]; then
     cp "$SRC_DIR/qt6ct/colors/wallust.conf" "$TARGET_HOME/.config/qt6ct/colors/wallust.conf"
+fi
+if [ ! -f "$TARGET_HOME/.config/qt5ct/colors/wallust.conf" ] && [ -f "$SRC_DIR/qt5ct/colors/wallust.conf" ]; then
+    cp "$SRC_DIR/qt5ct/colors/wallust.conf" "$TARGET_HOME/.config/qt5ct/colors/wallust.conf"
 fi
 
 echo

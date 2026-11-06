@@ -60,14 +60,14 @@ Scope {
             property bool entered: false
             property bool closing: false
             property real remaining: 1
-            readonly property color accent: notification.urgency === NotificationUrgency.Critical ? "#f38ba8" : Colors.color(4)
+            readonly property color accent: notification.urgency === NotificationUrgency.Critical ? Colors.danger : Colors.accentColor
 
             width: parent ? parent.width : 380
             implicitHeight: content.implicitHeight + 24
             radius: Appearance.radiusLarge
-            color: GameMode.active ? "#f20e1018" : Qt.rgba(0.06, 0.07, 0.10, 0.96)
-            border.width: notification.urgency === NotificationUrgency.Critical ? 2 : 1
-            border.color: notification.urgency === NotificationUrgency.Critical ? accent : Qt.rgba(accent.r, accent.g, accent.b, 0.42)
+            color: Colors.surface
+            border.width: 1
+            border.color: notification.urgency === NotificationUrgency.Critical ? accent : Colors.outlineStrong
 
             opacity: entered && !closing ? 1 : 0
             scale: entered && !closing ? 1 : 0.94
@@ -147,7 +147,7 @@ Scope {
                         Layout.preferredWidth: 30
                         Layout.preferredHeight: 30
                         radius: 10
-                        color: Qt.rgba(toast.accent.r, toast.accent.g, toast.accent.b, 0.16)
+                        color: notification.urgency === NotificationUrgency.Critical ? Qt.rgba(toast.accent.r, toast.accent.g, toast.accent.b, 0.16) : Colors.surfaceRaised
                         Text {
                             anchors.centerIn: parent
                             text: toast.notification.urgency === NotificationUrgency.Critical ? "!" : "●"
@@ -172,7 +172,7 @@ Scope {
                         Layout.preferredWidth: 26
                         Layout.preferredHeight: 26
                         radius: 13
-                        color: closeMouse.containsMouse ? Qt.rgba(1, 1, 1, 0.13) : "transparent"
+                        color: closeMouse.containsMouse ? Colors.surfaceHover : "transparent"
                         Text { anchors.centerIn: parent; text: "×"; color: Colors.textMuted; font.pixelSize: 18 }
                         MouseArea {
                             id: closeMouse
@@ -221,7 +221,7 @@ Scope {
                             implicitWidth: actionLabel.implicitWidth + 24
                             implicitHeight: 30
                             radius: 10
-                            color: actionMouse.containsMouse ? Qt.rgba(toast.accent.r, toast.accent.g, toast.accent.b, 0.27) : Qt.rgba(toast.accent.r, toast.accent.g, toast.accent.b, 0.15)
+                            color: actionMouse.containsMouse ? Colors.accentSurface : Colors.surfaceSubtle
                             Text {
                                 id: actionLabel
                                 anchors.centerIn: parent
@@ -250,7 +250,7 @@ Scope {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 2
                     radius: 1
-                    color: Qt.rgba(1, 1, 1, 0.09)
+                    color: Colors.surfaceRaised
                     Rectangle {
                         width: parent.width * toast.remaining
                         height: parent.height

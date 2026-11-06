@@ -1,7 +1,5 @@
 import QtQuick
-import Qt5Compat.GraphicalEffects
 import qs.config
-import qs.services
 
 Item {
     id: root
@@ -16,74 +14,39 @@ Item {
     Keys.onSpacePressed: root.clicked()
 
     implicitWidth: label.implicitWidth + (root.icon.length > 0 ? 28 : 20) + 20
-    implicitHeight: 32
-
-    // Soft glow behind accent buttons — a small hint of the same
-    // ambient-shadow language used on the bigger glass panels, scaled
-    // down and tinted so it reads as "glowing" rather than "shadowed".
-    Rectangle {
-        id: glowSource
-        anchors.fill: parent
-        radius: 10
-        color: Colors.color(4)
-        visible: false
-    }
-
-    Glow {
-        anchors.fill: glowSource
-        source: glowSource
-        visible: root.accent && !GameMode.active
-        radius: 14
-        samples: 29
-        color: Colors.color(4)
-        spread: 0.15
-        opacity: 0.35
-    }
+    implicitHeight: 34
 
     Rectangle {
         id: surface
         anchors.fill: parent
-        radius: 10
-        color: root.accent ? Colors.color(4) : (mouse.containsMouse ? Qt.rgba(1, 1, 1, 0.10) : Qt.rgba(1, 1, 1, 0.05))
-        border.width: root.accent ? 0 : (root.activeFocus ? 2 : 1)
-        border.color: root.activeFocus ? Colors.color(4) : Qt.rgba(1, 1, 1, 0.08)
-        Behavior on color {
-            ColorAnimation {
-                duration: Appearance.animFast
+        radius: Appearance.radiusMedium
+        color: root.accent
+            ? Colors.accentColor
+            : mouse.containsMouse ? Colors.surfaceHover : Colors.surfaceSubtle
+        border.width: root.activeFocus && !root.accent ? 1 : 0
+        border.color: Colors.accentOutline
+        Behavior on color { ColorAnimation { duration: Appearance.animFast } }
+
+        Row {
+            anchors.centerIn: parent
+            spacing: 7
+
+            Text {
+                visible: root.icon.length > 0
+                text: root.icon
+                color: root.accent ? Colors.backgroundColor : Colors.foregroundColor
+                font.family: Appearance.iconFont
+                font.pixelSize: Appearance.fontSize
+                font.weight: Font.Bold
             }
-        }
-    }
-
-    // Top-edge highlight, same "light catching glass" idea as GlassCard,
-    // scaled down to button size.
-    Rectangle {
-        anchors.top: surface.top
-        anchors.left: surface.left
-        anchors.right: surface.right
-        anchors.margins: 1
-        height: surface.height * 0.5
-        radius: surface.radius
-        color: Qt.rgba(1, 1, 1, root.accent ? 0.12 : Appearance.glassHighlightOpacity)
-    }
-
-    Row {
-        anchors.centerIn: parent
-        spacing: 6
-        Text {
-            visible: root.icon.length > 0
-            text: root.icon
-            color: root.accent ? Colors.background : Colors.foreground
-            font.family: Appearance.iconFont
-            font.pixelSize: Appearance.fontSize + 1
-            font.weight: Font.Bold
-        }
-        Text {
-            id: label
-            text: root.text
-            color: root.accent ? Colors.background : Colors.foreground
-            font.family: Appearance.fontFamily
-            font.pixelSize: Appearance.fontSizeSmall + 1
-            font.weight: Font.DemiBold
+            Text {
+                id: label
+                text: root.text
+                color: root.accent ? Colors.backgroundColor : Colors.foregroundColor
+                font.family: Appearance.fontFamily
+                font.pixelSize: Appearance.fontSizeSmall + 1
+                font.weight: Font.DemiBold
+            }
         }
     }
 

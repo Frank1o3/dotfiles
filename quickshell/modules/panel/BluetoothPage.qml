@@ -26,9 +26,9 @@ ColumnLayout {
         Layout.fillWidth: true
         implicitHeight: 64
         radius: Appearance.radiusLarge
-        color: Qt.rgba(1, 1, 1, 0.035)
+        color: Colors.surfaceSubtle
         border.width: 1
-        border.color: Qt.rgba(1, 1, 1, 0.08)
+        border.color: Colors.outline
 
         RowLayout {
             anchors.fill: parent
@@ -37,7 +37,7 @@ ColumnLayout {
 
             Rectangle {
                 width: 36; height: 36; radius: 18
-                color: root.adapter?.enabled ? Qt.rgba(Colors.color(6).r, Colors.color(6).g, Colors.color(6).b, 0.22) : Qt.rgba(1, 1, 1, 0.08)
+                color: root.adapter?.enabled ? Colors.accentSurface : Colors.surfaceSubtle
                 Text {
                     anchors.centerIn: parent
                     text: root.adapter?.enabled ? "󰂯" : "󰂲"
@@ -123,12 +123,12 @@ ColumnLayout {
             implicitHeight: 60
             radius: Appearance.radiusMedium
             color: modelData.connected
-                ? Qt.rgba(Colors.color(6).r, Colors.color(6).g, Colors.color(6).b, 0.16)
-                : Qt.rgba(1, 1, 1, 0.045)
+                ? Colors.accentSurface
+                : Colors.surfaceSubtle
             border.width: 1
             border.color: modelData.connected
-                ? Qt.rgba(Colors.color(6).r, Colors.color(6).g, Colors.color(6).b, 0.40)
-                : Qt.rgba(1, 1, 1, 0.07)
+                ? Colors.accentOutline
+                : Colors.outline
 
             RowLayout {
                 anchors.fill: parent
@@ -141,7 +141,7 @@ ColumnLayout {
                     width: 34; height: 34; radius: 10
                     color: devCard.modelData.connected
                         ? Qt.rgba(Colors.color(6).r, Colors.color(6).g, Colors.color(6).b, 0.25)
-                        : Qt.rgba(1, 1, 1, 0.06)
+                        : Colors.surfaceSubtle
 
                     Text {
                         anchors.centerIn: parent
@@ -219,12 +219,12 @@ ColumnLayout {
                 Rectangle {
                     visible: devCard.modelData.paired
                     width: 28; height: 28; radius: 14
-                    color: forgetMouse.containsMouse ? Qt.rgba(1, 1, 1, 0.12) : "transparent"
+                    color: forgetMouse.containsMouse ? Colors.surfaceHover : "transparent"
 
                     Text {
                         anchors.centerIn: parent
                         text: "󰆴"
-                        color: forgetMouse.containsMouse ? "#f38ba8" : Colors.color(7)
+                        color: forgetMouse.containsMouse ? Colors.danger : Colors.color(7)
                         font.family: Appearance.iconFont
                         font.pixelSize: 13
                     }
@@ -247,9 +247,9 @@ ColumnLayout {
         Layout.fillHeight: true
         visible: !root.adapter || !root.adapter.enabled || root.devices.length === 0
         radius: Appearance.radiusLarge
-        color: Qt.rgba(1, 1, 1, 0.035)
+        color: Colors.surfaceSubtle
         border.width: 1
-        border.color: Qt.rgba(1, 1, 1, 0.07)
+        border.color: Colors.outline
 
         ColumnLayout {
             anchors.centerIn: parent

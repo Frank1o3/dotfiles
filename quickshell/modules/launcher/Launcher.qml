@@ -395,8 +395,7 @@ Scope {
                 surfaceOpacity: Appearance.panelOpacity
                 shadowRadius: Appearance.shadowRadiusMedium
                 shadowOffset: Appearance.shadowOffsetMedium
-                showHighlight: false
-                borderColor: Qt.rgba(1, 1, 1, 0.16)
+                borderColor: Colors.outlineStrong
 
                 MouseArea {
                     anchors.fill: parent

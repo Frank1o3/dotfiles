@@ -67,12 +67,12 @@ ColumnLayout {
                     height: 26
                     radius: 13
                     color: root.selectedPlayerIndex === index
-                        ? Qt.rgba(Colors.color(4).r, Colors.color(4).g, Colors.color(4).b, 0.25)
-                        : Qt.rgba(1, 1, 1, 0.05)
+                        ? Colors.accentSurface
+                        : Colors.surfaceSubtle
                     border.width: 1
                     border.color: root.selectedPlayerIndex === index
                         ? Colors.color(4)
-                        : Qt.rgba(1, 1, 1, 0.08)
+                        : Colors.outline
 
                     Row {
                         id: playerTabContent
@@ -108,9 +108,9 @@ ColumnLayout {
         Layout.fillWidth: true
         implicitHeight: mediaContent.implicitHeight + 24
         radius: Appearance.radiusLarge
-        color: Qt.rgba(1, 1, 1, 0.035)
+        color: Colors.surfaceSubtle
         border.width: 1
-        border.color: Qt.rgba(1, 1, 1, 0.08)
+        border.color: Colors.outline
 
         ColumnLayout {
             id: mediaContent
@@ -199,7 +199,7 @@ ColumnLayout {
                         Rectangle {
                             visible: root.player?.shuffleSupported ?? false
                             width: 28; height: 28; radius: 14
-                            color: root.player?.shuffle ? Qt.rgba(Colors.color(4).r, Colors.color(4).g, Colors.color(4).b, 0.25) : Qt.rgba(1, 1, 1, 0.05)
+                            color: root.player?.shuffle ? Colors.accentSurface : Colors.surfaceSubtle
                             Text {
                                 anchors.centerIn: parent
                                 text: "󰒝"
@@ -217,7 +217,7 @@ ColumnLayout {
                         // Previous
                         Rectangle {
                             width: 32; height: 32; radius: 16
-                            color: prevMouse.containsMouse ? Qt.rgba(1, 1, 1, 0.12) : Qt.rgba(1, 1, 1, 0.05)
+                            color: prevMouse.containsMouse ? Colors.surfaceHover : Colors.surfaceSubtle
                             Text { anchors.centerIn: parent; text: "󰒮"; color: Colors.foreground; font.family: Appearance.iconFont; font.pixelSize: 14 }
                             MouseArea { id: prevMouse; anchors.fill: parent; hoverEnabled: true; cursorShape: Qt.PointingHandCursor; onClicked: root.player?.previous() }
                         }
@@ -241,7 +241,7 @@ ColumnLayout {
                         // Next
                         Rectangle {
                             width: 32; height: 32; radius: 16
-                            color: nextMouse.containsMouse ? Qt.rgba(1, 1, 1, 0.12) : Qt.rgba(1, 1, 1, 0.05)
+                            color: nextMouse.containsMouse ? Colors.surfaceHover : Colors.surfaceSubtle
                             Text { anchors.centerIn: parent; text: "󰒭"; color: Colors.foreground; font.family: Appearance.iconFont; font.pixelSize: 14 }
                             MouseArea { id: nextMouse; anchors.fill: parent; hoverEnabled: true; cursorShape: Qt.PointingHandCursor; onClicked: root.player?.next() }
                         }
@@ -251,7 +251,7 @@ ColumnLayout {
                             visible: root.player?.loopSupported ?? false
                             width: 28; height: 28; radius: 14
                             readonly property bool isLooping: root.player?.loopState !== MprisLoopState.None
-                            color: isLooping ? Qt.rgba(Colors.color(4).r, Colors.color(4).g, Colors.color(4).b, 0.25) : Qt.rgba(1, 1, 1, 0.05)
+                            color: isLooping ? Colors.accentSurface : Colors.surfaceSubtle
                             Text {
                                 anchors.centerIn: parent
                                 text: root.player?.loopState === MprisLoopState.Track ? "󰑘" : "󰑖"
@@ -297,7 +297,7 @@ ColumnLayout {
                     Layout.fillWidth: true
                     height: 5
                     radius: 2.5
-                    color: Qt.rgba(1, 1, 1, 0.10)
+                    color: Colors.surfaceRaised
 
                     Rectangle {
                         anchors.left: parent.left
@@ -346,9 +346,9 @@ ColumnLayout {
                 Layout.fillWidth: true
                 implicitHeight: outputSection.implicitHeight + 28
                 radius: Appearance.radiusLarge
-                color: Qt.rgba(1, 1, 1, 0.035)
+                color: Colors.surfaceSubtle
                 border.width: 1
-                border.color: Qt.rgba(1, 1, 1, 0.08)
+                border.color: Colors.outline
 
                 ColumnLayout {
                     id: outputSection
@@ -431,9 +431,9 @@ ColumnLayout {
                                     radius: 13
                                     color: isCurrent
                                         ? Qt.rgba(Colors.color(4).r, Colors.color(4).g, Colors.color(4).b, 0.24)
-                                        : Qt.rgba(1, 1, 1, 0.05)
+                                        : Colors.surfaceSubtle
                                     border.width: 1
-                                    border.color: isCurrent ? Colors.color(4) : Qt.rgba(1, 1, 1, 0.08)
+                                    border.color: isCurrent ? Colors.accentOutline : Colors.outline
 
                                     Row {
                                         id: sinkChipText
@@ -470,9 +470,9 @@ ColumnLayout {
                 Layout.fillWidth: true
                 implicitHeight: inputSection.implicitHeight + 28
                 radius: Appearance.radiusLarge
-                color: Qt.rgba(1, 1, 1, 0.035)
+                color: Colors.surfaceSubtle
                 border.width: 1
-                border.color: Qt.rgba(1, 1, 1, 0.08)
+                border.color: Colors.outline
 
                 ColumnLayout {
                     id: inputSection
@@ -534,9 +534,9 @@ ColumnLayout {
                 visible: root.streams.length > 0
                 implicitHeight: appStreamsSection.implicitHeight + 28
                 radius: Appearance.radiusLarge
-                color: Qt.rgba(1, 1, 1, 0.035)
+                color: Colors.surfaceSubtle
                 border.width: 1
-                border.color: Qt.rgba(1, 1, 1, 0.08)
+                border.color: Colors.outline
 
                 ColumnLayout {
                     id: appStreamsSection

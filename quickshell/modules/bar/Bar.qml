@@ -36,7 +36,7 @@ Scope {
             id: win
             required property var modelData
             screen: modelData
-            visible: !OverlayState.barHidden
+            visible: true
             WlrLayershell.namespace: "quickshell:bar"
 
             IdleInhibitor {
@@ -58,16 +58,24 @@ Scope {
             color: "transparent"
 
             mask: Region {
-                item: pillRow
+                item: OverlayState.barHidden ? null : pillRow
                 Region {
-                    item: dropdownHost
+                    item: OverlayState.barHidden || !win.panelOpen ? null : dropdownHost
                 }
             }
 
             HyprlandFocusGrab {
                 windows: [win]
-                active: win.panelOpen
+                active: win.panelOpen && !OverlayState.barHidden
                 onCleared: PanelState.setOpen(win.modelData.name, false)
+            }
+
+            Connections {
+                target: OverlayState
+                function onBarHiddenChanged() {
+                    if (OverlayState.barHidden && win.panelOpen)
+                        PanelState.setOpen(win.modelData.name, false);
+                }
             }
 
             // ---------------- Floating status capsule ----------------
@@ -77,6 +85,12 @@ Scope {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 height: Appearance.barHeight
+                property real reveal: OverlayState.barHidden ? 0 : 1
+                opacity: reveal
+                enabled: !OverlayState.barHidden
+
+                transform: Translate { y: (1 - pillRow.reveal) * -12 }
+                Behavior on reveal { NumberAnimation { duration: Appearance.animNormal; easing.type: Easing.OutCubic } }
 
                 GlassCard {
                     id: barCapsule
@@ -85,12 +99,10 @@ Scope {
                     height: parent.height - 10
                     width: barContent.implicitWidth + 30
                     cardRadius: height / 2
-                    surfaceOpacity: 0.86
-                    borderColor: Qt.rgba(1, 1, 1, 0.20)
+                    surfaceOpacity: Appearance.surfaceOpacity
+                    borderColor: Colors.outline
                     shadowRadius: Appearance.shadowRadiusMedium
                     shadowOffset: Appearance.shadowOffsetSmall
-                    showHighlight: false
-                    showTint: true
 
                     RowLayout {
                         id: barContent
@@ -106,7 +118,7 @@ Scope {
                         Rectangle {
                             Layout.preferredWidth: 1
                             Layout.preferredHeight: 20
-                            color: Qt.rgba(1, 1, 1, 0.18)
+                            color: Colors.divider
                         }
 
                         RowLayout {
@@ -119,7 +131,7 @@ Scope {
                                 visible: mediaWidget.visible
                                 Layout.preferredWidth: 1
                                 Layout.preferredHeight: 14
-                                color: Qt.rgba(1, 1, 1, 0.18)
+                                color: Colors.divider
                             }
 
                             Clock { id: clockContent }
@@ -128,7 +140,7 @@ Scope {
                         Rectangle {
                             Layout.preferredWidth: 1
                             Layout.preferredHeight: 20
-                            color: Qt.rgba(1, 1, 1, 0.18)
+                            color: Colors.divider
                         }
 
                         RowLayout {
@@ -143,7 +155,7 @@ Scope {
                             Rectangle {
                                 Layout.preferredWidth: 1
                                 Layout.preferredHeight: 14
-                                color: Qt.rgba(1, 1, 1, 0.18)
+                                color: Colors.divider
                             }
 
                             NotificationBell {
@@ -164,7 +176,7 @@ Scope {
                 anchors.topMargin: 8
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: Math.min(960, parent.width - 24)
-                height: win.panelOpen ? bg.implicitHeight : 0
+                height: win.panelOpen && !OverlayState.barHidden ? bg.implicitHeight : 0
                 clip: true
 
                 Behavior on height {
@@ -185,7 +197,6 @@ Scope {
                     surfaceOpacity: Appearance.panelOpacity
                     shadowRadius: Appearance.shadowRadiusLarge
                     shadowOffset: Appearance.shadowOffsetLarge
-                    showHighlight: false
 
                     // Pop‑out scaling & fade
                     transform: Scale {
@@ -195,7 +206,7 @@ Scope {
                         xScale: win.panelOpen ? 1 : 0.85
                         yScale: win.panelOpen ? 1 : 0.85
                     }
-                    opacity: win.panelOpen ? 1 : 0
+                    opacity: win.panelOpen && !OverlayState.barHidden ? 1 : 0
 
                     Behavior on opacity {
                         NumberAnimation {

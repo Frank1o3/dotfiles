@@ -14,9 +14,9 @@ RowLayout {
         implicitWidth: 24
         implicitHeight: 24
         radius: 12
-        color: launcherMouse.containsMouse ? Qt.rgba(1, 1, 1, 0.18) : Qt.rgba(1, 1, 1, 0.08)
+        color: launcherMouse.containsMouse ? Colors.surfaceHover : Colors.surfaceSubtle
         border.width: 1
-        border.color: launcherMouse.containsMouse ? Colors.color(4) : Qt.rgba(1, 1, 1, 0.14)
+        border.color: launcherMouse.containsMouse ? Colors.accentOutline : Colors.outline
 
         Text {
             anchors.centerIn: parent
@@ -48,9 +48,9 @@ RowLayout {
             implicitWidth: active ? 28 : (occupied ? 18 : 10)
             implicitHeight: 18
             radius: 9
-            color: active ? Colors.color(4) : (occupied ? Qt.rgba(1, 1, 1, 0.25) : Qt.rgba(1, 1, 1, 0.10))
+            color: active ? Colors.accentColor : (occupied ? Colors.surfaceRaised : Colors.surfaceSubtle)
             border.width: 1
-            border.color: active ? Qt.rgba(1, 1, 1, 0.40) : (hovered ? Qt.rgba(1, 1, 1, 0.25) : Qt.rgba(1, 1, 1, 0.08))
+            border.color: active ? Colors.accentOutline : (hovered ? Colors.outlineStrong : Colors.outline)
 
             Text {
                 visible: ws.active || ws.hovered

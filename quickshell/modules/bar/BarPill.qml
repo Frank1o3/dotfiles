@@ -15,13 +15,11 @@ Item {
     GlassCard {
         anchors.fill: parent
         cardRadius: Math.round(root.height / 2)
-        surfaceOpacity: root.hovered ? Math.min(0.95, Appearance.glassOpacity + 0.12) : Appearance.glassOpacity
-        borderColor: root.hovered ? Qt.rgba(1, 1, 1, 0.35) : Qt.rgba(1, 1, 1, 0.18)
+        surfaceOpacity: root.hovered ? Math.min(0.98, Appearance.surfaceOpacity + 0.06) : Appearance.surfaceOpacity
+        borderColor: root.hovered ? Colors.outlineStrong : Colors.outline
         borderWidth: 1
         shadowRadius: Appearance.shadowRadiusSmall
         shadowOffset: Appearance.shadowOffsetSmall
-        showHighlight: true
-        showTint: true
     }
 
     RowLayout {

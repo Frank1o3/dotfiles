@@ -51,8 +51,7 @@ Scope {
             surfaceOpacity: Appearance.panelOpacity
             shadowRadius: Appearance.shadowRadiusMedium
             shadowOffset: Appearance.shadowOffsetMedium
-            showHighlight: false
-            borderColor: root.flow?.supplementaryIsError ? "#f38ba8" : Qt.rgba(1, 1, 1, 0.18)
+            borderColor: root.flow?.supplementaryIsError ? Colors.danger : Colors.outlineStrong
             opacity: win.visible ? 1 : 0
             scale: win.visible ? 1 : 0.96
             Behavior on opacity { NumberAnimation { duration: Appearance.animNormal; easing.type: Easing.OutCubic } }
@@ -102,9 +101,9 @@ Scope {
                     Keys.onEscapePressed: root.flow?.cancelAuthenticationRequest()
                     background: Rectangle {
                         radius: 11
-                        color: Qt.rgba(1, 1, 1, 0.07)
+                        color: Colors.surfaceRaised
                         border.width: 1
-                        border.color: root.flow?.supplementaryIsError ? "#f38ba8" : (passwordInput.activeFocus ? Colors.color(4) : Qt.rgba(1, 1, 1, 0.14))
+                        border.color: root.flow?.supplementaryIsError ? Colors.danger : (passwordInput.activeFocus ? Colors.accentOutline : Colors.outline)
                     }
                 }
 
@@ -112,7 +111,7 @@ Scope {
                     Layout.fillWidth: true
                     visible: text.length > 0
                     text: root.flow?.supplementaryMessage ?? ""
-                    color: root.flow?.supplementaryIsError ? "#f38ba8" : Colors.textMuted
+                    color: root.flow?.supplementaryIsError ? Colors.danger : Colors.textMuted
                     font.family: Appearance.fontFamily
                     font.pixelSize: Appearance.fontSizeSmall
                     wrapMode: Text.Wrap

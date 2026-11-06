@@ -17,9 +17,9 @@ Item {
     Rectangle {
         anchors.fill: parent
         radius: height / 2
-        color: root.checked ? Colors.color(4) : Qt.rgba(1, 1, 1, 0.12)
+        color: root.checked ? Colors.accentColor : Colors.surfaceRaised
         border.width: 1
-        border.color: root.activeFocus ? Colors.color(4) : Qt.rgba(1, 1, 1, 0.1)
+        border.color: root.activeFocus ? Colors.accentOutline : Colors.outline
         Behavior on color {
             ColorAnimation {
                 duration: Appearance.animFast

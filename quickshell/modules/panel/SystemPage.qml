@@ -74,7 +74,7 @@ ColumnLayout {
             label: "CPU Usage"
             value: SysMonitor.cpuUsage
             unit: "%"
-            accent: SysMonitor.cpuUsage > 85 ? "#f38ba8" : Colors.color(1)
+            accent: SysMonitor.cpuUsage > 85 ? Colors.danger : Colors.color(1)
         }
 
         GaugeCard {
@@ -84,7 +84,7 @@ ColumnLayout {
             label: root.memoryUsed ? `Memory (${root.memoryUsed} / ${root.memoryTotal})` : "Memory"
             value: root.memory
             unit: "%"
-            accent: root.memory > 85 ? "#f38ba8" : Colors.color(4)
+            accent: root.memory > 85 ? Colors.danger : Colors.color(4)
         }
 
         GaugeCard {
@@ -105,7 +105,7 @@ ColumnLayout {
             value: root.temperature
             unit: "°C"
             maximum: 100
-            accent: root.temperature >= 85 ? "#f38ba8" : Colors.color(3)
+            accent: root.temperature >= 85 ? Colors.danger : Colors.color(3)
         }
 
         GaugeCard {
@@ -115,7 +115,7 @@ ColumnLayout {
             label: "Root Storage (/)"
             value: root.disk
             unit: "% used"
-            accent: root.disk >= 90 ? "#f38ba8" : Colors.color(5)
+            accent: root.disk >= 90 ? Colors.danger : Colors.color(5)
         }
 
         // Performance / Battery Card
@@ -123,9 +123,9 @@ ColumnLayout {
             Layout.fillWidth: true
             Layout.preferredHeight: 128
             radius: 16
-            color: Qt.rgba(1, 1, 1, 0.045)
+            color: Colors.surfaceSubtle
             border.width: 1
-            border.color: Qt.rgba(1, 1, 1, 0.06)
+            border.color: Colors.outline
 
             ColumnLayout {
                 anchors.centerIn: parent

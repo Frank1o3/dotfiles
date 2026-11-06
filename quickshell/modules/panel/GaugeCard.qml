@@ -13,9 +13,9 @@ Rectangle {
     property color accent: "#89b4fa"
 
     radius: 16
-    color: Qt.rgba(1, 1, 1, 0.045)
+    color: Colors.surfaceSubtle
     border.width: 1
-    border.color: Qt.rgba(1, 1, 1, 0.05)
+    border.color: Colors.outline
 
     ColumnLayout {
         anchors.fill: parent
@@ -33,7 +33,7 @@ Rectangle {
             Layout.fillWidth: true
             Layout.preferredHeight: 4
             radius: 2
-            color: Qt.rgba(1, 1, 1, 0.10)
+            color: Colors.surfaceRaised
             Rectangle { width: parent.width * Math.max(0, Math.min(1, root.value / Math.max(1, root.maximum))); height: parent.height; radius: parent.radius; color: root.accent }
         }
         Item { Layout.fillHeight: true }

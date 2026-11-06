@@ -142,7 +142,7 @@ Scope {
 
         Rectangle {
             anchors.fill: parent
-            color: "#99070910"
+            color: Qt.rgba(Colors.backgroundColor.r * 0.22, Colors.backgroundColor.g * 0.22, Colors.backgroundColor.b * 0.22, 0.70)
             opacity: root.open ? 1 : 0
             Behavior on opacity { NumberAnimation { duration: Appearance.animFast } }
         }
@@ -161,15 +161,29 @@ Scope {
             Item {
                 id: content
                 anchors.fill: parent
-                anchors.leftMargin: 44
-                anchors.rightMargin: 44
+                anchors.leftMargin: 56
+                anchors.rightMargin: 56
                 anchors.topMargin: 30
-                anchors.bottomMargin: 24
+                anchors.bottomMargin: 28
                 opacity: root.open ? 1 : 0
                 Behavior on opacity { NumberAnimation { duration: Appearance.animFast } }
 
+                GlassCard {
+                    anchors.fill: parent
+                    cardRadius: Appearance.radiusLarge
+                    surfaceOpacity: 0.92
+                    shadowRadius: Appearance.shadowRadiusLarge
+                    shadowOffset: Appearance.shadowOffsetLarge
+                    borderColor: Colors.outlineStrong
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                }
+
                 ColumnLayout {
                     anchors.fill: parent
+                    anchors.margins: 22
                     spacing: 14
 
                     // Header and gallery controls.
@@ -195,7 +209,7 @@ Scope {
                                 Layout.preferredWidth: 48
                                 Layout.preferredHeight: 32
                                 radius: 10
-                                color: root.viewMode === "grid" ? Qt.rgba(Colors.color(4).r, Colors.color(4).g, Colors.color(4).b, 0.3) : Qt.rgba(1, 1, 1, 0.07)
+                                color: root.viewMode === "grid" ? Colors.accentSurface : Colors.surfaceSubtle
                                 Text { anchors.centerIn: parent; text: "Grid"; color: Colors.foreground; font.family: Appearance.fontFamily; font.pixelSize: Appearance.fontSizeSmall }
                                 MouseArea { anchors.fill: parent; cursorShape: Qt.PointingHandCursor; onClicked: root.viewMode = "grid" }
                             }
@@ -203,7 +217,7 @@ Scope {
                                 Layout.preferredWidth: 52
                                 Layout.preferredHeight: 32
                                 radius: 10
-                                color: root.viewMode === "shelf" ? Qt.rgba(Colors.color(4).r, Colors.color(4).g, Colors.color(4).b, 0.3) : Qt.rgba(1, 1, 1, 0.07)
+                                color: root.viewMode === "shelf" ? Colors.accentSurface : Colors.surfaceSubtle
                                 Text { anchors.centerIn: parent; text: "Shelf"; color: Colors.foreground; font.family: Appearance.fontFamily; font.pixelSize: Appearance.fontSizeSmall }
                                 MouseArea { anchors.fill: parent; cursorShape: Qt.PointingHandCursor; onClicked: root.viewMode = "shelf" }
                             }
@@ -213,7 +227,7 @@ Scope {
                             Layout.preferredWidth: 38
                             Layout.preferredHeight: 32
                             radius: 16
-                            color: randomMouse.containsMouse ? Qt.rgba(Colors.color(4).r, Colors.color(4).g, Colors.color(4).b, 0.3) : Qt.rgba(1, 1, 1, 0.07)
+                            color: randomMouse.containsMouse ? Colors.surfaceHover : Colors.surfaceSubtle
                             Text { anchors.centerIn: parent; text: "⤨"; color: Colors.foreground; font.pixelSize: 17 }
                             MouseArea {
                                 id: randomMouse
@@ -228,9 +242,9 @@ Scope {
                             Layout.preferredWidth: 250
                             Layout.preferredHeight: 34
                             radius: 17
-                            color: Qt.rgba(1, 1, 1, 0.09)
+                            color: Colors.surfaceRaised
                             border.width: 1
-                            border.color: searchInput.activeFocus ? Colors.color(4) : Qt.rgba(1, 1, 1, 0.15)
+                            border.color: searchInput.activeFocus ? Colors.accentOutline : Colors.outline
 
                             RowLayout {
                                 anchors.fill: parent
@@ -260,7 +274,7 @@ Scope {
                                         verticalAlignment: Text.AlignVCenter
                                         visible: !searchInput.text && !searchInput.activeFocus
                                         text: "Filter wallpapers..."
-                                        color: Qt.rgba(1, 1, 1, 0.45)
+                                        color: Colors.textDim
                                         font.family: Appearance.fontFamily
                                         font.pixelSize: 12
                                     }
@@ -272,7 +286,7 @@ Scope {
                             Layout.preferredWidth: 34
                             Layout.preferredHeight: 34
                             radius: 17
-                            color: closeMouse.containsMouse ? Qt.rgba(1, 1, 1, 0.19) : Qt.rgba(1, 1, 1, 0.08)
+                            color: closeMouse.containsMouse ? Colors.surfaceHover : Colors.surfaceSubtle
                             Text { anchors.centerIn: parent; text: "✕"; color: Colors.foreground; font.pixelSize: 13; font.bold: true }
                             MouseArea {
                                 id: closeMouse
@@ -346,18 +360,18 @@ Scope {
 
                             Rectangle {
                                 anchors.fill: parent
-                                anchors.margins: -10
-                                radius: 32
+                                anchors.margins: -7
+                                radius: 26
                                 visible: PathView.isCurrentItem
-                                color: Qt.rgba(Colors.color(4).r, Colors.color(4).g, Colors.color(4).b, 0.35)
+                                color: Colors.accentSurface
                             }
 
                             ClippingRectangle {
                                 anchors.fill: parent
-                                radius: 22
-                                color: Qt.rgba(0.04, 0.05, 0.08, 0.8)
-                                border.width: PathView.isCurrentItem ? 3 : 1
-                                border.color: PathView.isCurrentItem ? Colors.color(4) : Qt.rgba(1, 1, 1, 0.16)
+                                radius: 18
+                                color: Colors.surface
+                                border.width: PathView.isCurrentItem ? 2 : 1
+                                border.color: PathView.isCurrentItem ? Colors.accentColor : Colors.outline
 
                                 Image {
                                     id: wallpaperImage
@@ -377,7 +391,7 @@ Scope {
                                     implicitWidth: currentLabel.implicitWidth + 18
                                     implicitHeight: 25
                                     radius: 13
-                                    color: Qt.rgba(0.03, 0.04, 0.07, 0.82)
+                                    color: Qt.rgba(Colors.backgroundColor.r, Colors.backgroundColor.g, Colors.backgroundColor.b, 0.88)
                                     Text {
                                         id: currentLabel
                                         anchors.centerIn: parent
@@ -424,10 +438,10 @@ Scope {
                             ClippingRectangle {
                                 anchors.fill: parent
                                 anchors.margins: 5
-                                radius: 12
-                                color: Qt.rgba(0.04, 0.05, 0.08, 0.65)
+                                radius: Appearance.radiusMedium
+                                color: Colors.surface
                                 border.width: carousel.currentIndex === gridCell.index ? 2 : 1
-                                border.color: carousel.currentIndex === gridCell.index ? Colors.color(4) : Qt.rgba(1, 1, 1, 0.14)
+                                border.color: carousel.currentIndex === gridCell.index ? Colors.accentColor : Colors.outline
                                 Image {
                                     anchors.fill: parent
                                     source: "file://" + gridCell.modelData.path
@@ -439,7 +453,7 @@ Scope {
                                     anchors.right: parent.right
                                     anchors.bottom: parent.bottom
                                     height: 32
-                                    color: Qt.rgba(0.03, 0.04, 0.07, 0.8)
+                                    color: Qt.rgba(Colors.backgroundColor.r, Colors.backgroundColor.g, Colors.backgroundColor.b, 0.88)
                                     Text {
                                         anchors.fill: parent
                                         anchors.leftMargin: 9
@@ -492,7 +506,7 @@ Scope {
                                     radius: 8
                                     color: modelData
                                     border.width: 1
-                                    border.color: Qt.rgba(1, 1, 1, 0.35)
+                                    border.color: Colors.outlineStrong
                                 }
                             }
                         }

@@ -52,7 +52,7 @@ RowLayout {
                 anchors.fill: parent
                 radius: 6
 
-                color: hoverArea.containsMouse ? Qt.rgba(1, 1, 1, 0.08) : "transparent"
+                color: hoverArea.containsMouse ? Colors.surfaceHover : "transparent"
 
                 Behavior on color {
                     ColorAnimation {

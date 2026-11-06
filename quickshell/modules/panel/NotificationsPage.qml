@@ -60,9 +60,9 @@ ColumnLayout {
         Layout.fillHeight: true
         visible: root.count === 0
         radius: Appearance.radiusLarge
-        color: Qt.rgba(1, 1, 1, 0.035)
+        color: Colors.surfaceSubtle
         border.width: 1
-        border.color: Qt.rgba(1, 1, 1, 0.07)
+        border.color: Colors.outline
 
         ColumnLayout {
             anchors.centerIn: parent
@@ -73,9 +73,9 @@ ColumnLayout {
                 width: 64
                 height: 64
                 radius: 32
-                color: Qt.rgba(Colors.color(4).r, Colors.color(4).g, Colors.color(4).b, 0.12)
+                color: Colors.accentSurface
                 border.width: 1
-                border.color: Qt.rgba(Colors.color(4).r, Colors.color(4).g, Colors.color(4).b, 0.28)
+                border.color: Colors.accentOutline
 
                 Text {
                     anchors.centerIn: parent
@@ -128,17 +128,17 @@ ColumnLayout {
             required property int index
 
             readonly property color accentColor: modelData.urgency === NotificationUrgency.Critical 
-                ? "#f38ba8" 
-                : Colors.color(4)
+                ? Colors.danger
+                : Colors.accentColor
 
             width: notifList.width
             implicitHeight: itemContent.implicitHeight + 20
             radius: Appearance.radiusMedium
-            color: itemHover.hovered ? Qt.rgba(1, 1, 1, 0.065) : Qt.rgba(1, 1, 1, 0.04)
+            color: itemHover.hovered ? Colors.surfaceHover : Colors.surfaceSubtle
             border.width: 1
             border.color: modelData.urgency === NotificationUrgency.Critical
-                ? Qt.rgba(accentColor.r, accentColor.g, accentColor.b, 0.5)
-                : Qt.rgba(1, 1, 1, 0.07)
+                ? Colors.danger
+                : Colors.outline
 
             Behavior on color { ColorAnimation { duration: Appearance.animFast } }
 
@@ -171,7 +171,7 @@ ColumnLayout {
                         Layout.preferredWidth: 20
                         Layout.preferredHeight: 20
                         radius: 6
-                        color: Qt.rgba(itemCard.accentColor.r, itemCard.accentColor.g, itemCard.accentColor.b, 0.18)
+                        color: itemCard.modelData.urgency === NotificationUrgency.Critical ? Qt.rgba(itemCard.accentColor.r, itemCard.accentColor.g, itemCard.accentColor.b, 0.16) : Colors.surfaceRaised
 
                         Text {
                             anchors.centerIn: parent
@@ -198,7 +198,7 @@ ColumnLayout {
                         Layout.preferredWidth: 22
                         Layout.preferredHeight: 22
                         radius: 11
-                        color: dismissMouse.containsMouse ? Qt.rgba(1, 1, 1, 0.15) : "transparent"
+                        color: dismissMouse.containsMouse ? Colors.surfaceHover : "transparent"
 
                         Text {
                             anchors.centerIn: parent

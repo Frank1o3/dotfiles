@@ -15,9 +15,9 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.preferredHeight: 184
         radius: Appearance.radiusLarge
-        color: Qt.rgba(1, 1, 1, 0.035)
+        color: Colors.surfaceSubtle
         border.width: 1
-        border.color: Qt.rgba(1, 1, 1, 0.08)
+        border.color: Colors.outline
 
         ColumnLayout {
             anchors.fill: parent
@@ -70,9 +70,9 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
         radius: Appearance.radiusLarge
-        color: Qt.rgba(1, 1, 1, 0.035)
+        color: Colors.surfaceSubtle
         border.width: 1
-        border.color: Qt.rgba(1, 1, 1, 0.08)
+        border.color: Colors.outline
 
         ColumnLayout {
             anchors.fill: parent

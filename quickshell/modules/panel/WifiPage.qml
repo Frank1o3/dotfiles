@@ -22,9 +22,9 @@ ColumnLayout {
         Layout.fillWidth: true
         implicitHeight: 64
         radius: Appearance.radiusLarge
-        color: Qt.rgba(1, 1, 1, 0.035)
+        color: Colors.surfaceSubtle
         border.width: 1
-        border.color: Qt.rgba(1, 1, 1, 0.08)
+        border.color: Colors.outline
 
         RowLayout {
             anchors.fill: parent
@@ -33,7 +33,7 @@ ColumnLayout {
 
             Rectangle {
                 width: 36; height: 36; radius: 18
-                color: Networking.wifiEnabled ? Qt.rgba(Colors.color(4).r, Colors.color(4).g, Colors.color(4).b, 0.22) : Qt.rgba(1, 1, 1, 0.08)
+                color: Networking.wifiEnabled ? Colors.accentSurface : Colors.surfaceSubtle
                 Text {
                     anchors.centerIn: parent
                     text: Networking.wifiEnabled ? "󰤨" : "󰤭"
@@ -76,9 +76,9 @@ ColumnLayout {
         visible: root.wiredDevice !== null
         implicitHeight: 56
         radius: Appearance.radiusLarge
-        color: Qt.rgba(1, 1, 1, 0.035)
+        color: Colors.surfaceSubtle
         border.width: 1
-        border.color: Qt.rgba(1, 1, 1, 0.08)
+        border.color: Colors.outline
 
         RowLayout {
             anchors.fill: parent
@@ -87,7 +87,7 @@ ColumnLayout {
 
             Rectangle {
                 width: 32; height: 32; radius: 16
-                color: root.wiredDevice?.hasLink ? Qt.rgba(Colors.color(2).r, Colors.color(2).g, Colors.color(2).b, 0.22) : Qt.rgba(1, 1, 1, 0.06)
+                color: root.wiredDevice?.hasLink ? Colors.accentSurface : Colors.surfaceSubtle
                 Text {
                     anchors.centerIn: parent
                     text: "󰈀"
@@ -163,12 +163,12 @@ ColumnLayout {
             implicitHeight: 56
             radius: Appearance.radiusMedium
             color: modelData.connected
-                ? Qt.rgba(Colors.color(4).r, Colors.color(4).g, Colors.color(4).b, 0.16)
-                : Qt.rgba(1, 1, 1, 0.045)
+                ? Colors.accentSurface
+                : Colors.surfaceSubtle
             border.width: 1
             border.color: modelData.connected
-                ? Qt.rgba(Colors.color(4).r, Colors.color(4).g, Colors.color(4).b, 0.45)
-                : Qt.rgba(1, 1, 1, 0.07)
+                ? Colors.accentOutline
+                : Colors.outline
 
             RowLayout {
                 anchors.fill: parent
@@ -281,9 +281,9 @@ ColumnLayout {
                     font.pixelSize: Appearance.fontSizeSmall
                     background: Rectangle {
                         radius: 10
-                        color: Qt.rgba(1, 1, 1, 0.08)
+                        color: Colors.surfaceSubtle
                         border.width: 1
-                        border.color: Qt.rgba(1, 1, 1, 0.15)
+                        border.color: Colors.outline
                     }
                     onAccepted: connectBtn.clicked()
                 }
@@ -318,7 +318,7 @@ ColumnLayout {
         Layout.fillWidth: true
         visible: root.errorMessage.length > 0
         text: `Connection error: ${root.errorMessage}`
-        color: "#f38ba8"
+        color: Colors.danger
         font.family: Appearance.fontFamily
         font.pixelSize: Appearance.fontSizeSmall
         wrapMode: Text.Wrap
@@ -330,9 +330,9 @@ ColumnLayout {
         Layout.fillHeight: true
         visible: !root.wifiDevice || !Networking.wifiEnabled || (root.wifiDevice.networks?.values?.length ?? 0) === 0
         radius: Appearance.radiusLarge
-        color: Qt.rgba(1, 1, 1, 0.035)
+        color: Colors.surfaceSubtle
         border.width: 1
-        border.color: Qt.rgba(1, 1, 1, 0.07)
+        border.color: Colors.outline
 
         ColumnLayout {
             anchors.centerIn: parent
