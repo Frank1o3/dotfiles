@@ -350,7 +350,7 @@ function fhelp --description 'Show Veyra shell shortcuts'
 end
 
 function fish-cheatsheet --description 'Print the Fish shortcut cheat sheet'
-    set -l sheet (path dirname (status filename))/CHEATSHEET.md
+    set -l sheet (string replace -r '[^/]+$' 'CHEATSHEET.md' -- (status --current-filename))
     if test -r $sheet
         command cat $sheet
     else
