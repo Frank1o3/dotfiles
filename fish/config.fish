@@ -117,98 +117,121 @@ else
     end
 end
 
-# ------------------------------------------------------------- ls / tree (eza)
-# Abbreviations expand on Space/Enter so you see (and learn) the real command.
-#   no suffix = show everything (ignores .gitignore)
-#   g suffix  = hide what .gitignore hides
-if type -q eza
-    set -l e 'eza --group-directories-first --icons=auto'
-    set -l ignore "-I '.git|node_modules'"
-    abbr -a l    "$e"
-    abbr -a ll   "$e -lh --git"
-    abbr -a la   "$e -a"
-    abbr -a lla  "$e -lah --git"
-    abbr -a lg   "$e --git-ignore"
-    abbr -a llg  "$e -lh --git --git-ignore"
-    abbr -a lag  "$e -a --git-ignore"
-    abbr -a llag "$e -lah --git --git-ignore"
-    abbr -a lt   "$e -T"
-    abbr -a lta  "$e -aT $ignore"
-    abbr -a ltg  "$e -T --git-ignore"
-    abbr -a ltag "$e -aT --git-ignore $ignore"
-    abbr -a tree "$e -T"
-else
-    abbr -a l    'ls'
-    abbr -a ll   'ls -lh'
-    abbr -a la   'ls -A'
-    abbr -a lla  'ls -lAh'
-    if type -q tree
-        abbr -a lt   'tree'
-        abbr -a lta  'tree -a -I .git'
-        abbr -a ltg  'tree --gitignore'
-        abbr -a ltag 'tree -a --gitignore -I .git'
+# -------------------------------------------------------- listing shortcuts
+# These are functions (not abbreviations), so Fish runs the name you typed and
+# leaves the command line untouched. Arguments are forwarded to the listing tool.
+function __veyra_list
+    if type -q eza
+        command eza --group-directories-first --icons=auto $argv
+    else
+        set -l ls_args
+        set -l skip_ignore 0
+        for arg in $argv
+            switch $arg
+                case --git --git-ignore -T
+                    # eza-only display flags have no ls equivalent.
+                case -I
+                    # Ignore patterns are specific to eza/tree.
+                    set skip_ignore 1
+                case '*'
+                    if test $skip_ignore -eq 1
+                        set skip_ignore 0
+                    else
+                        set -a ls_args $arg
+                    end
+            end
+        end
+        command ls $ls_args
     end
 end
 
-# ---------------------------------------------------------- git abbreviations
-abbr -a gs   'git status -sb'
-abbr -a ga   'git add'
-abbr -a gaa  'git add -A'
-abbr -a gc   'git commit'
-abbr -a gcm  'git commit -m'
-abbr -a gp   'git push'
-abbr -a gpl  'git pull'
-abbr -a gd   'git diff'
-abbr -a gds  'git diff --staged'
-abbr -a gb   'git branch'
-abbr -a gsw  'git switch'
-abbr -a gco  'git checkout'
-abbr -a gst  'git stash'
-abbr -a gstp 'git stash pop'
-abbr -a gl   'git log --oneline --graph --decorate -20'
-abbr -a glog 'git log --oneline --graph --decorate'
-
-# ------------------------------------------------------- package manager & tools
-if type -q paru
-    abbr -a p      'paru'
-    abbr -a psyu   'paru -Syu'
-    abbr -a pin    'paru -S'
-    abbr -a prem   'paru -Rns'
-    abbr -a pss    'paru -Ss'
-    abbr -a psi    'paru -Si'
-    abbr -a pclean 'paru -Sc'
-else if type -q pacman
-    abbr -a p      'sudo pacman'
-    abbr -a psyu   'sudo pacman -Syu'
-    abbr -a pin    'sudo pacman -S'
-    abbr -a prem   'sudo pacman -Rns'
-    abbr -a pss    'pacman -Ss'
-    abbr -a psi    'pacman -Si'
-    abbr -a pclean 'sudo pacman -Sc'
+function l; __veyra_list $argv; end
+function tree
+    if type -q eza; __veyra_list -T $argv; else if type -q tree; command tree $argv; else; __veyra_list $argv; end
+end
+function ll; __veyra_list -lh --git $argv; end
+function la; __veyra_list -a $argv; end
+function lla; __veyra_list -lah --git $argv; end
+function lg; __veyra_list --git-ignore $argv; end
+function llg; __veyra_list -lh --git --git-ignore $argv; end
+function lag; __veyra_list -a --git-ignore $argv; end
+function llag; __veyra_list -lah --git --git-ignore $argv; end
+function lt
+    if type -q eza; __veyra_list -T $argv; else if type -q tree; command tree $argv; else; __veyra_list $argv; end
+end
+function lta
+    if type -q eza; __veyra_list -aT -I '.git|node_modules' $argv; else if type -q tree; command tree -a -I .git $argv; else; __veyra_list -a $argv; end
+end
+function ltg
+    if type -q eza; __veyra_list -T --git-ignore $argv; else if type -q tree; command tree --gitignore $argv; else; __veyra_list $argv; end
+end
+function ltag
+    if type -q eza; __veyra_list -aT --git-ignore -I '.git|node_modules' $argv; else if type -q tree; command tree -a --gitignore -I .git $argv; else; __veyra_list -a $argv; end
 end
 
-# Systemd
-abbr -a sc  'systemctl'
-abbr -a scu 'systemctl --user'
-abbr -a jc  'journalctl -xe'
-abbr -a jcu 'journalctl --user -xe'
+# ----------------------------------------------------------- git shortcuts
+function gs; git status -sb $argv; end
+function ga; git add $argv; end
+function gaa; git add -A $argv; end
+function gc; git commit $argv; end
+function gcm; git commit -m $argv; end
+function gp; git push $argv; end
+function gpl; git pull $argv; end
+function gd; git diff $argv; end
+function gds; git diff --staged $argv; end
+function gb; git branch $argv; end
+function gsw; git switch $argv; end
+function gco; git checkout $argv; end
+function gst; git stash $argv; end
+function gstp; git stash pop $argv; end
+function gl; git log --oneline --graph --decorate -20 $argv; end
+function glog; git log --oneline --graph --decorate $argv; end
 
-# General
-abbr -a v      $EDITOR
-abbr -a reload 'exec fish'
-abbr -a md     'mkdir -p'
-
-# ..  ...  ....  ->  cd ../  cd ../../  cd ../../../
-function __veyra_multicd
-    echo cd (string repeat -n (math (string length -- $argv[1]) - 1) ../)
+# ------------------------------------------------------- package shortcuts
+function __veyra_pkg
+    if type -q paru
+        paru $argv
+    else if type -q pacman
+        sudo pacman $argv
+    else
+        echo 'Neither paru nor pacman is installed' >&2
+        return 127
+    end
 end
-abbr --add dotdot --regex '^\.\.+$' --function __veyra_multicd
-
-# sudo !!  ->  sudo <previous command>
-function __veyra_last_cmd
-    echo $history[1]
+function p; __veyra_pkg $argv; end
+function psyu; __veyra_pkg -Syu $argv; end
+function pin; __veyra_pkg -S $argv; end
+function prem; __veyra_pkg -Rns $argv; end
+function pss
+    if type -q paru; paru -Ss $argv; else; pacman -Ss $argv; end
 end
-abbr --add '!!' --position anywhere --function __veyra_last_cmd
+function psi
+    if type -q paru; paru -Si $argv; else; pacman -Si $argv; end
+end
+function pclean; __veyra_pkg -Sc $argv; end
+
+# ------------------------------------------------------------ service tools
+function sc; systemctl $argv; end
+function scu; systemctl --user $argv; end
+function jc; journalctl -xe $argv; end
+function jcu; journalctl --user -xe $argv; end
+
+# --------------------------------------------------------------- shortcuts
+function v; $EDITOR $argv; end
+function reload; exec fish; end
+function md; mkdir -p $argv; end
+function up
+    set -l levels 1
+    if test (count $argv) -gt 0
+        set levels $argv[1]
+    end
+    if not string match -rq '^[1-9][0-9]*$' -- $levels
+        echo 'Usage: up [positive-level-count]' >&2
+        return 2
+    end
+    set -l path (string repeat -n $levels '../')
+    cd -- $path
+end
 
 # ------------------------------------------------------------------ functions
 function mkcd --description 'mkdir -p and cd into it'
@@ -324,6 +347,16 @@ function fhelp --description 'Show Veyra shell shortcuts'
     echo '  gs / ga / gc / gp / gpl / gd / gb   git shortcuts'
     echo '  l ll la lla    lg llg lag llag      lt lta ltg ltag   (g = apply .gitignore)'
     echo 'Enter on a lone path: directory -> cd, text file -> $EDITOR, other file -> xdg-open'
+end
+
+function fish-cheatsheet --description 'Print the Fish shortcut cheat sheet'
+    set -l sheet (path dirname (status filename))/CHEATSHEET.md
+    if test -r $sheet
+        command cat $sheet
+    else
+        echo 'CHEATSHEET.md is not installed beside config.fish; showing the built-in shortcut summary.'
+        fhelp
+    end
 end
 
 # ----------------------------------------------------------- smart Enter key
