@@ -19,6 +19,11 @@ Arguments after a shortcut are passed to the underlying tool.
 | `mkcd DIR` | Create and enter a directory |
 | `up [N]` | Go up N directories (default 1) |
 | `cls` | Clear screen and scrollback |
+| Type a directory path and press Enter | Change to that directory directly |
+| Type a `.py` path and press Enter | Run it with the nearest project venv, activating that venv in this shell |
+| Type an executable path and press Enter | Run it |
+| Type a non-executable `.sh` path and press Enter | Show a `chmod +x` instruction without changing permissions |
+| Type another text file path and press Enter | View it with `bat`, or open it in the editor |
 
 `eza` is used when installed; otherwise listing shortcuts use `ls`, and tree
 shortcuts use `tree` when available.
@@ -64,4 +69,5 @@ shortcuts use `tree` when available.
 
 Other interactive features: `Ctrl+R` searches history, `Ctrl+T` inserts a
 fuzzy-selected file, and `Alt+C` changes to a fuzzy-selected directory when
-`fzf` is installed.
+`fzf` is installed. When `zoxide` is installed, its `z QUERY` command provides
+fuzzy directory jumping.

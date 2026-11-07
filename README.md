@@ -64,7 +64,7 @@ It is a modern desktop rice with focus on:
 ├── hypr/                 # Hyprland config and modules
 ├── quickshell/           # QuickShell shell, bar, widgets, and panels
 ├── kitty/                # Kitty terminal config
-├── fish/                 # Fish config
+├── fish/                 # Fish startup, feature modules, and cheat sheet
 ├── wallpapers/           # Local wallpaper collection
 ├── wallust/              # Wallust templates and theme config
 ├── sddm/                 # SDDM theme sync assets

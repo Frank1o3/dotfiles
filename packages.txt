@@ -1,4 +1,10 @@
 fd
+fzf
+bat
+eza
+starship
+zoxide
+wl-clipboard
 git
 fish
 kitty
